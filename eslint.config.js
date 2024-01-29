@@ -1,5 +1,5 @@
 // @ts-check
-import zyyv from '@zyyv/eslint-config'
+import zyyv from '@antfu/eslint-config'
 
 export default zyyv(
   {
