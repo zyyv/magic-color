@@ -237,8 +237,14 @@ export function hslToHsb(color: string): string {
 
 // HEX To Others
 export function hexToRgb(color: string): string {
-  const match = color.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i)
-  if (!match)
+  let match
+  const _match = color.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i)
+  const _shortMatch = color.match(/^#?([a-f\d])([a-f\d])([a-f\d])$/i)
+  if (_match)
+    match = _match
+  else if (_shortMatch)
+    match = _shortMatch
+  else
     throw new Error('Invalid HEX color format.')
 
   const r = Number.parseInt(match[1], 16)
@@ -249,8 +255,14 @@ export function hexToRgb(color: string): string {
 }
 
 export function hexToHsl(color: string): string {
-  const match = color.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i)
-  if (!match)
+  let match
+  const _match = color.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i)
+  const _shortMatch = color.match(/^#?([a-f\d])([a-f\d])([a-f\d])$/i)
+  if (_match)
+    match = _match
+  else if (_shortMatch)
+    match = _shortMatch
+  else
     throw new Error('Invalid HEX color format.')
 
   const r = Number.parseInt(match[1], 16) / 255
@@ -284,8 +296,14 @@ export function hexToHsl(color: string): string {
 }
 
 export function hexToHsb(color: string): string {
-  const match = color.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i)
-  if (!match)
+  let match
+  const _match = color.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i)
+  const _shortMatch = color.match(/^#?([a-f\d])([a-f\d])([a-f\d])$/i)
+  if (_match)
+    match = _match
+  else if (_shortMatch)
+    match = _shortMatch
+  else
     throw new Error('Invalid HEX color format.')
 
   const r = Number.parseInt(match[1], 16)
