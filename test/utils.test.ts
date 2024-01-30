@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { convertColor, hexToHsb, hexToHsl, hexToRgb, hsbToHex, hsbToHsl, hsbToRgb, hslToHex, hslToHsb, hslToRgb, isColor, rgbToHex, rgbToHsb, rgbToHsl } from '../src/index'
+import { convertColor, hexToHsb, hexToHsl, hexToRgb, hsbToHex, hsbToHsl, hsbToRgb, hslToHex, hslToHsb, hslToRgb, isColor, rgbToHex, rgbToHsb, rgbToHsl } from '../src'
 import type { ColorType } from '../src/types'
 
 describe('utils scoped', () => {
   const hex = '#ff0000'
+  const shortHex = '#f00'
   const rgb = 'rgb(255, 0, 0)'
   const hsl = 'hsl(0, 100%, 50%)'
   const hsb = 'hsb(0, 100%, 100%)'
@@ -30,6 +31,7 @@ describe('utils scoped', () => {
     expect(hexToHsb(hex)).toEqual(hsb)
     expect(hexToHsl(hex)).toEqual(hsl)
     expect(hexToRgb(hex)).toEqual(rgb)
+    expect(hexToRgb(shortHex)).toEqual(rgb)
 
     // hsl to others test case
     expect(hslToRgb(hsl)).toEqual(rgb)

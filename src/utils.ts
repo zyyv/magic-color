@@ -243,7 +243,7 @@ export function hexToRgb(color: string): string {
   if (_match)
     match = _match
   else if (_shortMatch)
-    match = _shortMatch
+    match = [null, ..._shortMatch.slice(1).map(c => c + c)] as unknown as RegExpMatchArray
   else
     throw new Error('Invalid HEX color format.')
 
@@ -261,7 +261,7 @@ export function hexToHsl(color: string): string {
   if (_match)
     match = _match
   else if (_shortMatch)
-    match = _shortMatch
+    match = [null, ..._shortMatch.slice(1).map(c => c + c)] as unknown as RegExpMatchArray
   else
     throw new Error('Invalid HEX color format.')
 
@@ -302,7 +302,7 @@ export function hexToHsb(color: string): string {
   if (_match)
     match = _match
   else if (_shortMatch)
-    match = _shortMatch
+    match = [null, ..._shortMatch.slice(1).map(c => c + c)] as unknown as RegExpMatchArray
   else
     throw new Error('Invalid HEX color format.')
 
