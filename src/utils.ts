@@ -16,6 +16,10 @@ export function isHsb(color: string) {
   return /^hsb\(\d+,\s*\d+%\s*,\s*\d+%\)$/.test(color)
 }
 
+export function isColor(color: string) {
+  return isHex(color) || isHsl(color) || isRgb(color) || isHsb(color)
+}
+
 export function getColorFormat(color: string): ColorType | null {
   if (isHex(color))
     return 'hex'
@@ -124,15 +128,36 @@ export function hslToHex(color: string): string {
     throw new Error('Invalid HSL color format.')
 
   const h = Number.parseInt(match[0])
-  const s = Number.parseInt(match[1])
-  const l = Number.parseInt(match[2])
+  const s = Number.parseInt(match[1]) / 100
+  const l = Number.parseInt(match[2]) / 100
 
-  const f = (n: number) => {
-    const k = (n + h / 30) % 12
-    const a = s * Math.min(l, 1 - l)
-    return Math.round(255 * (l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)))
+  function hue2rgb(p: number, q: number, t: number): number {
+    if (t < 0)
+      t += 1
+    if (t > 1)
+      t -= 1
+    if (t < 1 / 6)
+      return p + (q - p) * 6 * t
+    if (t < 1 / 2)
+      return q
+    if (t < 2 / 3)
+      return p + (q - p) * (2 / 3 - t) * 6
+    return p
   }
-  return `#${f(0).toString(16)}${f(8).toString(16)}${f(4).toString(16)}`
+
+  let r, g, b
+  if (s === 0) {
+    r = g = b = l // Achromatic
+  }
+  else {
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s
+    const p = 2 * l - q
+    r = hue2rgb(p, q, h / 360 + 1 / 3)
+    g = hue2rgb(p, q, h / 360)
+    b = hue2rgb(p, q, h / 360 - 1 / 3)
+  }
+
+  return rgbToHex(`rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)})`)
 }
 
 export function hslToRgb(color: string): string {
@@ -141,15 +166,35 @@ export function hslToRgb(color: string): string {
     throw new Error('Invalid HSL color format.')
 
   const h = Number.parseInt(match[0])
-  const s = Number.parseInt(match[1])
-  const l = Number.parseInt(match[2])
+  const s = Number.parseInt(match[1]) / 100
+  const l = Number.parseInt(match[2]) / 100
 
-  const f = (n: number) => {
-    const k = (n + h / 30) % 12
-    const a = s * Math.min(l, 1 - l)
-    return Math.round(255 * (l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)))
+  let r, g, b
+  if (s === 0) {
+    r = g = b = l
   }
-  return `rgb(${f(0)}, ${f(8)}, ${f(4)})`
+  else {
+    const hue2rgb = (p: number, q: number, t: number) => {
+      if (t < 0)
+        t += 1
+      if (t > 1)
+        t -= 1
+      if (t < 1 / 6)
+        return p + (q - p) * 6 * t
+      if (t < 1 / 2)
+        return q
+      if (t < 2 / 3)
+        return p + (q - p) * (2 / 3 - t) * 6
+      return p
+    }
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s
+    const p = 2 * l - q
+    r = hue2rgb(p, q, h / 360 + 1 / 3)
+    g = hue2rgb(p, q, h / 360)
+    b = hue2rgb(p, q, h / 360 - 1 / 3)
+  }
+
+  return `rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)})`
 }
 
 export function hslToHsb(color: string): string {
@@ -158,15 +203,36 @@ export function hslToHsb(color: string): string {
     throw new Error('Invalid HSL color format.')
 
   const h = Number.parseInt(match[0])
-  const s = Number.parseInt(match[1])
-  const l = Number.parseInt(match[2])
+  const s = Number.parseInt(match[1]) / 100
+  const l = Number.parseInt(match[2]) / 100
 
-  const f = (n: number) => {
-    const k = (n + h / 30) % 12
-    const a = s * Math.min(l, 1 - l)
-    return Math.round(255 * (l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)))
+  function hue2rgb(p: number, q: number, t: number): number {
+    if (t < 0)
+      t += 1
+    if (t > 1)
+      t -= 1
+    if (t < 1 / 6)
+      return p + (q - p) * 6 * t
+    if (t < 1 / 2)
+      return q
+    if (t < 2 / 3)
+      return p + (q - p) * (2 / 3 - t) * 6
+    return p
   }
-  return rgbToHsb(`rgb(${f(0)}, ${f(8)}, ${f(4)})`)
+
+  let r, g, b
+  if (s === 0) {
+    r = g = b = l // Achromatic
+  }
+  else {
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s
+    const p = 2 * l - q
+    r = hue2rgb(p, q, h / 360 + 1 / 3)
+    g = hue2rgb(p, q, h / 360)
+    b = hue2rgb(p, q, h / 360 - 1 / 3)
+  }
+
+  return rgbToHsb(`rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)})`)
 }
 
 // HEX To Others
@@ -237,15 +303,51 @@ export function hsbToHex(color: string): string {
     throw new Error('Invalid HSB color format.')
 
   const h = Number.parseInt(match[0])
-  const s = Number.parseInt(match[1])
-  const b = Number.parseInt(match[2])
+  const s = Number.parseInt(match[1]) / 100
+  const b = Number.parseInt(match[2]) / 100
 
-  const f = (n: number) => {
-    const k = (n + h / 30) % 12
-    const a = s * Math.min(b, 1 - b)
-    return Math.round(255 * (b - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)))
+  const c = b * s
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1))
+  const m = b - c
+
+  let r = 0
+  let g = 0
+  let bl = 0
+  if (h >= 0 && h < 60) {
+    r = c
+    g = x
   }
-  return `#${f(0).toString(16)}${f(8).toString(16)}${f(4).toString(16)}`
+  else if (h >= 60 && h < 120) {
+    r = x
+    g = c
+  }
+  else if (h >= 120 && h < 180) {
+    g = c
+    bl = x
+  }
+  else if (h >= 180 && h < 240) {
+    g = x
+    bl = c
+  }
+  else if (h >= 240 && h < 300) {
+    r = x
+    bl = c
+  }
+  else if (h >= 300 && h < 360) {
+    r = c
+    bl = x
+  }
+
+  r = Math.round((r + m) * 255)
+  g = Math.round((g + m) * 255)
+  bl = Math.round((bl + m) * 255)
+
+  const toHex = (c: number) => {
+    const hex = Math.round(c).toString(16)
+    return hex.length === 1 ? `0${hex}` : hex
+  }
+
+  return `#${toHex(r)}${toHex(g)}${toHex(bl)}`
 }
 
 export function hsbToRgb(color: string): string {
@@ -254,15 +356,46 @@ export function hsbToRgb(color: string): string {
     throw new Error('Invalid HSB color format.')
 
   const h = Number.parseInt(match[0])
-  const s = Number.parseInt(match[1])
-  const b = Number.parseInt(match[2])
+  const s = Number.parseInt(match[1]) / 100
+  const b = Number.parseInt(match[2]) / 100
 
-  const f = (n: number) => {
-    const k = (n + h / 30) % 12
-    const a = s * Math.min(b, 1 - b)
-    return Math.round(255 * (b - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)))
+  const c = b * s
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1))
+  const m = b - c
+
+  let r = 0
+  let g = 0
+  let bl = 0
+  if (h >= 0 && h < 60) {
+    r = c
+    g = x
   }
-  return `rgb(${f(0)}, ${f(8)}, ${f(4)})`
+  else if (h >= 60 && h < 120) {
+    r = x
+    g = c
+  }
+  else if (h >= 120 && h < 180) {
+    g = c
+    bl = x
+  }
+  else if (h >= 180 && h < 240) {
+    g = x
+    bl = c
+  }
+  else if (h >= 240 && h < 300) {
+    r = x
+    bl = c
+  }
+  else if (h >= 300 && h < 360) {
+    r = c
+    bl = x
+  }
+
+  r = Math.round((r + m) * 255)
+  g = Math.round((g + m) * 255)
+  bl = Math.round((bl + m) * 255)
+
+  return `rgb(${r}, ${g}, ${bl})`
 }
 
 export function hsbToHsl(color: string): string {
@@ -271,22 +404,20 @@ export function hsbToHsl(color: string): string {
     throw new Error('Invalid HSB color format.')
 
   const h = Number.parseInt(match[0])
-  const s = Number.parseInt(match[1])
-  const b = Number.parseInt(match[2])
+  const s = Number.parseInt(match[1]) / 100
+  const b = Number.parseInt(match[2]) / 100
 
-  const f = (n: number) => {
-    const k = (n + h / 30) % 12
-    const a = s * Math.min(b, 1 - b)
-    return Math.round(255 * (b - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)))
-  }
-  return rgbToHsl(`rgb(${f(0)}, ${f(8)}, ${f(4)})`)
+  const l = (2 - s) * b / 2
+  const sl = l && l < 0.5 ? s * b / (l * 2) : s * b / (2 - l * 2)
+
+  return `hsl(${h}, ${Math.round(sl * 100)}%, ${Math.round(l * 100)}%)`
 }
 
 /**
  * Convert color from one format to another.
  * @param colorString valid color string
  * @param targetFormat ColorType
- * @returns
+ * @returns Result of ColorType
  */
 export function convertColor(colorString: string, targetFormat: ColorType): string | null {
   const color = colorString.toLowerCase()
