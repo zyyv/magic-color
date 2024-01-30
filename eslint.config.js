@@ -1,15 +1,4 @@
 // @ts-check
-import zyyv from '@antfu/eslint-config'
+import antfu from '@antfu/eslint-config'
 
-export default zyyv(
-  {
-    ignores: [
-      // eslint ignore globs here
-    ],
-  },
-  {
-    rules: {
-      // overrides
-    },
-  },
-)
+export default antfu()

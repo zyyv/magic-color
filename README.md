@@ -1,29 +1,85 @@
-# magic-color
+<img src="https://raw.githubusercontent.com/zyyv/magic-color/main/public/logo.svg" style="width:100px;" />
 
-[![npm version][npm-version-src]][npm-version-href]
-[![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![bundle][bundle-src]][bundle-href]
-[![JSDocs][jsdocs-src]][jsdocs-href]
-[![License][license-src]][license-href]
+# magic-color [![NPM version](https://img.shields.io/npm/v/magic-color?color=a1b858&label=)](https://www.npmjs.com/package/magic-color)
 
 Magic color creator.
 
-> **Note**:
-> Replace `magic-color`, `Magic color creator.` and `zyyv` globally to use this template.
+## Usage
 
-## License
+```bash
+pnpm add magic-color
+```
 
-[MIT](./LICENSE) License © 2023-PRESENT [Chris](https://github.com/zyyv)
+A lot of color tool functions for you to use, providing easy conversion, generation, parsing, comparison, operation and other functions.
 
-<!-- Badges -->
+## Example
 
-[npm-version-src]: https://img.shields.io/npm/v/magic-color?style=flat&colorA=080f12&colorB=1fa669
-[npm-version-href]: https://npmjs.com/package/magic-color
-[npm-downloads-src]: https://img.shields.io/npm/dm/magic-color?style=flat&colorA=080f12&colorB=1fa669
-[npm-downloads-href]: https://npmjs.com/package/magic-color
-[bundle-src]: https://img.shields.io/bundlephobia/minzip/magic-color?style=flat&colorA=080f12&colorB=1fa669&label=minzip
-[bundle-href]: https://bundlephobia.com/result?p=magic-color
-[license-src]: https://img.shields.io/github/license/zyyv/magic-color.svg?style=flat&colorA=080f12&colorB=1fa669
-[license-href]: https://github.com/zyyv/magic-color/blob/main/LICENSE
-[jsdocs-src]: https://img.shields.io/badge/jsdocs-reference-080f12?style=flat&colorA=080f12&colorB=1fa669
-[jsdocs-href]: https://www.jsdocs.io/package/magic-color
+```ts
+import { hexTorgb, rgbTohex } from 'magic-color'
+
+hexTorgb('#fff') // [255, 255, 255]
+rgbTohex(255, 255, 255) // '#fff'
+```
+
+And more...
+
+### theme
+
+Well, you can use it to create a theme color.
+
+```ts
+import { theme } from 'magic-color'
+
+theme('#9955ff')
+
+// Will output:
+// {
+//   "100": "#f5eeff",
+//   "200": "#e6d5ff",
+//   "300": "#d6bbff",
+//   "400": "#b888ff",
+//   "50": "#faf7ff",
+//   "500": "#9955ff",
+//   "600": "#8a4de6",
+//   "700": "#5c3399",
+//   "800": "#452673",
+//   "900": "#2e1a4d",
+//   "950": "#1f1133",
+// }
+```
+
+And you can custom it with `themeOptions`.
+
+```ts
+import { theme } from 'magic-color'
+
+theme('#9955ff', {
+  type: 'rgb',
+  render: (c) => {
+    return c.replace(/rgb\((.*)\)/, '$1').replace(/,/g, '')
+  },
+})
+
+// Will output:
+// {
+//   "100": "245 238 255",
+//   "200": "230 213 255",
+//   "300": "214 187 255",
+//   "400": "184 136 255",
+//   "50": "250 247 255",
+//   "500": "153 85 255",
+//   "600": "138 77 230",
+//   "700": "92 51 153",
+//   "800": "69 38 115",
+//   "900": "46 26 77",
+//   "950": "31 17 51",
+// }
+```
+
+## Credits
+
+- [theme-colors](https://github.com/unjs/theme-colors) - (*Better than it*)
+
+## license
+
+[MIT](./LICENSE)
