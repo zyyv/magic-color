@@ -33,6 +33,32 @@ export interface ThemeOptions {
   render?: (color: string) => string
 }
 
+/**
+ * Generate a theme from a color
+ *
+ * @example
+ * ```ts
+ * theme('#9955FF')
+ * =>
+ {
+   "50": "#faf7ff",
+  "100": "#f5eeff",
+  "200": "#e6d5ff",
+  "300": "#d6bbff",
+  "400": "#b888ff",
+  "500": "#9955ff",
+  "600": "#8a4de6",
+  "700": "#5c3399",
+  "800": "#452673",
+  "900": "#2e1a4d",
+  "950": "#1f1133",
+  }
+ * ```
+ *
+ * @param color theme color
+ * @param options ThemeOptions
+ * @returns Record<string, string>
+ */
 export function theme(color: string, options: ThemeOptions = {}): Record<string, string> {
   if (!isColor(color))
     throw new Error(`Invalid color: ${color}`)
