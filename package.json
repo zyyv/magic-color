@@ -12,7 +12,11 @@
     "url": "git+https://github.com/zyyv/magic-color.git"
   },
   "bugs": "https://github.com/zyyv/magic-color/issues",
-  "keywords": [],
+  "keywords": [
+    "color",
+    "colors",
+    "magic-color"
+  ],
   "sideEffects": false,
   "exports": {
     ".": {
