@@ -20,7 +20,7 @@ export function isColor(color: string) {
   return isHex(color) || isHsl(color) || isRgb(color) || isHsb(color)
 }
 
-export function getColorFormat(color: string): ColorType | null {
+export function getColorType(color: string): ColorType | null {
   if (isHex(color))
     return 'hex'
   if (isHsl(color))
@@ -439,7 +439,7 @@ export function hsbToHsl(color: string): string {
  */
 export function convertColor(colorString: string, targetFormat: ColorType): string | null {
   const color = colorString.toLowerCase()
-  const colorFormat = getColorFormat(color)
+  const colorFormat = getColorType(color)
 
   switch (targetFormat) {
     case 'hsl':
