@@ -4,6 +4,12 @@
 
 Magic color creator.
 
+## Features
+
+- 🎨 Convert between RGB, HEX, HSL and HSB.
+- 🦄 Theme color generator.
+- etc.
+
 ## Usage
 
 ```bash
