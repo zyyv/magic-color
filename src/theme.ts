@@ -27,10 +27,11 @@ export interface ThemeOptions {
 
   /**
    * Custom render output color
-   * @param color result color
-   * @returns
+   *
+   * @param meta [name, color]
+   * @returns [CustomedName, CustomedColor]
    */
-  render?: (color: string) => string
+  render?: (meta: [string, string]) => [string, string]
 }
 
 /**
@@ -69,24 +70,20 @@ export function theme(color: string, options: ThemeOptions = {}): Record<string,
   }
 
   const { type, render } = { ...defaultOptions, ...options } as Required<ThemeOptions>
-  const finnalRender = (color: string) => {
-    let c = ''
+  const finnalRender = (meta: [string, string]) => {
     switch (type) {
       case 'hsl':
-        c = rgbToHsl(color)
+        meta[1] = rgbToHsl(meta[1])
         break
       case 'hsb':
-        c = rgbToHsb(color)
+        meta[1] = rgbToHsb(meta[1])
         break
       case 'hex':
-        c = rgbToHex(color)
+        meta[1] = rgbToHex(meta[1])
         break
-      case 'rgb':
-      default:
-        c = color
     }
 
-    return render(c)
+    return render(meta)
   }
 
   const rgb = convertColor(color, 'rgb')
@@ -108,8 +105,12 @@ export function theme(color: string, options: ThemeOptions = {}): Record<string,
 
   const colors: Record<string, string> = {}
 
-  for (const [name, fn] of Object.entries(variants))
-    colors[name] = finnalRender(`rgb(${fn(components).join(', ')})`)
+  for (const [name, fn] of Object.entries(variants)) {
+    Object.assign(
+      colors,
+      Object.fromEntries([finnalRender([name, `rgb(${fn(components).join(', ')})`])]),
+    )
+  }
 
   return colors
 }
