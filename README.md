@@ -18,7 +18,7 @@ A lot of color tool functions for you to use, providing easy conversion, generat
 import { hexTorgb, rgbTohex } from 'magic-color'
 
 hexTorgb('#fff') // [255, 255, 255]
-rgbTohex(255, 255, 255) // '#fff'
+rgbTohex('rgb(255, 255, 255)') // '#fff'
 ```
 
 And more...
