@@ -84,11 +84,11 @@ theme('#9955ff', {
 
 // Will output:
 // {
+//   "--color-primary-50": "250 247 255",
 //   "--color-primary-100": "245 238 255",
 //   "--color-primary-200": "230 213 255",
 //   "--color-primary-300": "214 187 255",
 //   "--color-primary-400": "184 136 255",
-//   "--color-primary-50": "250 247 255",
 //   "--color-primary-500": "153 85 255",
 //   "--color-primary-600": "138 77 230",
 //   "--color-primary-700": "92 51 153",
