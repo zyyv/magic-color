@@ -17,6 +17,20 @@ function withShade(intensity: number) {
   return (hex: number[]) => shade(hex, intensity)
 }
 
+export interface ThemeMetas {
+  '50': string
+  '100': string
+  '200': string
+  '300': string
+  '400': string
+  '500': string
+  '600': string
+  '700': string
+  '800': string
+  '900': string
+  '950': string
+}
+
 export interface ThemeOptions {
   /**
    * Output color type
@@ -31,7 +45,7 @@ export interface ThemeOptions {
    * @param meta [name, color]
    * @returns [CustomedName, CustomedColor]
    */
-  render?: (meta: [string, string]) => [string, string]
+  render?: (meta: [keyof ThemeMetas, string]) => [string, string]
 }
 
 /**
@@ -58,9 +72,9 @@ export interface ThemeOptions {
  *
  * @param color theme color
  * @param options ThemeOptions
- * @returns Record<string, string>
+ * @returns ThemeMetas
  */
-export function theme(color: string, options: ThemeOptions = {}): Record<string, string> {
+export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
   if (!isColor(color))
     throw new Error(`Invalid color: ${color}`)
 
@@ -70,7 +84,7 @@ export function theme(color: string, options: ThemeOptions = {}): Record<string,
   }
 
   const { type, render } = { ...defaultOptions, ...options } as Required<ThemeOptions>
-  const finnalRender = (meta: [string, string]) => {
+  const finnalRender = (meta: [keyof ThemeMetas, string]) => {
     switch (type) {
       case 'hsl':
         meta[1] = rgbToHsl(meta[1])
@@ -103,14 +117,14 @@ export function theme(color: string, options: ThemeOptions = {}): Record<string,
     950: withShade(0.2),
   }
 
-  const colors: Record<string, string> = {}
+  const colors = {}
 
   for (const [name, fn] of Object.entries(variants)) {
     Object.assign(
       colors,
-      Object.fromEntries([finnalRender([name, `rgb(${fn(components).join(', ')})`])]),
+      Object.fromEntries([finnalRender([name as keyof ThemeMetas, `rgb(${fn(components).join(', ')})`])]),
     )
   }
 
-  return colors
+  return colors as ThemeMetas
 }
