@@ -9,7 +9,7 @@ defineProps<{
 <template>
   <ul fcc text-white gap-8 mt-10>
     <li fccc v-for="(v, k) in theme" :key="k">
-      <div w-10 h-10 :style="{ backgroundColor: v }"></div>
+      <button px-3 py-2 text-sm rd-md :style="{ backgroundColor: v }">button</button>
       <span>{{ k }}</span>
     </li>
   </ul>

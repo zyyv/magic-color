@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { theme } from 'magic-color'
-const color = ref('#d6bbff')
+const color = ref('#9455d3')
 
 const results = computed(() => {
   try {

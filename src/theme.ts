@@ -1,5 +1,5 @@
 import type { ColorType } from '.'
-import { convertColor, getColorType, isColor, rgbToHex, rgbToHsb, rgbToHsl } from '.'
+import { convertColor, getColorType, isColor, rgbToHex, rgbToHsb, rgbToHsl } from './'
 
 function tint(components: number[], intensity: number) {
   return components.map(c => Math.round(c + (255 - c) * intensity))

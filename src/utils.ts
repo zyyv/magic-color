@@ -1,22 +1,22 @@
 import type { ColorType } from './types'
 
-export function isHex(color: string) {
+export function isHex(color: string): boolean {
   return /^#?([a-f\d]{3}|[a-f\d]{6})$/i.test(color)
 }
 
-export function isHsl(color: string) {
+export function isHsl(color: string): boolean {
   return /^hsl\(\d+,\s*\d+%\s*,\s*\d+%\)$/.test(color)
 }
 
-export function isRgb(color: string) {
+export function isRgb(color: string): boolean {
   return /^rgb\(\d+,\s*\d+,\s*\d+\)$/.test(color)
 }
 
-export function isHsb(color: string) {
+export function isHsb(color: string): boolean {
   return /^hsb\(\d+,\s*\d+%\s*,\s*\d+%\)$/.test(color)
 }
 
-export function isColor(color: string) {
+export function isColor(color: string): boolean {
   return isHex(color) || isHsl(color) || isRgb(color) || isHsb(color)
 }
 
