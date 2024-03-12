@@ -1,20 +1,20 @@
-import type { ColorType } from '.'
+import type { ColorType, rgbColor } from '.'
 import { convertColor, getColorType, isColor, rgbToHex, rgbToHsb, rgbToHsl } from './'
 
-function tint(components: number[], intensity: number) {
-  return components.map(c => Math.round(c + (255 - c) * intensity))
+function tint(components: rgbColor, intensity: number) {
+  return components.map(c => Math.round(c + (255 - c) * intensity)) as rgbColor
 }
 
-function shade(components: number[], intensity: number) {
-  return components.map(c => Math.round(c * intensity))
+function shade(components: rgbColor, intensity: number) {
+  return components.map(c => Math.round(c * intensity)) as rgbColor
 }
 
 function withTint(intensity: number) {
-  return (hex: number[]) => tint(hex, intensity)
+  return (hex: rgbColor) => tint(hex, intensity)
 }
 
 function withShade(intensity: number) {
-  return (hex: number[]) => shade(hex, intensity)
+  return (hex: rgbColor) => shade(hex, intensity)
 }
 
 export interface ThemeMetas {
@@ -79,29 +79,27 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
     throw new Error(`Invalid color: ${color}`)
 
   const defaultOptions: ThemeOptions = {
-    type: getColorType(color)!,
+    type: getColorType(color)! === 'keyword' ? 'hex' : getColorType(color)!,
     render: c => c,
   }
 
   const { type, render } = { ...defaultOptions, ...options } as Required<ThemeOptions>
-  const finnalRender = (meta: [keyof ThemeMetas, string]) => {
+
+  const finnalRender = (meta: [keyof ThemeMetas, rgbColor | string]) => {
     switch (type) {
       case 'hsl':
-        meta[1] = rgbToHsl(meta[1])
+        meta[1] = rgbToHsl(meta[1], true)
         break
       case 'hsb':
-        meta[1] = rgbToHsb(meta[1])
+        meta[1] = rgbToHsb(meta[1], true)
         break
       case 'hex':
         meta[1] = rgbToHex(meta[1])
         break
     }
 
-    return render(meta)
+    return render(meta as [keyof ThemeMetas, string])
   }
-
-  const rgb = convertColor(color, 'rgb')
-  const components = rgb!.slice(4, -1).split(',').map(Number)
 
   const variants = {
     50: withTint(0.95),
@@ -109,7 +107,7 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
     200: withTint(0.75),
     300: withTint(0.6),
     400: withTint(0.3),
-    500: (c: number[]) => c,
+    500: (c: rgbColor) => c,
     600: withShade(0.9),
     700: withShade(0.6),
     800: withShade(0.45),
@@ -122,7 +120,12 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
   for (const [name, fn] of Object.entries(variants)) {
     Object.assign(
       colors,
-      Object.fromEntries([finnalRender([name as keyof ThemeMetas, `rgb(${fn(components).join(', ')})`])]),
+      Object.fromEntries([
+        finnalRender([
+          name as keyof ThemeMetas,
+          fn(convertColor(color, 'rgb')!),
+        ]),
+      ]),
     )
   }
 

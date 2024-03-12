@@ -23,37 +23,39 @@ describe('utils scoped', () => {
 
   it('simple convert', () => {
     // rgb to others test case
-    expect(rgbToHsl(rgb)).toEqual(hsl)
-    expect(rgbToHsb(rgb)).toEqual(hsb)
+    expect(rgbToHsl(rgb, true)).toEqual(hsl)
+    expect(rgbToHsb(rgb, true)).toEqual(hsb)
     expect(rgbToHex(rgb)).toEqual(hex)
 
     // hex to others test case
-    expect(hexToHsb(hex)).toEqual(hsb)
-    expect(hexToHsl(hex)).toEqual(hsl)
-    expect(hexToRgb(hex)).toEqual(rgb)
-    expect(hexToRgb(shortHex)).toEqual(rgb)
+    expect(hexToHsb(hex, true)).toEqual(hsb)
+    expect(hexToHsl(hex, true)).toEqual(hsl)
+    expect(hexToRgb(hex, true)).toEqual(rgb)
+    expect(hexToRgb(shortHex, true)).toEqual(rgb)
 
     // hsl to others test case
-    expect(hslToRgb(hsl)).toEqual(rgb)
+    expect(hslToRgb(hsl, true)).toEqual(rgb)
     expect(hslToHex(hsl)).toEqual(hex)
-    expect(hslToHsb(hsl)).toEqual(hsb)
+    expect(hslToHsb(hsl, true)).toEqual(hsb)
 
     // hsb to others test case
-    expect(hsbToRgb(hsb)).toEqual(rgb)
+    expect(hsbToRgb(hsb, true)).toEqual(rgb)
     expect(hsbToHex(hsb)).toEqual(hex)
-    expect(hsbToHsl(hsb)).toEqual(hsl)
+    expect(hsbToHsl(hsb, true)).toEqual(hsl)
   })
 
   it('convertColor', () => {
-    function testTrueConvert(type: ColorType) {
+    type TestType = Parameters<typeof convertColor>[1]
+
+    function testTrueConvert(type: TestType) {
       return colors.map(c => convertColor(c, type))
     }
 
-    function testFalseConvert(type: ColorType) {
+    function testFalseConvert(type: TestType) {
       return notColors.map(c => convertColor(c, type))
     }
 
-    expect((['rgb', 'hex', 'hsl', 'hsb'] as ColorType[]).map(testTrueConvert)).toMatchInlineSnapshot(`
+    expect((['rgb', 'hex', 'hsl', 'hsb'] as TestType[]).map(testTrueConvert)).toMatchInlineSnapshot(`
       [
         [
           "rgb(255, 0, 0)",
