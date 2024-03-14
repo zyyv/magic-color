@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { convertColor, hexToHsb, hexToHsl, hexToRgb, hsbToHex, hsbToHsl, hsbToRgb, hslToHex, hslToHsb, hslToRgb, isColor, rgbToHex, rgbToHsb, rgbToHsl } from '../src'
-import type { ColorType } from '../src/types'
 
 describe('utils scoped', () => {
+  const keyword = 'red'
   const hex = '#ff0000'
   const shortHex = '#f00'
   const rgb = 'rgb(255, 0, 0)'
@@ -23,65 +23,54 @@ describe('utils scoped', () => {
 
   it('simple convert', () => {
     // rgb to others test case
-    expect(rgbToHsl(rgb)).toEqual(hsl)
-    expect(rgbToHsb(rgb)).toEqual(hsb)
+    expect(rgbToHsl(rgb, true)).toEqual(hsl)
+    expect(rgbToHsb(rgb, true)).toEqual(hsb)
     expect(rgbToHex(rgb)).toEqual(hex)
 
     // hex to others test case
-    expect(hexToHsb(hex)).toEqual(hsb)
-    expect(hexToHsl(hex)).toEqual(hsl)
-    expect(hexToRgb(hex)).toEqual(rgb)
-    expect(hexToRgb(shortHex)).toEqual(rgb)
+    expect(hexToHsb(hex, true)).toEqual(hsb)
+    expect(hexToHsl(hex, true)).toEqual(hsl)
+    expect(hexToRgb(hex, true)).toEqual(rgb)
+    expect(hexToRgb(shortHex, true)).toEqual(rgb)
 
     // hsl to others test case
-    expect(hslToRgb(hsl)).toEqual(rgb)
+    expect(hslToRgb(hsl, true)).toEqual(rgb)
     expect(hslToHex(hsl)).toEqual(hex)
-    expect(hslToHsb(hsl)).toEqual(hsb)
+    expect(hslToHsb(hsl, true)).toEqual(hsb)
 
     // hsb to others test case
-    expect(hsbToRgb(hsb)).toEqual(rgb)
+    expect(hsbToRgb(hsb, true)).toEqual(rgb)
     expect(hsbToHex(hsb)).toEqual(hex)
-    expect(hsbToHsl(hsb)).toEqual(hsl)
+    expect(hsbToHsl(hsb, true)).toEqual(hsl)
   })
 
   it('convertColor', () => {
-    function testTrueConvert(type: ColorType) {
-      return colors.map(c => convertColor(c, type))
-    }
+    const hexColor = convertColor(keyword, 'hex')
+    const rgbColor = convertColor(keyword, 'rgb')
+    const hslColor = convertColor(keyword, 'hsl')
+    const hsbColor = convertColor(keyword, 'hsb')
 
-    function testFalseConvert(type: ColorType) {
-      return notColors.map(c => convertColor(c, type))
-    }
-
-    expect((['rgb', 'hex', 'hsl', 'hsb'] as ColorType[]).map(testTrueConvert)).toMatchInlineSnapshot(`
+    expect(hexColor).toMatchInlineSnapshot(`"#ff0000"`)
+    expect(rgbColor).toMatchInlineSnapshot(`
       [
-        [
-          "rgb(255, 0, 0)",
-          "rgb(255, 0, 0)",
-          "rgb(255, 0, 0)",
-          "rgb(255, 0, 0)",
-        ],
-        [
-          "#ff0000",
-          "#ff0000",
-          "#ff0000",
-          "#ff0000",
-        ],
-        [
-          "hsl(0, 100%, 50%)",
-          "hsl(0, 100%, 50%)",
-          "hsl(0, 100%, 50%)",
-          "hsl(0, 100%, 50%)",
-        ],
-        [
-          "hsb(0, 100%, 100%)",
-          "hsb(0, 100%, 100%)",
-          "hsb(0, 100%, 100%)",
-          "hsb(0, 100%, 100%)",
-        ],
+        255,
+        0,
+        0,
       ]
     `)
-
-    expect(testFalseConvert('hex').filter(Boolean)).toEqual([])
+    expect(hslColor).toMatchInlineSnapshot(`
+      [
+        0,
+        100,
+        50,
+      ]
+    `)
+    expect(hsbColor).toMatchInlineSnapshot(`
+      [
+        0,
+        100,
+        100,
+      ]
+    `)
   })
 })
