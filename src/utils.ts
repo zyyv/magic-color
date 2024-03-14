@@ -125,6 +125,7 @@ export function rgbToHex(color: rgbColor | string): hexColor {
 export function rgbToHsl(color: rgbColor | string): hslColor
 export function rgbToHsl(color: rgbColor | string, toString: false): hslColor
 export function rgbToHsl(color: rgbColor | string, toString: true): string
+export function rgbToHsl(color: rgbColor | string, toString: boolean): hslColor | string
 export function rgbToHsl(color: rgbColor | string, toString = false): hslColor | string {
   const [r, g, b] = parseRgb(color)
 
@@ -159,6 +160,7 @@ export function rgbToHsl(color: rgbColor | string, toString = false): hslColor |
 export function rgbToHsb(color: rgbColor | string): hsbColor
 export function rgbToHsb(color: rgbColor | string, toString: false): hsbColor
 export function rgbToHsb(color: rgbColor | string, toString: true): string
+export function rgbToHsb(color: rgbColor | string, toString: boolean): hsbColor | string
 export function rgbToHsb(color: rgbColor | string, toString = false): hsbColor | string {
   const [r, g, b] = parseRgb(color)
 
@@ -408,15 +410,19 @@ export function hsbToHsl(color: hsbColor | string, toString = false): hslColor |
 export function convertColor(colorString: string, format: 'rgb'): rgbColor | null
 export function convertColor(colorString: string, format: 'rgb', toString: false): rgbColor | null
 export function convertColor(colorString: string, format: 'rgb', toString: true): string | null
+export function convertColor(colorString: string, format: 'rgb', toString: boolean): rgbColor | string | null
 export function convertColor(colorString: string, format: 'hsl'): hslColor | null
 export function convertColor(colorString: string, format: 'hsl', toString: false): hslColor | null
 export function convertColor(colorString: string, format: 'hsl', toString: true): string | null
+export function convertColor(colorString: string, format: 'hsl', toString: boolean): hslColor | string | null
 export function convertColor(colorString: string, format: 'hsb'): hsbColor | null
 export function convertColor(colorString: string, format: 'hsb', toString: false): hsbColor | null
 export function convertColor(colorString: string, format: 'hsb', toString: true): string | null
+export function convertColor(colorString: string, format: 'hsb', toString: boolean): hsbColor | string | null
 export function convertColor(colorString: string, format: 'hex'): hexColor | null
 export function convertColor(colorString: string, format: 'hex', toString: false): hexColor | null
 export function convertColor(colorString: string, format: 'hex', toString: true): string | null
+export function convertColor(colorString: string, format: 'hex', toString: boolean): hexColor | string | null
 export function convertColor(
   colorString: string,
   format: Exclude<ColorType, 'keyword'>,
@@ -437,7 +443,7 @@ export function convertColor(
         case 'hsb':
           return hsbToHsl(color, toString)
         case 'keyword':
-          return hexToHsl(keywordColors[color] as hexColor)
+          return hexToHsl(keywordColors[color] as hexColor, toString)
       }
       break
     case 'hex':
