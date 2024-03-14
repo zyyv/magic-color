@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     Item: typeof import('./components/ListColor.vue')['default']
     ListColor: typeof import('./components/ListColor.vue')['default']
+    Picker: typeof import('./components/Picker.vue')['default']
     Toggle: typeof import('./components/Toggle.vue')['default']
   }
 }

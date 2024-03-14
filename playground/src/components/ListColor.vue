@@ -11,6 +11,7 @@ defineProps<{
     <li fccc v-for="(v, k) in theme" :key="k">
       <button px-3 py-2 text-sm rd-md :style="{ backgroundColor: v }">button</button>
       <span>{{ k }}</span>
+      <span>{{ v }}</span>
     </li>
   </ul>
 </template>

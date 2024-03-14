@@ -49,7 +49,8 @@
     "test": "vitest",
     "test:update": "vitest -u",
     "typecheck": "tsc --noEmit",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks",
+    "play": "pnpm -C playground dev"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.6.2",
