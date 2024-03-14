@@ -85,20 +85,27 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
 
   const { type, render } = { ...defaultOptions, ...options } as Required<ThemeOptions>
 
-  const finnalRender = (meta: [keyof ThemeMetas, rgbColor | string]) => {
+  const finnalRender = (meta: [keyof ThemeMetas, rgbColor]) => {
+    let cs = ''
+
     switch (type) {
       case 'hsl':
-        meta[1] = rgbToHsl(meta[1], true)
+        cs = rgbToHsl(meta[1], true)
         break
       case 'hsb':
-        meta[1] = rgbToHsb(meta[1], true)
+        cs = rgbToHsb(meta[1], true)
         break
       case 'hex':
-        meta[1] = rgbToHex(meta[1])
+        cs = rgbToHex(meta[1])
         break
+      case 'rgb':
+        cs = `rgb(${meta[1].join(', ')})`
+        break
+      default:
+        throw new Error(`Invalid type: ${type}`)
     }
 
-    return render(meta as [keyof ThemeMetas, string])
+    return render([meta[0], cs])
   }
 
   const variants = {

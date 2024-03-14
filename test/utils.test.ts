@@ -61,8 +61,8 @@ describe('utils scoped', () => {
     expect(hslColor).toMatchInlineSnapshot(`
       [
         0,
-        -101,
-        12750,
+        100,
+        50,
       ]
     `)
     expect(hsbColor).toMatchInlineSnapshot(`

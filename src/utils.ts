@@ -127,7 +127,7 @@ export function rgbToHsl(color: rgbColor | string, toString: false): hslColor
 export function rgbToHsl(color: rgbColor | string, toString: true): string
 export function rgbToHsl(color: rgbColor | string, toString: boolean): hslColor | string
 export function rgbToHsl(color: rgbColor | string, toString = false): hslColor | string {
-  const [r, g, b] = parseRgb(color)
+  const [r, g, b] = parseRgb(color).map(i => i / 255)
 
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
@@ -281,7 +281,7 @@ export function hexToRgb(color: hexColor, toString = false): rgbColor | string {
 }
 
 export function hexToHsl(color: hexColor, toString = false): hsbColor | string {
-  const [r, g, b] = parseHex(color)
+  const [r, g, b] = parseHex(color).map(i => i / 255)
 
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
