@@ -2,6 +2,9 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "lib": ["esnext", "dom"],
+    "paths": {
+      "magic-colors": ["../src/indenx.ts"]
+    },
     "types": [
       "vite/client"
     ]

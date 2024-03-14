@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { theme as themes } from 'magic-color'
+import { theme as themes, getReadableTextColor } from 'magic-color'
 
 defineProps<{
   theme: ReturnType<typeof themes>
@@ -9,7 +9,7 @@ defineProps<{
 <template>
   <ul fcc text-white gap-8 mt-10>
     <li fccc v-for="(v, k) in theme" :key="k">
-      <button px-3 py-2 text-sm rd-md :style="{ backgroundColor: v }">button</button>
+      <button px-3 py-2 text-sm rd-md :style="{ backgroundColor: v, color: getReadableTextColor(v) }">button</button>
       <span>{{ k }}</span>
       <span>{{ v }}</span>
     </li>

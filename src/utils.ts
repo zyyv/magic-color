@@ -274,6 +274,10 @@ function parseHex(color: hexColor): rgbColor {
   return [r, g, b]
 }
 
+export function hexToRgb(color: hexColor): rgbColor
+export function hexToRgb(color: hexColor, toString: false): rgbColor
+export function hexToRgb(color: hexColor, toString: true): string
+export function hexToRgb(color: hexColor, toString: boolean): rgbColor | string
 export function hexToRgb(color: hexColor, toString = false): rgbColor | string {
   const [r, g, b] = parseHex(color)
 
@@ -491,4 +495,31 @@ export function convertColor(
   }
 
   return null
+}
+
+export function getContrastRatio(c1: string, c2: string): number {
+  const luminance1 = calcuRelativeLuminance(hexToRgb(c1))
+  const luminance2 = calcuRelativeLuminance(hexToRgb(c2))
+
+  const lighter = Math.max(luminance1, luminance2)
+  const darker = Math.min(luminance1, luminance2)
+
+  return (lighter + 0.05) / (darker + 0.05)
+}
+
+export function calcuRelativeLuminance(rgb: rgbColor): number {
+  const [red, green, blue] = rgb.map((channel) => {
+    const channelNormalized = channel / 255
+    return channelNormalized <= 0.03928
+      ? channelNormalized / 12.92
+      : ((channelNormalized + 0.055) / 1.055) ** 2.4
+  })
+
+  return 0.2126 * red + 0.7152 * green + 0.0722 * blue
+}
+
+export function getReadableTextColor(bgColor: string, textColor = '#ffffff'): '#000000' | '#ffffff' {
+  return getContrastRatio(textColor, bgColor) >= 4.5
+    ? '#ffffff'
+    : '#000000'
 }
