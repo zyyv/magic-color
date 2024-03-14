@@ -1,7 +1,7 @@
 {
   "name": "magic-color",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "packageManager": "pnpm@8.14.0",
   "description": "Magic color creator.",
   "author": "Chris <hizyyv@gmail.com>",
