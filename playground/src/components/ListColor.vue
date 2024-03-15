@@ -14,4 +14,12 @@ defineProps<{
       <span>{{ v }}</span>
     </li>
   </ul>
+  <ul fccc text-white mt-10>
+    <li fccc v-for="(v, k) in theme" :key="k" w="100" h="12"
+      :class="k === '500' ? 'scale-105' : 'scale-100'"
+      important-duration-100 hover-scale-105 trans
+      :style="{ backgroundColor: v, color: getReadableTextColor(v) }">
+      <span>{{ v }}</span>
+    </li>
+  </ul>
 </template>
