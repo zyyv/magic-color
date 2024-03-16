@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { convertColor, hexToHsb, hexToHsl, hexToRgb, hsbToHex, hsbToHsl, hsbToRgb, hslToHex, hslToHsb, hslToRgb, isColor, rgbToHex, rgbToHsb, rgbToHsl } from '../src'
+import { convertColor, hexToHsb, hexToHsl, hexToRgb, hsbToHex, hsbToHsl, hsbToRgb, hslToHex, hslToHsb, hslToRgb, isColor, opacityToString, rgbToHex, rgbToHsb, rgbToHsl } from '../src'
 
 describe('utils scoped', () => {
   const keyword = 'red'
@@ -72,5 +72,12 @@ describe('utils scoped', () => {
         100,
       ]
     `)
+  })
+
+  it('opacityToString', () => {
+    const opacity = 0.1
+
+    expect(opacityToString(opacity)).toMatchInlineSnapshot(`"10%"`)
+    expect(opacityToString(opacity, true)).toMatchInlineSnapshot(`"1a"`)
   })
 })

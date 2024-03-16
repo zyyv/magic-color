@@ -1,4 +1,10 @@
-import type { Color, ColorType, hexColor, hsbColor, hslColor, rgbColor } from './types'
+import type { Color, ColorObject, ColorType, Opacity, hexColor, hsbColor, hslColor, rgbColor } from './types'
+
+const hexRegex = /^#?([a-f\d]{3}|[a-f\d]{6}|[a-f\d]{8})$/i
+const hslRegex = /^hsl\(\d+,\s*\d+%\s*,\s*\d+%\)$/
+const rgbRegex = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/
+const rgbaRegex = /^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(0?\.\d+|1)\)$/
+const hsbRegex = /^hsb\(\d+,\s*\d+%\s*,\s*\d+%\)$/
 
 const keywordColors: Record<string, hexColor> = {
   black: '#000000',
@@ -63,20 +69,49 @@ const keywordColors: Record<string, hexColor> = {
 
 type ColorKeyword = keyof typeof keywordColors
 
+export function createColorObject(type: ColorType, value: Color, opacity: Opacity, hasOpacity = false): ColorObject {
+  return {
+    type,
+    value,
+    opacity,
+    hasOpacity,
+    toString() {
+      if (this.type === 'keyword') {
+        return this.value as hexColor
+      }
+      else if (this.type === 'hex') {
+        return this.hasOpacity
+          ? (this.value as hexColor) + opacityToString(this.opacity)
+          : this.value as hexColor
+      }
+      else if (this.type === 'rgb') {
+        return this.hasOpacity
+          ? `rgba(${(this.value as rgbColor).join(', ')}, ${this.opacity})`
+          : `rgb(${(this.value as rgbColor).join(', ')})`
+      }
+      else { return `${this.type}(${(this.value as hslColor | hsbColor).join(', ')})` }
+    },
+  }
+}
+
+export function isColorType(color: string): color is ColorType {
+  return ['hex', 'hsl', 'rgb', 'hsb', 'keyword'].includes(color)
+}
+
 export function isHex(color: string): boolean {
-  return /^#?([a-f\d]{3}|[a-f\d]{6})$/i.test(color)
+  return hexRegex.test(color)
 }
 
 export function isHsl(color: string): boolean {
-  return /^hsl\(\d+,\s*\d+%\s*,\s*\d+%\)$/.test(color)
+  return hslRegex.test(color)
 }
 
 export function isRgb(color: string): boolean {
-  return /^rgb\(\d+,\s*\d+,\s*\d+\)$/.test(color)
+  return rgbRegex.test(color) || rgbaRegex.test(color)
 }
 
 export function isHsb(color: string): boolean {
-  return /^hsb\(\d+,\s*\d+%\s*,\s*\d+%\)$/.test(color)
+  return hsbRegex.test(color)
 }
 
 export function isKeyword(color: string): color is ColorKeyword {
@@ -101,19 +136,29 @@ export function getColorType(color: string): ColorType | null {
   return null
 }
 
+export function opacityToString(opacity: Opacity, hex = false): string {
+  return hex
+    ? Math.round(opacity * 255).toString(16).padStart(2, '0')
+    : `${opacity * 100}%`
+}
+
 // RGB To Others
 
-function parseRgb(color: rgbColor | string): rgbColor {
+export function parseRgb(color: rgbColor | string) {
   let colors
+  let opacity = 1
   if (typeof color === 'string') {
-    const match = color.match(/\d+/g)
-    if (!match || match.length < 3)
-      throw new Error('Invalid RGB color format.')
-    colors = match.map(Number) as rgbColor
-  }
-  else { colors = color }
+    const match = color.match(rgbRegex) || color.match(rgbaRegex)
+    if (!match)
+      throw new Error('Invalid RGB or RGBA color format.')
 
-  return colors
+    const rgb = [match[1], match[2], match[3]].map(Number) as rgbColor
+    opacity = match[4] ? Number.parseFloat(match[4]) : 1
+    colors = [...rgb, opacity]
+  }
+  else { colors = [...color, opacity] }
+
+  return colors as [...rgbColor, Opacity]
 }
 
 export function rgbToHex(color: rgbColor | string): hexColor {
@@ -196,7 +241,7 @@ export function rgbToHsb(color: rgbColor | string, toString = false): hsbColor |
 
 // HSL To Others
 
-function parseHsl(color: hslColor | string): hslColor {
+export function parseHsl(color: hslColor | string): hslColor {
   let colors
   if (typeof color === 'string') {
     const match = color.match(/\d+/g)
@@ -256,22 +301,38 @@ export function hslToHsb(color: hslColor | string, toString = false): hsbColor |
 
 // HEX To Others
 
-function parseHex(color: hexColor): rgbColor {
-  let match
-  const _match = color.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i)
-  const _shortMatch = color.match(/^#?([a-f\d])([a-f\d])([a-f\d])$/i)
-  if (_match)
-    match = _match
-  else if (_shortMatch)
-    match = [null, ..._shortMatch.slice(1).map(c => c + c)] as unknown as RegExpMatchArray
-  else
+export function parseHex(color: hexColor): [...rgbColor, Opacity] {
+  let r
+  let g
+  let b
+  let opacity = 1
+
+  const match = color.match(hexRegex)
+  if (!match)
     throw new Error('Invalid HEX color format.')
 
-  const r = Number.parseInt(match[1], 16)
-  const g = Number.parseInt(match[2], 16)
-  const b = Number.parseInt(match[3], 16)
+  if (match[1].length === 3) {
+    r = match[1][0] + match[1][0]
+    g = match[1][1] + match[1][1]
+    b = match[1][2] + match[1][2]
+  }
+  else if (match[1].length === 6) {
+    r = match[1].substring(0, 2)
+    g = match[1].substring(2, 4)
+    b = match[1].substring(4, 6)
+  }
+  else {
+    r = match[1].substring(0, 2)
+    g = match[1].substring(2, 4)
+    b = match[1].substring(4, 6)
+    opacity = Number.parseInt(match[1].substring(6, 8), 16) / 255
+  }
 
-  return [r, g, b]
+  r = Number.parseInt(r, 16)
+  g = Number.parseInt(g, 16)
+  b = Number.parseInt(b, 16)
+
+  return [r, g, b, opacity]
 }
 
 export function hexToRgb(color: hexColor): rgbColor
@@ -316,12 +377,12 @@ export function hexToHsl(color: hexColor, toString = false): hsbColor | string {
 }
 
 export function hexToHsb(color: hexColor, toString = false): hsbColor | string {
-  return rgbToHsb(parseHex(color), toString)
+  return rgbToHsb(parseHex(color).slice(0, 3) as rgbColor, toString)
 }
 
 // HSB To Others
 
-function parseHsb(color: hsbColor | string): hsbColor {
+export function parseHsb(color: hsbColor | string): hsbColor {
   let colors
   if (typeof color === 'string') {
     const match = color.match(/\d+/g)
@@ -338,7 +399,7 @@ function parseHsb(color: hsbColor | string): hsbColor {
   return colors
 }
 
-function parseHsbToRgb(color: hsbColor): rgbColor {
+export function parseHsbToRgb(color: hsbColor): rgbColor {
   const [h, s, b] = color
   const c = b * s
   const x = c * (1 - Math.abs(((h / 60) % 2) - 1))
@@ -435,6 +496,9 @@ export function convertColor(
   const color = colorString.toLowerCase()
   const type = getColorType(color)
 
+  if (!isColorType(format))
+    throw new Error('Invalid format type.')
+
   switch (format) {
     case 'hsl':
       switch (type) {
@@ -471,7 +535,7 @@ export function convertColor(
         case 'hex':
           return hexToRgb(color, toString)
         case 'rgb':
-          return toString ? color : parseRgb(color)
+          return toString ? color : parseRgb(color).slice(0, 3) as rgbColor
         case 'hsb':
           return hsbToRgb(color, toString)
         case 'keyword':
