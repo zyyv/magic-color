@@ -45,27 +45,27 @@ describe('utils scoped', () => {
   })
 
   it('convertColor', () => {
-    const hexColor = convertColor(keyword, 'hex')
-    const rgbColor = convertColor(keyword, 'rgb')
-    const hslColor = convertColor(keyword, 'hsl')
-    const hsbColor = convertColor(keyword, 'hsb')
+    const HexColor = convertColor(keyword, 'hex')
+    const RgbColor = convertColor(keyword, 'rgb')
+    const HslColor = convertColor(keyword, 'hsl')
+    const HsbColor = convertColor(keyword, 'hsb')
 
-    expect(hexColor).toMatchInlineSnapshot(`"#ff0000"`)
-    expect(rgbColor).toMatchInlineSnapshot(`
+    expect(HexColor).toMatchInlineSnapshot(`"#ff0000"`)
+    expect(RgbColor).toMatchInlineSnapshot(`
       [
         255,
         0,
         0,
       ]
     `)
-    expect(hslColor).toMatchInlineSnapshot(`
+    expect(HslColor).toMatchInlineSnapshot(`
       [
         0,
         100,
         50,
       ]
     `)
-    expect(hsbColor).toMatchInlineSnapshot(`
+    expect(HsbColor).toMatchInlineSnapshot(`
       [
         0,
         100,
