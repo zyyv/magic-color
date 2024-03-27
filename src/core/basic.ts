@@ -1,4 +1,4 @@
-import type { ColorObject, ColorType, Colors, HexColor, HsbColor, HslColor, Opacity, RgbColor } from './types'
+import type { ColorObject, ColorType, ColorValue, Colors, HexColor, HsbColor, HslColor, Opacity, RgbColor } from './types'
 import { hsbToHex, hsbToHsl, hsbToRgb, isHsb, parseHsb } from './hsb'
 import { hslToHex, hslToHsb, hslToRgb, isHsl, parseHsl } from './hsl'
 import { hexToHsb, hexToHsl, hexToRgb, isHex, parseHex } from './hex'
@@ -133,7 +133,10 @@ export function createMagicColor<T extends ColorType = any>(value: Colors[T] | s
       opacity: _opacity,
     } = parseColorString(value)
 
-    return new MagicColor<any>(_value, _type, _opacity)
+    if (type && type !== _type)
+      throw new Error(`Invalid color type: ${_type}.`)
+
+    return new MagicColor<any>(_value, _type, opacity ?? _opacity)
   }
 
   opacity = opacity ?? 1
@@ -150,7 +153,7 @@ export function opacityToString(opacity: Opacity, toHex = false): string {
 function parseColorString(color: string) {
   const type = guessType(color)
   if (!type)
-    throw new Error('Invalid color format.')
+    throw new Error(`Invalid color: ${color}.`)
 
   const parseMap = {
     rgb: parseRgb,

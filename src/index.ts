@@ -1,3 +1,2 @@
-// export * from './utils/utils'
-export * from './utils/types'
+export * from './core'
 export * from './theme'
