@@ -1,5 +1,5 @@
 import type { HexColor } from './types'
-import { parseHex } from '.'
+import { parseHex } from './hex'
 
 export const KeywordColors: Record<string, HexColor> = {
   black: '#000000',
