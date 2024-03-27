@@ -1,28 +1,33 @@
 import { rgbToHex, rgbToHsb } from './rgb'
-import { type HslColor, createColorObject } from '.'
+import type { HexColor, HsbColor, HslColor, RgbColor } from './types'
 
-export function parseHsl(color: HslColor | string) {
-  if (typeof color === 'string') {
-    const match = color.match(/\d+/g)
-    if (!match || match.length < 3)
-      throw new Error('Invalid HSL color format.')
-    color = [
-      Number.parseInt(match[0]),
-      Number.parseInt(match[1]) / 100,
-      Number.parseInt(match[2]) / 100,
-    ] as HslColor
-  }
+const hslRegex = /^hsl\((\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\)$/
+const hslaRegex = /^hsla\((\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*,\s*(0?\.\d+|1)\)$/
 
-  return createColorObject('hsl', color, 1)
+export function isHsl(color: string): boolean {
+  return hslRegex.test(color) || hslaRegex.test(color)
 }
 
-export function hslToHex(color: HslColor | string) {
-  return rgbToHex(hslToRgb(parseHsl(color).value).value)
+export function parseHsl(color: string) {
+  const match = color.match(hslRegex) || color.match(hslaRegex)
+  if (!match)
+    throw new Error('Invalid HSL color format.')
+  const value = [
+    Number.parseInt(match[1]),
+    Number.parseInt(match[2]) / 100,
+    Number.parseInt(match[3]) / 100,
+  ] as HslColor
+  const opacity = match[4] ? Number.parseFloat(match[4]) : 1
+
+  return { value, opacity }
 }
 
-export function hslToRgb(color: HslColor | string) {
-  const parsed = parseHsl(color)
-  const [h, s, l] = parsed.value
+export function hslToHex(color: HslColor): HexColor {
+  return rgbToHex(hslToRgb(color))
+}
+
+export function hslToRgb(color: HslColor): RgbColor {
+  const [h, s, l] = color
 
   let r, g, b
   if (s === 0) {
@@ -49,9 +54,9 @@ export function hslToRgb(color: HslColor | string) {
     b = hue2rgb(p, q, h / 360 - 1 / 3)
   }
 
-  return createColorObject('rgb', [r * 255, g * 255, b * 255], parsed.opacity)
+  return [r * 255, g * 255, b * 255]
 }
 
-export function hslToHsb(color: HslColor | string) {
-  return rgbToHsb(hslToRgb(parseHsl(color).value).value)
+export function hslToHsb(color: HslColor): HsbColor {
+  return rgbToHsb(hslToRgb(color))
 }

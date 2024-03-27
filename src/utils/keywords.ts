@@ -1,4 +1,5 @@
 import type { HexColor } from './types'
+import { parseHex } from '.'
 
 export const KeywordColors: Record<string, HexColor> = {
   black: '#000000',
@@ -34,7 +35,7 @@ export const KeywordColors: Record<string, HexColor> = {
   gold: '#ffd700',
 }
 
-export const UnoColors = {
+export const UnoColors: Record<string, HexColor> = {
   amber: '#fbbf24',
   black: '#000',
   blue: '#60a5fa',
@@ -72,4 +73,12 @@ export const UnoColors = {
   white: '#fff',
   yellow: '#facc15',
   zinc: '#a1a1aa',
+}
+
+export function isKeyword(color: string): color is keyof typeof KeywordColors {
+  return color in KeywordColors || color in UnoColors
+}
+
+export function parseKeyword(color: string) {
+  return parseHex(KeywordColors[color] ?? UnoColors[color])
 }

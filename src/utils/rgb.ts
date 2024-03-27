@@ -1,5 +1,5 @@
-import { createColorObject } from './basic'
-import type { RgbColor } from './types'
+import { createMagicColor } from './basic'
+import type { HexColor, HsbColor, HslColor, RgbColor } from './types'
 
 const rgbRegex = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/
 const rgbaRegex = /^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(0?\.\d+|1)\)$/
@@ -8,35 +8,24 @@ export function isRgb(color: string): boolean {
   return rgbRegex.test(color) || rgbaRegex.test(color)
 }
 
-export function parseRgb(color: RgbColor | string) {
-  if (typeof color === 'string') {
-    const match = color.match(rgbRegex) || color.match(rgbaRegex)
-    if (!match)
-      throw new Error('Invalid RGB or RGBA color format.')
+export function parseRgb(color: string) {
+  const match = color.match(rgbRegex) || color.match(rgbaRegex)
+  if (!match)
+    throw new Error('Invalid RGB or RGBA color format.')
 
-    const rgb = [match[1], match[2], match[3]].map(Number) as RgbColor
-    const opacity = match[4] ? Number.parseFloat(match[4]) : 1
+  const rgb = [match[1], match[2], match[3]].map(Number) as RgbColor
+  const opacity = match[4] ? Number.parseFloat(match[4]) : 1
 
-    return createColorObject('rgb', rgb, opacity)
-  }
-
-  return createColorObject('rgb', color, 1)
+  return { value: rgb, opacity }
 }
 
-export function rgbToHex(color: RgbColor | string) {
-  const parsed = parseRgb(color)
-  const [r, g, b] = parsed.value
-
-  return createColorObject(
-    'hex',
-    `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`,
-    parsed.opacity,
-  )
+export function rgbToHex(color: RgbColor): HexColor {
+  const [r, g, b] = color
+  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`
 }
 
-export function rgbToHsl(color: RgbColor | string) {
-  const parsed = parseRgb(color)
-  const [r, g, b] = parsed.value.map(i => i / 255)
+export function rgbToHsl(color: RgbColor): HslColor {
+  const [r, g, b] = color
 
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
@@ -61,16 +50,11 @@ export function rgbToHsl(color: RgbColor | string) {
     h *= 60
   }
 
-  return createColorObject(
-    'hsl',
-    [Math.round(h), Math.round(s * 100), Math.round(l * 100)],
-    parsed.opacity,
-  )
+  return [Math.round(h), Math.round(s * 100), Math.round(l * 100)]
 }
 
-export function rgbToHsb(color: RgbColor | string) {
-  const parsed = parseRgb(color)
-  const [r, g, b] = parsed.value
+export function rgbToHsb(color: RgbColor): HsbColor {
+  const [r, g, b] = color
 
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
@@ -97,9 +81,5 @@ export function rgbToHsb(color: RgbColor | string) {
     v *= 100
   }
 
-  return createColorObject(
-    'hsb',
-    [Math.round(h), Math.round(s), Math.round(v)],
-    parsed.opacity,
-  )
+  return [Math.round(h), Math.round(s), Math.round(v)]
 }

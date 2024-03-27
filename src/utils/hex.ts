@@ -1,6 +1,6 @@
-import type { HexColor } from './types'
+import type { HexColor, HsbColor, HslColor, RgbColor } from './types'
 import { rgbToHsb } from './rgb'
-import { createColorObject } from '.'
+import { createMagicColor } from '.'
 
 const hexRegex = /^#?([a-f\d]{3}|[a-f\d]{6}|[a-f\d]{8})$/i
 
@@ -9,9 +9,7 @@ export function isHex(color: string): boolean {
 }
 
 export function parseHex(color: HexColor) {
-  let r
-  let g
-  let b
+  let value: HexColor
   let opacity = 1
 
   const match = color.match(hexRegex)
@@ -19,36 +17,29 @@ export function parseHex(color: HexColor) {
     throw new Error('Invalid HEX color format.')
 
   if (match[1].length === 3) {
-    r = match[1][0] + match[1][0]
-    g = match[1][1] + match[1][1]
-    b = match[1][2] + match[1][2]
+    value = match[1].split('').map(c => c + c).join('')
   }
   else if (match[1].length === 6) {
-    r = match[1].substring(0, 2)
-    g = match[1].substring(2, 4)
-    b = match[1].substring(4, 6)
+    value = match[1]
   }
   else {
-    r = match[1].substring(0, 2)
-    g = match[1].substring(2, 4)
-    b = match[1].substring(4, 6)
+    value = match[1].substring(0, 6)
     opacity = Number.parseInt(match[1].substring(6, 8), 16) / 255
   }
 
-  r = Number.parseInt(r, 16)
-  g = Number.parseInt(g, 16)
-  b = Number.parseInt(b, 16)
-
-  return createColorObject('rgb', [r, g, b], opacity)
+  return { value, opacity }
 }
 
-export function hexToRgb(color: HexColor) {
-  return parseHex(color)
+export function hexToRgb(color: HexColor): RgbColor {
+  const r = Number.parseInt(color.substring(0, 2), 16)
+  const g = Number.parseInt(color.substring(2, 4), 16)
+  const b = Number.parseInt(color.substring(4, 6), 16)
+
+  return [r, g, b]
 }
 
-export function hexToHsl(color: HexColor) {
-  const parsed = parseHex(color)
-  const [r, g, b] = parsed.value.map(i => i / 255)
+export function hexToHsl(color: HexColor): HslColor {
+  const [r, g, b] = hexToRgb(color)
 
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
@@ -73,15 +64,11 @@ export function hexToHsl(color: HexColor) {
     h *= 60
   }
 
-  return createColorObject(
-    'hsl',
-    [Math.round(h), Math.round(s * 100), Math.round(l * 100)],
-    parsed.opacity,
-  )
+  return [Math.round(h), Math.round(s * 100), Math.round(l * 100)]
 }
 
-export function hexToHsb(color: HexColor) {
-  return rgbToHsb(parseHex(color).value)
+export function hexToHsb(color: HexColor): HsbColor {
+  return rgbToHsb(hexToRgb(color))
 }
 
 export function toHex(c: number) {

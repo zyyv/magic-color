@@ -39,10 +39,4 @@ export interface ColorObject<T extends ColorType> {
   type: T
   value: Colors[T]
   opacity: Opacity
-  /**
-   * Stringify the color and opacity (rgb or hex with alpha)
-   * @param withOpacity Boolean to determine if the opacity should be included in the string
-   * @returns The stringified color
-   */
-  toString: (withOpacity: boolean) => string
 }
