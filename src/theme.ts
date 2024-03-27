@@ -1,20 +1,20 @@
-import type { ColorType, rgbColor } from '.'
-import { convertColor, getColorType, isColor, rgbToHex, rgbToHsb, rgbToHsl } from './'
+import type { ColorType, RgbColor } from './core/types'
+import { createMagicColor } from './core'
 
-function tint(components: rgbColor, intensity: number) {
-  return components.map(c => Math.round(c + (255 - c) * intensity)) as rgbColor
+function tint(components: RgbColor, intensity: number) {
+  return components.map(c => Math.round(c + (255 - c) * intensity)) as RgbColor
 }
 
-function shade(components: rgbColor, intensity: number) {
-  return components.map(c => Math.round(c * intensity)) as rgbColor
+function shade(components: RgbColor, intensity: number) {
+  return components.map(c => Math.round(c * intensity)) as RgbColor
 }
 
 function withTint(intensity: number) {
-  return (hex: rgbColor) => tint(hex, intensity)
+  return (hex: RgbColor) => tint(hex, intensity)
 }
 
 function withShade(intensity: number) {
-  return (hex: rgbColor) => shade(hex, intensity)
+  return (hex: RgbColor) => shade(hex, intensity)
 }
 
 export interface ThemeMetas {
@@ -75,31 +75,30 @@ export interface ThemeOptions {
  * @returns ThemeMetas
  */
 export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
-  if (!isColor(color))
-    throw new Error(`Invalid color: ${color}`)
+  const mc = createMagicColor(color)
 
   const defaultOptions: ThemeOptions = {
-    type: getColorType(color)! === 'keyword' ? 'hex' : getColorType(color)!,
+    type: mc.type,
     render: c => c,
   }
 
   const { type, render } = { ...defaultOptions, ...options } as Required<ThemeOptions>
 
-  const finnalRender = (meta: [keyof ThemeMetas, rgbColor]) => {
+  const finnalRender = (meta: [keyof ThemeMetas, RgbColor]) => {
     let cs = ''
 
     switch (type) {
       case 'hsl':
-        cs = rgbToHsl(meta[1], true)
+        cs = createMagicColor(meta[1], 'rgb').toHsl().toString()
         break
       case 'hsb':
-        cs = rgbToHsb(meta[1], true)
+        cs = createMagicColor(meta[1], 'rgb').toHsb().toString()
         break
       case 'hex':
-        cs = rgbToHex(meta[1])
+        cs = createMagicColor(meta[1], 'rgb').toHex().toString()
         break
       case 'rgb':
-        cs = `rgb(${meta[1].join(', ')})`
+        cs = createMagicColor(meta[1], 'rgb').toRgb().toString()
         break
       default:
         throw new Error(`Invalid type: ${type}`)
@@ -114,7 +113,7 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
     200: withTint(0.75),
     300: withTint(0.6),
     400: withTint(0.3),
-    500: (c: rgbColor) => c,
+    500: (c: RgbColor) => c,
     600: withShade(0.9),
     700: withShade(0.6),
     800: withShade(0.45),
@@ -130,7 +129,7 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
       Object.fromEntries([
         finnalRender([
           name as keyof ThemeMetas,
-          fn(convertColor(color, 'rgb')!),
+          fn(mc.toRgb().value),
         ]),
       ]),
     )

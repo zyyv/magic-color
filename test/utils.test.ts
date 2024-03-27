@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { convertColor, hexToHsb, hexToHsl, hexToRgb, hsbToHex, hsbToHsl, hsbToRgb, hslToHex, hslToHsb, hslToRgb, isColor, rgbToHex, rgbToHsb, rgbToHsl } from '../src'
+import { isColor, createMagicColor as mc, opacityToString } from '../src/core'
 
 describe('utils scoped', () => {
-  const keyword = 'red'
   const hex = '#ff0000'
   const shortHex = '#f00'
   const rgb = 'rgb(255, 0, 0)'
@@ -23,54 +22,40 @@ describe('utils scoped', () => {
 
   it('simple convert', () => {
     // rgb to others test case
-    expect(rgbToHsl(rgb, true)).toEqual(hsl)
-    expect(rgbToHsb(rgb, true)).toEqual(hsb)
-    expect(rgbToHex(rgb)).toEqual(hex)
+    expect(mc(rgb).toHex().toString()).toEqual(hex)
+    expect(mc(rgb).toHsb().toString()).toEqual(hsb)
+    expect(mc(rgb).toHsl().toString()).toEqual(hsl)
 
     // hex to others test case
-    expect(hexToHsb(hex, true)).toEqual(hsb)
-    expect(hexToHsl(hex, true)).toEqual(hsl)
-    expect(hexToRgb(hex, true)).toEqual(rgb)
-    expect(hexToRgb(shortHex, true)).toEqual(rgb)
+    expect(mc(hex).toRgb().toString()).toEqual(rgb)
+    expect(mc(hex).toHsl().toString()).toEqual(hsl)
+    expect(mc(hex).toHsb().toString()).toEqual(hsb)
+    expect(mc(shortHex).toRgb().toString()).toEqual(rgb)
 
     // hsl to others test case
-    expect(hslToRgb(hsl, true)).toEqual(rgb)
-    expect(hslToHex(hsl)).toEqual(hex)
-    expect(hslToHsb(hsl, true)).toEqual(hsb)
+    expect(mc(hsl).toRgb().toString()).toEqual(rgb)
+    expect(mc(hsl).toHsb().toString()).toEqual(hsb)
+    expect(mc(hsl).toHex().toString()).toEqual(hex)
 
     // hsb to others test case
-    expect(hsbToRgb(hsb, true)).toEqual(rgb)
-    expect(hsbToHex(hsb)).toEqual(hex)
-    expect(hsbToHsl(hsb, true)).toEqual(hsl)
+    expect(mc(hsb).toRgb().toString()).toEqual(rgb)
+    expect(mc(hsb).toHsl().toString()).toEqual(hsl)
+    expect(mc(hsb).toHex().toString()).toEqual(hex)
   })
 
-  it('convertColor', () => {
-    const hexColor = convertColor(keyword, 'hex')
-    const rgbColor = convertColor(keyword, 'rgb')
-    const hslColor = convertColor(keyword, 'hsl')
-    const hsbColor = convertColor(keyword, 'hsb')
+  const opacity = 0.6789
 
-    expect(hexColor).toMatchInlineSnapshot(`"#ff0000"`)
-    expect(rgbColor).toMatchInlineSnapshot(`
-      [
-        255,
-        0,
-        0,
-      ]
-    `)
-    expect(hslColor).toMatchInlineSnapshot(`
-      [
-        0,
-        100,
-        50,
-      ]
-    `)
-    expect(hsbColor).toMatchInlineSnapshot(`
-      [
-        0,
-        100,
-        100,
-      ]
-    `)
+  it('with opacity', () => {
+    expect(opacityToString(opacity)).toEqual('67.89%')
+    expect(opacityToString(opacity, true)).toEqual('ad')
+  })
+
+  it('in magic color', () => {
+    const c = `rgba(100, 100, 100, ${opacity})`
+    const mcColor = mc(c)
+    expect(mcColor.toRgb().toString(true)).toEqual('rgba(100, 100, 100, 67.89%)')
+    expect(mcColor.toHex().toString(true)).toEqual('#646464ad')
+    expect(mcColor.toHsl().toString(true)).toEqual('hsla(0, 0%, 39%, 67.89%)')
+    expect(mcColor.toHsb().toString(true)).toEqual('hsb(0, 0%, 0%)')
   })
 })
