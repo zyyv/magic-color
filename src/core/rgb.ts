@@ -1,4 +1,3 @@
-import { createMagicColor } from './basic'
 import type { HexColor, HsbColor, HslColor, RgbColor } from './types'
 
 const rgbRegex = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/
@@ -25,7 +24,7 @@ export function rgbToHex(color: RgbColor): HexColor {
 }
 
 export function rgbToHsl(color: RgbColor): HslColor {
-  const [r, g, b] = color
+  const [r, g, b] = color.map(i => i / 255)
 
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)

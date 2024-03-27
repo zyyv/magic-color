@@ -1,4 +1,4 @@
-import type { ColorObject, ColorType, ColorValue, Colors, HexColor, HsbColor, HslColor, Opacity, RgbColor } from './types'
+import type { ColorObject, ColorType, Colors, HexColor, HsbColor, HslColor, Opacity, RgbColor } from './types'
 import { hsbToHex, hsbToHsl, hsbToRgb, isHsb, parseHsb } from './hsb'
 import { hslToHex, hslToHsb, hslToRgb, isHsl, parseHsl } from './hsl'
 import { hexToHsb, hexToHsl, hexToRgb, isHex, parseHex } from './hex'
@@ -28,11 +28,11 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
 
       case 'rgb':
         return withOpacity
-          ? `rgba(${(this.value as RgbColor).join(', ')}, ${this.opacity})`
+          ? `rgba(${(this.value as RgbColor).join(', ')}, ${opacityToString(this.opacity)})`
           : `rgb(${(this.value as RgbColor).join(', ')})`
 
       case 'hsl':
-        return `${this.type}${withOpacity ? 'a' : ''}(${[this.value[0], `${this.value[1]}%`, `${this.value[2]}%`].join(', ')})`
+        return `${this.type}${withOpacity ? 'a' : ''}(${[this.value[0], `${this.value[1]}%`, `${this.value[2]}%`].join(', ')}${withOpacity ? `, ${opacityToString(this.opacity)}` : ''})`
 
       case 'hsb':
         return `${this.type}(${[this.value[0], `${this.value[1]}%`, `${this.value[2]}%`].join(', ')})`
@@ -147,7 +147,7 @@ export function createMagicColor<T extends ColorType = any>(value: Colors[T] | s
 export function opacityToString(opacity: Opacity, toHex = false): string {
   return toHex
     ? Math.round(opacity * 255).toString(16).padStart(2, '0')
-    : `${opacity * 100}%`
+    : `${Math.round(opacity * 10000) / 100}%`
 }
 
 function parseColorString(color: string) {
@@ -169,7 +169,7 @@ function parseColorString(color: string) {
   } as ColorObject<ColorType>
 }
 
-function guessType(color: string) {
+export function guessType(color: string) {
   const map = {
     rgb: isRgb,
     hex: isHex,

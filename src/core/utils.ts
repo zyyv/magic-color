@@ -1,5 +1,9 @@
 import type { RgbColor } from './types'
-import { createMagicColor } from './basic'
+import { createMagicColor, guessType } from './basic'
+
+export function isColor(color: string): boolean {
+  return guessType(color) !== undefined
+}
 
 export function getContrastRatio(c1: string, c2: string): number {
   const _c1 = createMagicColor(c1).toRgb().value

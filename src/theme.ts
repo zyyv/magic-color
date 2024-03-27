@@ -75,7 +75,7 @@ export interface ThemeOptions {
  * @returns ThemeMetas
  */
 export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
-  const mc = createMagicColor(color).toRgb()
+  const mc = createMagicColor(color)
 
   const defaultOptions: ThemeOptions = {
     type: mc.type,
@@ -129,7 +129,7 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
       Object.fromEntries([
         finnalRender([
           name as keyof ThemeMetas,
-          fn(mc.value),
+          fn(mc.toRgb().value),
         ]),
       ]),
     )

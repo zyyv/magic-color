@@ -1,6 +1,5 @@
 import type { HexColor, HsbColor, HslColor, RgbColor } from './types'
 import { rgbToHsb } from './rgb'
-import { createMagicColor } from '.'
 
 const hexRegex = /^#?([a-f\d]{3}|[a-f\d]{6}|[a-f\d]{8})$/i
 
@@ -39,7 +38,7 @@ export function hexToRgb(color: HexColor): RgbColor {
 }
 
 export function hexToHsl(color: HexColor): HslColor {
-  const [r, g, b] = hexToRgb(color)
+  const [r, g, b] = hexToRgb(color).map(i => i / 255)
 
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
