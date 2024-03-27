@@ -16,7 +16,7 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     this.opacity = opacity
   }
 
-  toString(withOpacity = false) {
+  toString(withOpacity = false): string {
     switch (this.type) {
       case 'keyword':
         return this.value + (withOpacity ? opacityToString(this.opacity, true) : '')
@@ -42,7 +42,7 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     }
   }
 
-  toRgb() {
+  toRgb(): MagicColor<'rgb'> {
     let value
     switch (this.type) {
       case 'keyword':
@@ -62,7 +62,7 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     return new MagicColor(value as RgbColor, 'rgb', this.opacity)
   }
 
-  toHex() {
+  toHex(): MagicColor<'hex'> {
     let value
     switch (this.type) {
       case 'rgb':
@@ -82,7 +82,7 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     return new MagicColor(value as HexColor, 'hex', this.opacity)
   }
 
-  toHsl() {
+  toHsl(): MagicColor<'hsl'> {
     let value
     switch (this.type) {
       case 'keyword':
@@ -102,7 +102,7 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     return new MagicColor(value as HslColor, 'hsl', this.opacity)
   }
 
-  toHsb() {
+  toHsb(): MagicColor<'hsb'> {
     let value
     switch (this.type) {
       case 'keyword':
@@ -169,7 +169,7 @@ function parseColorString(color: string) {
   } as ColorObject<ColorType>
 }
 
-export function guessType(color: string) {
+export function guessType(color: string): ColorType | undefined {
   const map = {
     rgb: isRgb,
     hex: isHex,
