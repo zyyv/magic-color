@@ -18,14 +18,38 @@ pnpm add magic-color
 
 A lot of color tool functions for you to use, providing easy conversion, generation, parsing, comparison, operation and other functions.
 
-## Example
+### basic
 
 ```ts
-import { hexTorgb, rgbTohex } from 'magic-color'
+import { MagicColor, createMagicColor } from 'magic-color'
 
-hexTorgb('#fff') // [255, 255, 255]
-rgbTohex('rgb(255, 255, 255)') // '#fff'
+const mc = new MagicColor('#ffffff', 'hex', '1')
+// or
+const mc = createMagicColor('#ffffff') // recommended
 ```
+
+`createMagicColor` will automatically infer the input color type and the opacity.
+
+Now support color types: `RGB`, `HEX`, `HSL`, `HSB`, `Keyword`.
+
+You can convert between supported types.
+
+```ts
+mc.toRgb().value // [255, 255, 255]
+mc.toHex().value // '#ffffff'
+mc.toHsl().value // [0, 0, 100]
+mc.toHsb().value // [0, 0, 100]
+```
+
+If you want to output a color string, you can use the `toString` method, and you can choose whether you need opacity.
+
+```ts
+mc.toRgb().toString() // 'rgb(255, 255, 255)'
+// with opacity
+mc.toRgb().toString(true) // 'rgba(255, 255, 255, 100%)'
+```
+
+Refer to the [type documentation](https://github.com/zyyv/magic-color/blob/main/src/core/types.ts) for more information.
 
 And more...
 
