@@ -4,7 +4,7 @@ const { width, height } = defineProps<{
   height: number;
 }>();
 
-
+const noop = () => { };
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 const barRef = ref<HTMLDivElement | null>(null);
 
@@ -46,34 +46,34 @@ function drawColorControl(ctx: CanvasRenderingContext2D) {
   ctx.fillRect(0, 0, 168, 12);
 }
 
-function initBar() {
-  const bar = barRef.value;
-  if (bar) {
-    let isDragging = false;
-    let startX = 0;
-    let startLeft = 0;
-    bar.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      startX = e.clientX;
-      startLeft = bar.offsetLeft;
-      barStyle.value.cursor = 'grabbing';
-      barStyle.value.transition = 'none';
-    });
-    window.addEventListener('mousemove', (e) => {
-      if (isDragging) {
-        const dis = startLeft + e.clientX - startX;
-        const left = Math.min(Math.max(dis, 0), width - height)
-        const precent = left / (width - height)
-        console.log(precent)
-        barStyle.value.left = left + 'px';
-      }
-    });
-    window.addEventListener('mouseup', () => {
-      isDragging = false;
-      barStyle.value.cursor = 'grab';
-      barStyle.value.transition = 'all 0.2s ease-in-out';
-    });
-  }
+// listeners
+const startX = ref(0);
+const startLeft = ref(0);
+
+function handleMouseDown(e: MouseEvent) {
+  startX.value = e.clientX;
+  startLeft.value = barRef.value!.offsetLeft;
+  barStyle.value.cursor = 'grabbing';
+  barStyle.value.transition = 'none';
+
+  window.addEventListener('mousemove', handleMouseMove);
+  window.addEventListener('mouseup', handleMouseUp);
+}
+
+function handleMouseMove(e: MouseEvent) {
+  const dis = startLeft.value + e.clientX - startX.value;
+  const left = Math.min(Math.max(dis, 0), width - height)
+  const precent = left / (width - height)
+  console.log(precent)
+  barStyle.value.left = left + 'px';
+}
+
+function handleMouseUp() {
+  barStyle.value.cursor = 'grab';
+  barStyle.value.transition = 'all 0.2s ease-in-out';
+
+  window.removeEventListener('mousemove', handleMouseMove);
+  window.removeEventListener('mouseup', handleMouseUp);
 }
 
 function handleClick(e: MouseEvent) {
@@ -83,7 +83,6 @@ function handleClick(e: MouseEvent) {
 }
 
 onMounted(() => {
-  initBar()
   const ctx = canvasRef.value?.getContext('2d');
   if (ctx)
     drawColorControl(ctx);
@@ -92,8 +91,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div @click.stop="handleClick" :style="wrapperStyle">
-    <canvas ref="canvasRef" :width :height></canvas>
-    <div ref="barRef" :style="barStyle"></div>
+  <div :style="wrapperStyle">
+    <canvas @click.stop="handleClick" ref="canvasRef" :width :height></canvas>
+    <div @click.stop="noop" @mousedown="handleMouseDown" ref="barRef" :style="barStyle"></div>
   </div>
 </template>
