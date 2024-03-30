@@ -1,18 +1,17 @@
 <script lang='ts' setup>
 const alpha = ref(1);
-
-
+const hue = ref(0.5);
 
 </script>
 
 <template>
-  <div>
-    <PalettePanel />
-    <div flex gap-2 p="2">
+  <div style="width: 240px;">
+    <PalettePanel :width="240" :height="240" :color="'#0ff'" />
+    <div flex justify-around py="2">
       <div w="40px" h="40px" bg-red></div>
       <div fbc flex-col py="2px">
-        <PaletteControls :width="168" :height="12" />
-        <PaletteAlpha :width="168" :height="12" :color="'#3d0'" v-model="alpha" />
+        <PaletteControls :width="168" :height="12" :color="'#0ff'" type="hue" v-model="hue" />
+        <PaletteControls :width="168" :height="12" :color="'#3d0'" type="alpha" v-model="alpha" />
       </div>
     </div>
   </div>

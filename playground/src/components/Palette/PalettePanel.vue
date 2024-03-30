@@ -1,46 +1,39 @@
 <script lang='ts' setup>
-import { ref } from 'vue';
+import { ref, defineProps, watch } from 'vue';
 
-const canvas = ref<HTMLCanvasElement | null>(null);
+const { width, height, color } = defineProps<{
+  width: number,
+  height: number
+  color: string
+}>();
 
-function drawMask(ctx: CanvasRenderingContext2D) {
-  const gradient2: CanvasGradient = ctx.createLinearGradient(0, 0, 240, 0);
-  gradient2.addColorStop(0, '#ffffff');
-  gradient2.addColorStop(1, 'rgba(255,255,255,0)');
-
-  ctx.fillStyle = gradient2;
-  ctx.fillRect(0, 0, 240, 240);
-
-  const gradient1: CanvasGradient = ctx.createLinearGradient(0, 240, 0, 0);
-  gradient1.addColorStop(0, '#000000');
-  gradient1.addColorStop(1, 'transparent');
-
-  ctx.fillStyle = gradient1;
-  ctx.fillRect(0, 0, 240, 240);
-}
+const canvasRef = ref<HTMLCanvasElement | null>(null);
+const ctx = ref<CanvasRenderingContext2D | null>(null);
 
 function drawBackground(ctx: CanvasRenderingContext2D) {
-  ctx.fillStyle = '#9455d3'; // 这里以白色为例
-  ctx.fillRect(0, 0, 240, 240);
+  const bgGradient: CanvasGradient = ctx.createLinearGradient(0, 0, width, 0);
+  bgGradient.addColorStop(0, '#fff');
+  bgGradient.addColorStop(1, color);
+  ctx.fillStyle = bgGradient;
+  ctx.fillRect(0, 0, width, height);
+
+  const maskGradient: CanvasGradient = ctx.createLinearGradient(0, 0, 0, height);
+  maskGradient.addColorStop(0, 'transparent');
+  maskGradient.addColorStop(1, '#000');
+  ctx.fillStyle = maskGradient;
+  ctx.fillRect(0, 0, width, height);
 }
 
-function draw() {
-  const ctx = canvas.value?.getContext('2d');
-  if (ctx) {
-    drawBackground(ctx);
-    drawMask(ctx);
-  }
-}
-
+watch(() => color, () => drawBackground(ctx.value!))
 
 onMounted(() => {
-  draw();
+  if (canvasRef.value) {
+    ctx.value = canvasRef.value.getContext('2d');
+    drawBackground(ctx.value!);
+  }
 })
-
 </script>
 
 <template>
-  <div w="240px">
-    <canvas ref="canvas" width="240px" height="240px"></canvas>
-  </div>
+  <canvas ref="canvasRef" :width :height></canvas>
 </template>

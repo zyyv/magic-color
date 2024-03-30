@@ -1,39 +1,66 @@
 <script lang='ts' setup>
-const { width, height } = defineProps<{
+import { type RgbColor, createMagicColor, HexColor } from 'magic-color';
+import { defineProps, defineModel, onMounted, ref } from 'vue';
+import { useControlBar } from './hook';
+
+const { width, height, color, type } = defineProps<{
   width: number;
   height: number;
+  color: HexColor;
+  type: 'hue' | 'alpha';
 }>();
+const model = defineModel({ type: Number, default: 1 });
 
-const noop = () => { };
-const canvasRef = ref<HTMLCanvasElement | null>(null);
-const barRef = ref<HTMLDivElement | null>(null);
+const { canvasRef, barRef, onMouseDown } = useControlBar({ onChange: (value: number) => model.value = value });
 
-const barStyle = ref<any>({
+const barStyle = computed<any>(() => ({
   position: 'absolute',
   top: '0',
-  left: '0',
+  left: model.value * (width - height) + 'px',
   height: height + 'px',
   aspectRatio: '1 / 1',
   borderRadius: '50%',
   border: '2px solid white',
   boxShadow: 'rgba(0, 0, 0, 0.2) 0px 0px 0px 0.6px',
-  // backgroundColor: getColorByAlpha(color, alpha.value),
-  backgroundColor: 'red',
+  backgroundColor: getCurrentBgColor(),
   cursor: 'grab',
   userSelect: 'none',
-  transition: 'all 0.2s ease-in-out',
-})
+}))
 
 const wrapperStyle = ref<any>({
   position: 'relative',
   borderRadius: '9999px',
   overflow: 'hidden',
-  userSelect: 'none',
   width: width + 'px',
 })
 
-function drawColorControl(ctx: CanvasRenderingContext2D) {
-  const gradient: CanvasGradient = ctx.createLinearGradient(0, 0, 168, 0);
+function getCurrentBgColor() {
+  if (type === 'alpha') {
+    const rgb = createMagicColor(color, 'hex', model.value).toRgb().value
+    const c = rgb.map(i => (i + Math.round((255 - i) * (1 - model.value)))) as RgbColor
+    return createMagicColor(c, 'rgb', model.value).toString()
+  } else {
+    return color
+  }
+}
+
+function drawColorAlpha(ctx: CanvasRenderingContext2D) {
+  for (let col = 0; col < width / 3; col++) {
+    for (let row = 0; row < height / 3; row++) {
+      ctx.fillStyle = (col + row) % 2 === 0 ? 'lightgray' : 'white';
+      ctx.fillRect(col * 3, row * 3, 3, 3);
+    }
+  }
+
+  const gradient: CanvasGradient = ctx.createLinearGradient(0, 0, width, 0);
+  gradient.addColorStop(0, 'transparent');
+  gradient.addColorStop(1, color);
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, width, height);
+}
+
+function drawColorHue(ctx: CanvasRenderingContext2D) {
+  const gradient: CanvasGradient = ctx.createLinearGradient(0, 0, width, 0);
   gradient.addColorStop(0, '#f00');
   gradient.addColorStop(1 / 6, '#ff0');
   gradient.addColorStop(2 / 6, '#0f0');
@@ -43,57 +70,20 @@ function drawColorControl(ctx: CanvasRenderingContext2D) {
   gradient.addColorStop(1, '#f00');
 
   ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, 168, 12);
-}
-
-// listeners
-const startX = ref(0);
-const startLeft = ref(0);
-
-function handleMouseDown(e: MouseEvent) {
-  startX.value = e.clientX;
-  startLeft.value = barRef.value!.offsetLeft;
-  barStyle.value.cursor = 'grabbing';
-  barStyle.value.transition = 'none';
-
-  window.addEventListener('mousemove', handleMouseMove);
-  window.addEventListener('mouseup', handleMouseUp);
-}
-
-function handleMouseMove(e: MouseEvent) {
-  e.preventDefault()
-  const dis = startLeft.value + e.clientX - startX.value;
-  const left = Math.min(Math.max(dis, 0), width - height)
-  const precent = left / (width - height)
-  console.log(precent)
-  barStyle.value.left = left + 'px';
-}
-
-function handleMouseUp() {
-  barStyle.value.cursor = 'grab';
-  barStyle.value.transition = 'all 0.2s ease-in-out';
-
-  window.removeEventListener('mousemove', handleMouseMove);
-  window.removeEventListener('mouseup', handleMouseUp);
-}
-
-function handleClick(e: MouseEvent) {
-  const dis = e.offsetX - height / 2;
-  const left = Math.min(Math.max(dis, 0), width - height)
-  barStyle.value.left = left + 'px';
+  ctx.fillRect(0, 0, width, height);
 }
 
 onMounted(() => {
   const ctx = canvasRef.value?.getContext('2d');
-  if (ctx)
-    drawColorControl(ctx);
+  if (ctx) {
+    type === 'hue' ? drawColorHue(ctx) : drawColorAlpha(ctx);
+  }
 })
-
 </script>
 
 <template>
   <div :style="wrapperStyle">
-    <canvas @click.stop="handleClick" ref="canvasRef" :width :height></canvas>
-    <div @click.stop="noop" @mousedown="handleMouseDown" ref="barRef" :style="barStyle"></div>
+    <canvas ref="canvasRef" :width :height style="user-select: none;"></canvas>
+    <div ref="barRef" @mousedown="onMouseDown" :style="barStyle"></div>
   </div>
 </template>
