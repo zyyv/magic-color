@@ -61,6 +61,7 @@ function handleMouseDown(e: MouseEvent) {
 }
 
 function handleMouseMove(e: MouseEvent) {
+  e.preventDefault()
   const dis = startLeft.value + e.clientX - startX.value;
   const left = Math.min(Math.max(dis, 0), width - height)
   const precent = left / (width - height)
