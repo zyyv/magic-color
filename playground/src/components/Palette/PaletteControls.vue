@@ -3,16 +3,23 @@ import { type RgbColor, createMagicColor, HexColor } from 'magic-color';
 import { defineProps, defineModel, onMounted, ref } from 'vue';
 import { useControlBar } from './hook';
 
-const { width, height, color, type } = defineProps<{
-  width: number;
-  height: number;
-  color: HexColor;
-  type: 'hue' | 'alpha';
-}>();
+const { width, height, color, type } = withDefaults(defineProps<{
+  width: number,
+  height: number
+  color: string
+  type: 'hue' | 'alpha'
+}>(), {
+  type: 'hue',
+  height: 12,
+  width: 168,
+  color: '#f00'
+})
 const model = defineModel({ type: Number, default: 1 });
 
 const { canvasRef, barRef, onMouseDown } = useControlBar({ onChange: (value: number) => model.value = value });
 
+const BarWidth = height;
+const BarHeight = height;
 const barStyle = computed<any>(() => ({
   position: 'absolute',
   top: '0',
@@ -86,4 +93,6 @@ onMounted(() => {
     <canvas ref="canvasRef" :width :height style="user-select: none;"></canvas>
     <div ref="barRef" @mousedown="onMouseDown" :style="barStyle"></div>
   </div>
+
+  <div>{{ model }}</div>
 </template>

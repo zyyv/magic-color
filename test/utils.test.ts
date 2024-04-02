@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { isColor, createMagicColor as mc, opacityToString } from '../src/core'
+import { hsbToRgb } from '../src/core/hsb'
 
 describe('utils scoped', () => {
   const hex = '#ff0000'
@@ -56,6 +57,33 @@ describe('utils scoped', () => {
     expect(mcColor.toRgb().toString(true)).toEqual('rgba(100, 100, 100, 67.89%)')
     expect(mcColor.toHex().toString(true)).toEqual('#646464ad')
     expect(mcColor.toHsl().toString(true)).toEqual('hsla(0, 0%, 39%, 67.89%)')
+    expect(mcColor.toHsb().toHsl().value).toMatchInlineSnapshot(`
+      [
+        0,
+        -0,
+        3900,
+      ]
+    `)
     expect(mcColor.toHsb().toString(true)).toEqual('hsb(0, 0%, 0%)')
+    expect(mcColor.toHsb().value).toMatchInlineSnapshot()
+  })
+
+  it('test case', () => {
+    const c = `hsb(360, 100%, 100%)`
+
+    expect(hsbToRgb([360, 100, 100])).toMatchInlineSnapshot(`
+      [
+        255,
+        0,
+        0,
+      ]
+    `)
+    expect(mc(c).toRgb().value).toMatchInlineSnapshot(`
+      [
+        255,
+        0,
+        0,
+      ]
+    `)
   })
 })

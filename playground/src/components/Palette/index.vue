@@ -2,11 +2,17 @@
 const alpha = ref(1);
 const hue = ref(0.5);
 
+const color = computed(()=> `hsb(${Math.round(360 * hue.value)}, 100%, 100%)`)
+
+watchEffect(() => {
+  console.log('color', color.value);
+})
+
 </script>
 
 <template>
   <div style="width: 240px;">
-    <PalettePanel :width="240" :height="240" :color="'#0ff'" />
+    <PalettePanel :width="240" :height="240" :color />
     <div flex justify-around py="2">
       <div w="40px" h="40px" bg-red></div>
       <div fbc flex-col py="2px">

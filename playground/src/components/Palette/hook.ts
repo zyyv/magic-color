@@ -11,8 +11,8 @@ export function useControlBar({ onChange }: useControlBarProps) {
   const active = ref(false)
   const startX = ref(0)
   const startLeft = ref(0)
-  const width = ref(0)
-  const height = ref(0)
+  const realWidth = ref(0)
+  const realHeight = ref(0)
 
   function handleMouseDown(e: MouseEvent) {
     startX.value = e.clientX
@@ -27,10 +27,9 @@ export function useControlBar({ onChange }: useControlBarProps) {
   function handleMouseMove(e: MouseEvent) {
     e.preventDefault()
     const dis = startLeft.value + e.clientX - startX.value
-    const realWidth = width.value - height.value
-    const left = Math.min(Math.max(dis, 0), realWidth)
+    const left = Math.min(Math.max(dis, 0), realWidth.value)
     barRef.value!.style.left = `${left}px`
-    onChange?.(left / realWidth)
+    onChange?.(Math.round((left / realWidth.value) * 100) / 100)
   }
 
   function handleMouseUp() {
@@ -42,12 +41,12 @@ export function useControlBar({ onChange }: useControlBarProps) {
 
   function handleClick(e: MouseEvent) {
     e.stopPropagation()
-    const dis = e.offsetX - height.value / 2
-    const realWidth = width.value - height.value
-    const left = Math.min(Math.max(dis, 0), realWidth)
     barRef.value!.style.transition = 'all 0.2s ease-in-out'
-    barRef.value!.style.left = `${left}px`
-    onChange?.(left / realWidth)
+    const left = Math.min(Math.max(e.offsetX - 6, 0), realWidth.value)
+    onChange?.(Math.round((left / realWidth.value) * 100) / 100)
+    nextTick(() => {
+      barRef.value!.style.left = `${left}px`
+    })
   }
 
   function registerListeners() {
@@ -63,13 +62,16 @@ export function useControlBar({ onChange }: useControlBarProps) {
   }
 
   onMounted(() => {
-    if (canvasRef.value) {
-      width.value = canvasRef.value.width
-      height.value = canvasRef.value.height
+    if (canvasRef.value)
       canvasRef.value.addEventListener('click', handleClick)
-    }
+
     if (barRef.value)
       barRef.value.addEventListener('click', e => e.stopPropagation())
+
+    if (canvasRef.value && barRef.value) {
+      realWidth.value = canvasRef.value.width - barRef.value.offsetWidth
+      realHeight.value = canvasRef.value.height - barRef.value.offsetHeight
+    }
   })
 
   return {
