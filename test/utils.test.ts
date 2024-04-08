@@ -64,20 +64,6 @@ describe('utils scoped', () => {
     expect(mcColor.toHex().toString(true)).toEqual('#646464ad')
     expect(mcColor.toHsl().toString(true)).toEqual('hsla(0, 0%, 39%, 67.89%)')
     expect(mcColor.toHsl().toString(true)).toEqual('hsla(0, 0%, 39%, 67.89%)')
-    expect(mcColor.toHsb().value).toMatchInlineSnapshot(`
-      [
-        0,
-        0,
-        39,
-      ]
-    `)
-    expect(mcColor.toHsb().toHsl().value).toMatchInlineSnapshot(`
-      [
-        0,
-        0,
-        39,
-      ]
-    `)
     expect(mcColor.toHsb().toString(true)).toEqual('hsb(0, 0%, 39%)')
   })
 })

@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { type RgbColor, createMagicColor, HsbColor, ColorType } from 'magic-color';
+import { type RgbColor, createMagicColor, HsbColor } from 'magic-color';
 import { ref, defineProps, watch, type PropType } from 'vue';
 import { useControlBlock } from './hook';
 
@@ -19,22 +19,20 @@ const color = defineModel<HsbColor>('color', { type: Object as PropType<HsbColor
 
 const ctx = ref<CanvasRenderingContext2D | null>(null);
 const { canvasRef, barRef, onMouseDown } = useControlBlock({
-  onChange: v => { color.value = [color.value[0], v.x * 100, 100 - v.y * 100] },
+  onChange: v => { color.value = [color.value[0], Math.round(v.x * 100), Math.round(100 - v.y * 100)] },
   overflows: false
 });
 
 const wrapperStyle = ref<any>({
   position: 'relative',
-  // overflow: 'hidden',
   width: width + 'px',
   height: height + 'px',
 })
 
 const barStyle = computed<any>(() => ({
   position: 'absolute',
-  // TODO: optimize initial position
   left: color.value[1] / 100 * width - barSize + 'px',
-  top: (1 - color.value[2] / 100) * height + 'px',
+  top: Math.round((1 - color.value[2] / 100)) * height + 'px',
   height: barSize + 'px',
   aspectRatio: '1 / 1',
   borderRadius: '50%',

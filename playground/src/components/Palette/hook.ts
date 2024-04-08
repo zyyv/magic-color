@@ -50,8 +50,8 @@ export function useControlBlock(options: useControlBlockOptions = {}) {
     const left = Math.min(Math.max(disX, 0), realWidth.value)
     const top = Math.min(Math.max(disY, 0), realHeight.value)
     const value = {
-      x: Math.round((left / realWidth.value) * 100) / 100,
-      y: Math.round((top / realHeight.value) * 100) / 100,
+      x: Number((left / realWidth.value).toFixed(2)),
+      y: Number((top / realHeight.value).toFixed(2)),
     }
     onChange?.(value)
     nextTick(() => {
@@ -73,8 +73,8 @@ export function useControlBlock(options: useControlBlockOptions = {}) {
     const left = Math.min(Math.max(e.offsetX - (overflows ? barRef.value!.offsetWidth / 2 : 0), 0), realWidth.value)
     const top = Math.min(Math.max(e.offsetY - (overflows ? barRef.value!.offsetHeight / 2 : 0), 0), realHeight.value)
     const value = {
-      x: Math.round((left / realWidth.value) * 100) / 100,
-      y: Math.round((top / realHeight.value) * 100) / 100,
+      x: Number((left / realWidth.value).toFixed(2)),
+      y: Number((top / realHeight.value).toFixed(2)),
     }
 
     onChange?.(value)

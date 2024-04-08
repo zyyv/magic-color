@@ -4,9 +4,9 @@ import { defineProps, defineModel, onMounted, ref } from 'vue';
 import { useControlBlock } from './hook';
 
 const props = withDefaults(defineProps<{
-  width: number,
-  height: number
-  color: string
+  width?: number,
+  height?: number
+  color?: string
   type: 'hue' | 'alpha'
 }>(), {
   type: 'hue',
@@ -23,7 +23,7 @@ const { canvasRef, barRef, onMouseDown } = useControlBlock({ onChange: ({ x }) =
 const barStyle = computed<any>(() => ({
   position: 'absolute',
   top: '0',
-  left: model.value * (width - height) + 'px',
+  left: model.value * Math.round(width - height) + 'px',
   height: height + 'px',
   aspectRatio: '1 / 1',
   borderRadius: '50%',
@@ -44,11 +44,10 @@ const wrapperStyle = ref<any>({
 function getCurrentBgColor() {
   if (type === 'alpha') {
     const rgb = createMagicColor(props.color, 'hex', model.value).toRgb().value
-    const c = rgb.map(i => (i + Math.round((255 - i) * (1 - model.value)))) as RgbColor
+    const c = rgb.map(i => (i + Math.round((255 - i) * Math.round(1 - model.value)))) as RgbColor
     return createMagicColor(c, 'rgb', model.value).toString()
   } else {
-    const h = createMagicColor(props.color, 'hex', 1).toHsb().value[0]
-    return createMagicColor([h, 100, 100], 'hsb', 1).toHex().toString()
+    return createMagicColor([Math.round(model.value * 360), 100, 100], 'hsb', 1).toHex().toString()
   }
 }
 
@@ -91,9 +90,6 @@ onMounted(() => {
 
 watch(() => props.color, () => {
   if (ctx.value && type === 'alpha') {
-    // 清空画布
-    console.log('11', type);
-
     ctx.value.clearRect(0, 0, width, height);
     drawColorAlpha(ctx.value)
   }
