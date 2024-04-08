@@ -13,8 +13,8 @@ export function parseHsb(color: string) {
     throw new Error('Invalid HSB color format.')
   const value = [
     Number.parseInt(match[1]),
-    Number.parseInt(match[2]) / 100,
-    Number.parseInt(match[3]) / 100,
+    Number.parseInt(match[2]),
+    Number.parseInt(match[3]),
   ] as HsbColor
   const opacity = match[4] ? Number.parseFloat(match[4]) : 1
 
@@ -22,44 +22,30 @@ export function parseHsb(color: string) {
 }
 
 function parseHsbToRgb(color: HsbColor): RgbColor {
-  const [h, s, b] = color
+  let [h, s, b] = color
+  h = h / 60
+  s = s / 100
+  b = b / 100
+
   const c = b * s
-  const x = c * (1 - Math.abs(((h / 60) % 2) - 1))
+  const x = c * (1 - Math.abs(h % 2 - 1))
   const m = b - c
 
-  let r = 0
-  let g = 0
-  let bl = 0
-  if (h >= 0 && h < 60) {
-    r = c
-    g = x
-  }
-  else if (h >= 60 && h < 120) {
-    r = x
-    g = c
-  }
-  else if (h >= 120 && h < 180) {
-    g = c
-    bl = x
-  }
-  else if (h >= 180 && h < 240) {
-    g = x
-    bl = c
-  }
-  else if (h >= 240 && h < 300) {
-    r = x
-    bl = c
-  }
-  else if (h >= 300 && h < 360) {
-    r = c
-    bl = x
-  }
+  let rgb
+  if (h >= 0 && h < 1)
+    rgb = [c, x, 0]
+  else if (h >= 1 && h < 2)
+    rgb = [x, c, 0]
+  else if (h >= 2 && h < 3)
+    rgb = [0, c, x]
+  else if (h >= 3 && h < 4)
+    rgb = [0, x, c]
+  else if (h >= 4 && h < 5)
+    rgb = [x, 0, c]
+  else
+    rgb = [c, 0, x]
 
-  r = Math.round((r + m) * 255)
-  g = Math.round((g + m) * 255)
-  bl = Math.round((bl + m) * 255)
-
-  return [r, g, bl]
+  return rgb.map(value => Math.round((value + m) * 255)) as RgbColor
 }
 
 export function hsbToHex(color: HsbColor) {
@@ -71,9 +57,11 @@ export function hsbToRgb(color: HsbColor): RgbColor {
 }
 
 export function hsbToHsl(color: HsbColor): HslColor {
-  const [h, s, b] = color
+  let [h, s, b] = color
+  s /= 100
+  b /= 100
   const l = (2 - s) * b / 2
-  const sl = l && l < 0.5 ? s * b / (l * 2) : s * b / (2 - l * 2)
+  s = l && l < 1 ? s * b / (l < 0.5 ? l * 2 : 2 - l * 2) : s
 
-  return [Math.round(h), Math.round(sl * 100), Math.round(l * 100)] as HslColor
+  return [h, s * 100, l * 100]
 }

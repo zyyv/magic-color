@@ -53,32 +53,30 @@ export function rgbToHsl(color: RgbColor): HslColor {
 }
 
 export function rgbToHsb(color: RgbColor): HsbColor {
-  const [r, g, b] = color
+  const [r, g, b] = color.map(i => i / 255)
 
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
-  const delta = max - min
   let h = 0
-  let s = 0
-  let v = max / 255
+  const v = max
 
-  if (delta !== 0) {
-    s = delta / max
+  const d = max - min
+  const s = max === 0 ? 0 : d / max
+
+  if (max === min) {
+    h = 0 // achromatic
+  }
+  else {
     switch (max) {
-      case r:
-        h = (g - b) / delta + (g < b ? 6 : 0)
+      case r: h = (g - b) / d + (g < b ? 6 : 0)
         break
-      case g:
-        h = (b - r) / delta + 2
+      case g: h = (b - r) / d + 2
         break
-      case b:
-        h = (r - g) / delta + 4
+      case b: h = (r - g) / d + 4
         break
     }
-    h *= 60
-    s *= 100
-    v *= 100
+    h /= 6
   }
 
-  return [Math.round(h), Math.round(s), Math.round(v)]
+  return [Math.round(h * 360), Math.round(s * 100), Math.round(v * 100)]
 }
