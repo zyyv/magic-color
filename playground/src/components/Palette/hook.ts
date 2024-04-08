@@ -1,10 +1,25 @@
 import { ref } from 'vue'
 
-interface useControlBlockProps {
+interface useControlBlockOptions {
+  /**
+   * When the value of the control block changes, this function will be called.
+   *
+   * @param value { x: number, y: number } - The new value of the control block.
+   * @example value = { x: 0.5, y: 0.5 }
+   */
   onChange?: (value: { x: number, y: number }) => void
+
+  /**
+   * Whether to enable the overflow limit of the bar
+   *
+   * @default true
+   */
+  overflows?: boolean
 }
 
-export function useControlBlock({ onChange }: useControlBlockProps = {}) {
+export function useControlBlock(options: useControlBlockOptions = {}) {
+  const { onChange, overflows = true } = options
+
   const canvasRef = ref<HTMLCanvasElement | null>(null)
   const barRef = ref<HTMLDivElement | null>(null)
 
@@ -55,12 +70,13 @@ export function useControlBlock({ onChange }: useControlBlockProps = {}) {
   function handleClick(e: MouseEvent) {
     e.stopPropagation()
     barRef.value!.style.transition = 'all 0.2s ease-in-out'
-    const left = Math.min(Math.max(e.offsetX - (barRef.value!.offsetWidth / 2), 0), realWidth.value)
-    const top = Math.min(Math.max(e.offsetY - (barRef.value!.offsetHeight / 2), 0), realHeight.value)
+    const left = Math.min(Math.max(e.offsetX - (overflows ? barRef.value!.offsetWidth / 2 : 0), 0), realWidth.value)
+    const top = Math.min(Math.max(e.offsetY - (overflows ? barRef.value!.offsetHeight / 2 : 0), 0), realHeight.value)
     const value = {
       x: Math.round((left / realWidth.value) * 100) / 100,
       y: Math.round((top / realHeight.value) * 100) / 100,
     }
+
     onChange?.(value)
     nextTick(() => {
       barRef.value!.style.left = `${left}px`
@@ -84,12 +100,16 @@ export function useControlBlock({ onChange }: useControlBlockProps = {}) {
     if (canvasRef.value)
       canvasRef.value.addEventListener('click', handleClick)
 
-    if (barRef.value)
+    if (barRef.value) {
       barRef.value.addEventListener('click', e => e.stopPropagation())
 
+      if (!overflows)
+        barRef.value.style.transform = 'translate(-50%, -50%)'
+    }
+
     if (canvasRef.value && barRef.value) {
-      realWidth.value = canvasRef.value.width - barRef.value.offsetWidth
-      realHeight.value = canvasRef.value.height - barRef.value.offsetHeight
+      realWidth.value = canvasRef.value.width - (overflows ? barRef.value.offsetWidth : 0)
+      realHeight.value = canvasRef.value.height - (overflows ? barRef.value.offsetHeight : 0)
     }
   })
 

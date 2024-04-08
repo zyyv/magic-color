@@ -18,13 +18,14 @@ const { width, height, barSize } = props;
 const color = defineModel<HsbColor>('color', { type: Object as PropType<HsbColor>, default: () => [0, 100, 100] })
 
 const ctx = ref<CanvasRenderingContext2D | null>(null);
-const { canvasRef, barRef, onMouseDown } = useControlBlock({ onChange: v => {
-  color.value = [color.value[0], v.x * 100, 100 - v.y * 100]
-} });
+const { canvasRef, barRef, onMouseDown } = useControlBlock({
+  onChange: v => { color.value = [color.value[0], v.x * 100, 100 - v.y * 100] },
+  overflows: false
+});
 
 const wrapperStyle = ref<any>({
   position: 'relative',
-  overflow: 'hidden',
+  // overflow: 'hidden',
   width: width + 'px',
   height: height + 'px',
 })

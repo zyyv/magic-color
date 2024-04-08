@@ -57,7 +57,7 @@ const controlColor = computed(() => createMagicColor(color.value).toHex().toStri
 </script>
 
 <template>
-  <div style="width: 240px;">
+  <div style="width: 240px;" p-10>
     <PalettePanel :width="240" :height="240" :bar-size="12" v-model:color="mcHsbColor" />
     <div flex justify-evenly py="2">
       <div w="40px" h="40px" rd :style="{backgroundColor: color}" ></div>
