@@ -57,9 +57,11 @@ export function hsbToRgb(color: HsbColor): RgbColor {
 }
 
 export function hsbToHsl(color: HsbColor): HslColor {
-  const [h, s, b] = color
+  let [h, s, b] = color
+  s /= 100
+  b /= 100
   const l = (2 - s) * b / 2
-  const sl = l && l < 0.5 ? s * b / (l * 2) : s * b / (2 - l * 2)
+  s = l && l < 1 ? s * b / (l < 0.5 ? l * 2 : 2 - l * 2) : s
 
-  return [Math.round(h), Math.round(sl * 100), Math.round(l * 100)] as HslColor
+  return [h, s * 100, l * 100]
 }

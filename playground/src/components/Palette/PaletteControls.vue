@@ -1,9 +1,9 @@
 <script lang='ts' setup>
-import { type RgbColor, createMagicColor, HexColor } from 'magic-color';
+import { type RgbColor, createMagicColor } from 'magic-color';
 import { defineProps, defineModel, onMounted, ref } from 'vue';
-import { useControlBar } from './hook';
+import { useControlBlock } from './hook';
 
-const { width, height, color, type } = withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   width: number,
   height: number
   color: string
@@ -14,12 +14,12 @@ const { width, height, color, type } = withDefaults(defineProps<{
   width: 168,
   color: '#f00'
 })
+const { width, height, type } = props
 const model = defineModel({ type: Number, default: 1 });
 
-const { canvasRef, barRef, onMouseDown } = useControlBar({ onChange: (value: number) => model.value = value });
+const ctx = ref<CanvasRenderingContext2D | null>(null);
+const { canvasRef, barRef, onMouseDown } = useControlBlock({ onChange: ({ x }) => model.value = x });
 
-const BarWidth = height;
-const BarHeight = height;
 const barStyle = computed<any>(() => ({
   position: 'absolute',
   top: '0',
@@ -43,11 +43,12 @@ const wrapperStyle = ref<any>({
 
 function getCurrentBgColor() {
   if (type === 'alpha') {
-    const rgb = createMagicColor(color, 'hex', model.value).toRgb().value
+    const rgb = createMagicColor(props.color, 'hex', model.value).toRgb().value
     const c = rgb.map(i => (i + Math.round((255 - i) * (1 - model.value)))) as RgbColor
     return createMagicColor(c, 'rgb', model.value).toString()
   } else {
-    return color
+    const h = createMagicColor(props.color, 'hex', 1).toHsb().value[0]
+    return createMagicColor([h, 100, 100], 'hsb', 1).toHex().toString()
   }
 }
 
@@ -61,29 +62,40 @@ function drawColorAlpha(ctx: CanvasRenderingContext2D) {
 
   const gradient: CanvasGradient = ctx.createLinearGradient(0, 0, width, 0);
   gradient.addColorStop(0, 'transparent');
-  gradient.addColorStop(1, color);
+  gradient.addColorStop(1, props.color);
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
 }
 
 function drawColorHue(ctx: CanvasRenderingContext2D) {
   const gradient: CanvasGradient = ctx.createLinearGradient(0, 0, width, 0);
-  gradient.addColorStop(0, '#f00');
-  gradient.addColorStop(1 / 6, '#ff0');
-  gradient.addColorStop(2 / 6, '#0f0');
-  gradient.addColorStop(3 / 6, '#0ff');
-  gradient.addColorStop(4 / 6, '#00f');
-  gradient.addColorStop(5 / 6, '#f0f');
-  gradient.addColorStop(1, '#f00');
+  gradient.addColorStop(0, '#ff0000');
+  gradient.addColorStop(1 / 6, '#ffff00');
+  gradient.addColorStop(2 / 6, '#00ff00');
+  gradient.addColorStop(3 / 6, '#00ffff');
+  gradient.addColorStop(4 / 6, '#0000ff');
+  gradient.addColorStop(5 / 6, '#ff00ff');
+  gradient.addColorStop(1, '#ff0000');
 
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
 }
 
 onMounted(() => {
-  const ctx = canvasRef.value?.getContext('2d');
-  if (ctx) {
-    type === 'hue' ? drawColorHue(ctx) : drawColorAlpha(ctx);
+  const _ctx = canvasRef.value?.getContext('2d');
+  if (_ctx) {
+    ctx.value = _ctx;
+    type === 'hue' ? drawColorHue(ctx.value) : drawColorAlpha(ctx.value);
+  }
+})
+
+watch(() => props.color, () => {
+  if (ctx.value && type === 'alpha') {
+    // 清空画布
+    console.log('11', type);
+
+    ctx.value.clearRect(0, 0, width, height);
+    drawColorAlpha(ctx.value)
   }
 })
 </script>
@@ -93,6 +105,4 @@ onMounted(() => {
     <canvas ref="canvasRef" :width :height style="user-select: none;"></canvas>
     <div ref="barRef" @mousedown="onMouseDown" :style="barStyle"></div>
   </div>
-
-  <div>{{ model }}</div>
 </template>
