@@ -1,6 +1,6 @@
 <script lang='ts' setup>
 import { type PropType } from 'vue'
-import { type ColorType, type ColorValue } from 'magic-color'
+import { type ColorType } from 'magic-color'
 
 const type = defineModel('type', { type: String as PropType<ColorType> })
 const colorValue = defineModel('color', { type: [String, Object] })
@@ -31,14 +31,10 @@ const v2 = computed({
   }
 })
 const aplhaStringify = computed({
-  get: () => alpha.value! * 100,
+  get: () => Math.round(alpha.value! * 100),
   set: (v: number) => {
     alpha.value = Math.min(1, Math.max(0, Number((v / 100).toFixed(2))));
   }
-})
-
-watchEffect(() => {
-  console.log(colorValue.value);
 })
 
 function handleAlphaBlur(e: any) {
@@ -51,21 +47,42 @@ function handleAlphaBlur(e: any) {
 </script>
 
 <template>
-  <div flex>
-    <select v-model="type">
-      <option value="hex">HEX</option>
-      <option value="rgb">RGB</option>
-      <option value="hsl">HSL</option>
-      <option value="hsb">HSB</option>
-    </select>
-    <div flex>
-      <input type="text" v-if="type === 'hex'" v-model="hexV" />
+  <div flex c-white text-11px px-8px>
+    <div flex="[0_0_64px]" px-8px>
+      <select v-model="type" w-full h="28px" bg-transparent style="outline: none;">
+        <option value="hex">HEX</option>
+        <option value="rgb">RGB</option>
+        <option value="hsl">HSL</option>
+        <option value="hsb">HSB</option>
+      </select>
+    </div>
+    <div flex flex-1 rd-2px class="group" b="~ #3c3c3c op-0" hover="b-op-100">
+      <label v-if="type === 'hex'" flex items-center flex-1 b-r="~ #3c3c3c op-0" group-hover-b-r="op-100">
+        <input pl-8px outline-none bg-transparent w-full type="text" v-model="hexV" />
+      </label>
       <template v-else>
-        <input v-model="v0" :min="0" type="number" />
-        <input v-model="v1" type="number" />
-        <input v-model="v2" type="number" />
+        <label flex items-center flex-1 b-r="~ #3c3c3c op-0" group-hover-b-r="op-100">
+          <input class="no-spinners" pl-8px w-full outline-none bg-transparent v-model="v0" :min="0" type="number" />
+        </label>
+        <label flex items-center flex-1 b-r="~ #3c3c3c op-0" group-hover-b-r="op-100">
+          <input class="no-spinners" pl-8px w-full outline-none bg-transparent v-model="v1" type="number" />
+        </label>
+        <label flex items-center flex-1 b-r="~ #3c3c3c op-0" group-hover-b-r="op-100">
+          <input class="no-spinners" pl-8px w-full outline-none bg-transparent v-model="v2" type="number" />
+        </label>
       </template>
-      <input type="number" min="0" max="100" v-model="aplhaStringify" @blur="handleAlphaBlur">
+      <label :class="type === 'hex' ? 'flex-[0_0_46px]' : 'flex-1'" flex items-center h="100%">
+        <input class="no-spinners" w-full outline-none bg-transparent pl-8px type="number" min="0" max="100"
+          v-model="aplhaStringify" @blur="handleAlphaBlur">
+      </label>
     </div>
   </div>
 </template>
+
+<style scoped>
+.no-spinners::-webkit-outer-spin-button,
+.no-spinners::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+</style>

@@ -85,11 +85,10 @@ function handlePanelChange({ x, y }: { x: number, y: number }) {
 }
 </script>
 <template>
-  <div style="width: 240px;" m-10>
+  <div style="width: 240px;" m-10 bg="#272727" pb-8px shadow>
     <PalettePanel :width="240" :height="240" :bar-size="12" :color="mcHsbColor" @change="handlePanelChange" />
     <div flex justify-evenly py="2">
       <PalettePreview :width="40" :height="40" :color="displayBgColor" />
-      <!-- <div w="40px" h="40px" rd of-hidden :style="{ backgroundColor: displayBgColor }"></div> -->
       <div fbc flex-col py="2px">
         <PaletteControls :width="168" :height="12" type="hue" v-model="hue" />
         <PaletteControls :width="168" :height="12" :color="controlColor" type="alpha" v-model="alpha" />
