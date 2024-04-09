@@ -4,7 +4,21 @@ const alpha = ref(1)
 </script>
 
 <template>
-  <Palette v-model:color="color" v-model:alpha="alpha" />
-  <div h="20px" />
-  <Picker v-model="color" />
+  <div fc pt-16 ma gap-20>
+    <div fccc gap-8>
+      <div>
+        <h1 text-4xl fw-600 text-transparent bg-clip-text bg-gradient-to-r from-purple to-red>
+          Magic Color
+          <span text-sm>palette.</span>
+        </h1>
+      </div>
+      <Palette v-model:color="color" v-model:alpha="alpha" />
+
+      <div fsc gap-2>
+        <input v-model="color" type="text">
+        <input id="color" v-model="color" type="color" name="color">
+      </div>
+    </div>
+    <Picker v-model="color" />
+  </div>
 </template>

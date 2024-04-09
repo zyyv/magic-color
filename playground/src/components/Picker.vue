@@ -14,13 +14,8 @@ const results = computed(() => {
 </script>
 
 <template>
-  <h1 c-white>
-    Magic Color
-  </h1>
-  <div fsc gap-2>
-    <input v-model="color" type="text">
-    <input id="color" v-model="color" type="color" name="color">
+  <div fccc>
+    <ThemeButtons :theme="results" />
+    <ThemeHue :theme="results" />
   </div>
-
-  <ListColor :theme="results" />
 </template>

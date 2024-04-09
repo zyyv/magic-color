@@ -55,9 +55,9 @@ function handleAlphaBlur(e: any) {
         <option value="rgb">
           RGB
         </option>
-        <option value="hsl">
+        <!-- <option value="hsl">
           HSL
-        </option>
+        </option> -->
         <option value="hsb">
           HSB
         </option>
