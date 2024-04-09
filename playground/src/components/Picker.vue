@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { theme } from 'magic-color'
-const color = ref('#9455d3')
+const color = defineModel<string>()
 
 const results = computed(() => {
   try {
-    return theme(color.value)
+    return theme(color.value!)
   } catch (e) {
     return {} as any
   }

@@ -1,12 +1,13 @@
 <script lang='ts' setup>
-import { type RgbColor, createMagicColor, HsbColor } from 'magic-color';
+import { createMagicColor, HsbColor } from 'magic-color';
 import { ref, defineProps, watch, type PropType } from 'vue';
 import { useControlBlock } from './hook';
 
 const props = withDefaults(defineProps<{
-  width: number,
-  height: number
-  barSize: number
+  width?: number,
+  height?: number
+  barSize?: number
+  color: HsbColor
 }>(), {
   height: 240,
   width: 240,
@@ -14,12 +15,13 @@ const props = withDefaults(defineProps<{
 })
 
 const { width, height, barSize } = props;
-
-const color = defineModel<HsbColor>('color', { type: Object as PropType<HsbColor>, default: () => [0, 100, 100] })
+const emit = defineEmits<{
+  (e: 'change', v: { x: number, y: number }): void
+}>()
 
 const ctx = ref<CanvasRenderingContext2D | null>(null);
 const { canvasRef, barRef, onMouseDown } = useControlBlock({
-  onChange: v => { color.value = [color.value[0], Math.round(v.x * 100), Math.round(100 - v.y * 100)] },
+  onChange: v => emit('change', { x: Math.round(v.x * 100), y: Math.round(v.y * 100) }),
   overflows: false
 });
 
@@ -31,26 +33,22 @@ const wrapperStyle = ref<any>({
 
 const barStyle = computed<any>(() => ({
   position: 'absolute',
-  left: color.value[1] / 100 * width - barSize + 'px',
-  top: Math.round((1 - color.value[2] / 100)) * height + 'px',
+  left: props.color[1] + '%',
+  top: (100 - props.color[2]) + '%',
   height: barSize + 'px',
   aspectRatio: '1 / 1',
   borderRadius: '50%',
   border: '2px solid white',
   boxShadow: 'rgba(0, 0, 0, 0.2) 0px 0px 0px 0.6px',
-  backgroundColor: getCurrentBgColor(),
+  backgroundColor: createMagicColor([props.color[0], 100, 100], 'hsb').toHex().toString(),
   cursor: 'grab',
   userSelect: 'none',
 }))
 
-function getCurrentBgColor() {
-  return createMagicColor(color.value, 'hsb').toHex().toString()
-}
-
 function drawBackground(ctx: CanvasRenderingContext2D) {
   const bgGradient: CanvasGradient = ctx.createLinearGradient(0, 0, width, 0);
   bgGradient.addColorStop(0, '#fff');
-  bgGradient.addColorStop(1, createMagicColor(`hsb(${color.value[0]}, 100%, 100%)`).toHex().toString());
+  bgGradient.addColorStop(1, createMagicColor([props.color[0], 100, 100], 'hsb').toHex().toString());
   ctx.fillStyle = bgGradient;
   ctx.fillRect(0, 0, width, height);
 
@@ -61,7 +59,7 @@ function drawBackground(ctx: CanvasRenderingContext2D) {
   ctx.fillRect(0, 0, width, height);
 }
 
-watch(() => color.value, () => {
+watch(() => props.color, () => {
   if (ctx.value) {
     // 清空画布
     ctx.value.clearRect(0, 0, width, height);

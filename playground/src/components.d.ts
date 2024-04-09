@@ -15,6 +15,7 @@ declare module 'vue' {
     PaletteControls: typeof import('./components/Palette/PaletteControls.vue')['default']
     PaletteInput: typeof import('./components/Palette/PaletteInput.vue')['default']
     PalettePanel: typeof import('./components/Palette/PalettePanel.vue')['default']
+    PalettePreview: typeof import('./components/Palette/PalettePreview.vue')['default']
     Picker: typeof import('./components/Picker.vue')['default']
     Toggle: typeof import('./components/Toggle.vue')['default']
   }

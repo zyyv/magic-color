@@ -44,7 +44,7 @@ const wrapperStyle = ref<any>({
 function getCurrentBgColor() {
   if (type === 'alpha') {
     const rgb = createMagicColor(props.color, 'hex', model.value).toRgb().value
-    const c = rgb.map(i => (i + Math.round((255 - i) * Math.round(1 - model.value)))) as RgbColor
+    const c = rgb.map(i => i + Math.round((255 - i) * (1 - model.value))) as RgbColor
     return createMagicColor(c, 'rgb', model.value).toString()
   } else {
     return createMagicColor([Math.round(model.value * 360), 100, 100], 'hsb', 1).toHex().toString()

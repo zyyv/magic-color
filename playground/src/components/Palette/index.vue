@@ -29,12 +29,13 @@ const mcHsbColor = computed({
   }
 })
 
-const hue = ref(mcHsbColor.value[0] / 360)
-
-watch(hue, (v) => {
-  const hsb = [...mcHsbColor.value] as HsbColor
-  hsb[0] = Math.round(v * 360)
-  mcHsbColor.value = hsb
+const hue = computed({
+  get: () => mcHsbColor.value[0] / 360,
+  set: v => {
+    const hsb = [...mcHsbColor.value] as HsbColor
+    hsb[0] = Math.round(v * 360)
+    mcHsbColor.value = hsb
+  }
 })
 
 const controlColor = computed(() => createMagicColor(color.value).toHex().toString())
@@ -78,12 +79,17 @@ const colorValue = computed({
     }
   }
 })
+
+function handlePanelChange({ x, y }: { x: number, y: number }) {
+  mcHsbColor.value = [mcHsbColor.value[0], x, 100 - y]
+}
 </script>
 <template>
   <div style="width: 240px;" m-10>
-    <PalettePanel :width="240" :height="240" :bar-size="12" v-model:color="mcHsbColor" />
+    <PalettePanel :width="240" :height="240" :bar-size="12" :color="mcHsbColor" @change="handlePanelChange" />
     <div flex justify-evenly py="2">
-      <div w="40px" h="40px" rd :style="{ backgroundColor: displayBgColor }"></div>
+      <PalettePreview :width="40" :height="40" :color="displayBgColor" />
+      <!-- <div w="40px" h="40px" rd of-hidden :style="{ backgroundColor: displayBgColor }"></div> -->
       <div fbc flex-col py="2px">
         <PaletteControls :width="168" :height="12" type="hue" v-model="hue" />
         <PaletteControls :width="168" :height="12" :color="controlColor" type="alpha" v-model="alpha" />

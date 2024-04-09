@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { theme as themes, getReadableTextColor } from 'magic-color'
+import { defineProps } from 'vue';
 
 defineProps<{
   theme: ReturnType<typeof themes>
