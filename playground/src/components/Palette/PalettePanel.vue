@@ -40,7 +40,7 @@ const barStyle = computed<any>(() => ({
   borderRadius: '50%',
   border: '2px solid white',
   boxShadow: 'rgba(0, 0, 0, 0.2) 0px 0px 0px 0.6px',
-  backgroundColor: createMagicColor([props.color[0], 100, 100], 'hsb').toHex().toString(),
+  backgroundColor: createMagicColor(props.color, 'hsb').toHex().toString(),
   cursor: 'grab',
   userSelect: 'none',
 }))
