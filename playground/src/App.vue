@@ -8,7 +8,9 @@ const alpha = ref(1)
     <div fccc gap-8>
       <div>
         <h1 text-4xl fw-600 text-transparent bg-clip-text bg-gradient-to-r from-purple to-red>
-          Magic Color
+          <a href="https://github.com/zyyv/magic-color" target="_blank">
+            Magic Color
+          </a>
           <span text-sm>palette.</span>
         </h1>
       </div>
