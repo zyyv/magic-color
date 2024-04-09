@@ -1,5 +1,6 @@
 <script lang='ts' setup>
-import { ColorValue, HexColor, HsbColor, HslColor, RgbColor, createMagicColor } from 'magic-color'
+import type { ColorValue, HexColor, HsbColor, HslColor, RgbColor } from 'magic-color'
+import { createMagicColor } from 'magic-color'
 import { computed, defineModel, ref } from 'vue'
 
 const color = defineModel('color', { type: String, default: '#ff0000' })
@@ -26,16 +27,16 @@ const mcHsbColor = computed({
       default:
         break
     }
-  }
+  },
 })
 
 const hue = computed({
   get: () => mcHsbColor.value[0] / 360,
-  set: v => {
+  set: (v) => {
     const hsb = [...mcHsbColor.value] as HsbColor
     hsb[0] = Math.round(v * 360)
     mcHsbColor.value = hsb
-  }
+  },
 })
 
 const controlColor = computed(() => createMagicColor(color.value).toHex().toString())
@@ -77,21 +78,22 @@ const colorValue = computed({
       default:
         break
     }
-  }
+  },
 })
 
 function handlePanelChange({ x, y }: { x: number, y: number }) {
   mcHsbColor.value = [mcHsbColor.value[0], x, 100 - y]
 }
 </script>
+
 <template>
   <div style="width: 240px;" m-10 bg="#272727" pb-8px shadow>
     <PalettePanel :width="240" :height="240" :bar-size="12" :color="mcHsbColor" @change="handlePanelChange" />
     <div flex justify-evenly py="2">
       <PalettePreview :width="40" :height="40" :color="displayBgColor" />
       <div fbc flex-col py="2px">
-        <PaletteControls :width="168" :height="12" type="hue" v-model="hue" />
-        <PaletteControls :width="168" :height="12" :color="controlColor" type="alpha" v-model="alpha" />
+        <PaletteControls v-model="hue" :width="168" :height="12" type="hue" />
+        <PaletteControls v-model="alpha" :width="168" :height="12" :color="controlColor" type="alpha" />
       </div>
     </div>
     <PaletteInput v-model:alpha="alpha" v-model:color="colorValue" v-model:type="type" />

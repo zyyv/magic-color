@@ -1,0 +1,12 @@
+[build]
+publish = "playground/dist"
+command = "pnpm run build"
+
+[build.environment]
+NPM_FLAGS = "--version"
+NODE_VERSION = "20"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200

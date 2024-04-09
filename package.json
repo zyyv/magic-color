@@ -2,7 +2,7 @@
   "name": "magic-color",
   "type": "module",
   "version": "0.1.0",
-  "packageManager": "pnpm@8.14.0",
+  "packageManager": "pnpm@8.15.6",
   "description": "Magic color creator.",
   "author": "Chris <hizyyv@gmail.com>",
   "license": "MIT",
@@ -40,7 +40,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "unbuild",
+    "build": "unbuild && nr play:build",
     "dev": "unbuild --stub",
     "lint": "eslint .",
     "prepublishOnly": "nr build",
@@ -50,7 +50,8 @@
     "test:update": "vitest -u",
     "typecheck": "tsc --noEmit",
     "prepare": "simple-git-hooks",
-    "play": "pnpm -C playground dev"
+    "play": "pnpm -C playground dev",
+    "play:build": "pnpm -C playground build"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.6.2",
