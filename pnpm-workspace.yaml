@@ -2,6 +2,5 @@ packages:
   - playground
   - docs
   - talk
-  - talk-example
   - packages/*
   - examples/*
