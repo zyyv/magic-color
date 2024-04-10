@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { theme } from '../src'
+import { theme } from 'magic-color'
 
 describe('theme colors', () => {
   const testColor = '#9955FF'

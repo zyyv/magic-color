@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isColor, createMagicColor as mc, opacityToString } from '../src/core'
+import { isColor, createMagicColor as mc, opacityToString } from 'magic-color'
 
 describe('utils scoped', () => {
   const hex = '#ff0000'

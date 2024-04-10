@@ -7,14 +7,14 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    copy: typeof import('./components/ThemeButtons copy.vue')['default']
-    ListColor: typeof import('./components/ListColor.vue')['default']
     Palette: typeof import('./components/Palette/index.vue')['default']
     PaletteControls: typeof import('./components/Palette/PaletteControls.vue')['default']
     PaletteInput: typeof import('./components/Palette/PaletteInput.vue')['default']
     PalettePanel: typeof import('./components/Palette/PalettePanel.vue')['default']
     PalettePreview: typeof import('./components/Palette/PalettePreview.vue')['default']
     Picker: typeof import('./components/Picker.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
     ThemeButtons: typeof import('./components/ThemeButtons.vue')['default']
     ThemeHue: typeof import('./components/ThemeHue.vue')['default']
   }

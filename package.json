@@ -1,74 +1,45 @@
 {
-  "name": "magic-color",
+  "name": "@magic-color/monorepo",
   "type": "module",
   "version": "0.1.0",
+  "private": true,
   "packageManager": "pnpm@8.15.6",
-  "description": "Magic color creator.",
-  "author": "Chris <hizyyv@gmail.com>",
-  "license": "MIT",
-  "homepage": "https://github.com/zyyv/magic-color#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zyyv/magic-color.git"
-  },
-  "bugs": "https://github.com/zyyv/magic-color/issues",
-  "keywords": [
-    "color",
-    "colors",
-    "magic-color"
-  ],
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    }
-  },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*",
-        "./dist/index.d.ts"
-      ]
-    }
-  },
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "build": "unbuild && nr play:build",
-    "dev": "unbuild --stub",
+    "dev": "pnpm -r -F=\"./packages/*\" --parallel run dev",
+    "build": "pnpm -r -F=\"./packages/*\" run build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "prepublishOnly": "nr build",
-    "release": "bumpp && npm publish",
-    "start": "esno src/index.ts",
+    "release": "nr lint:fix && bumpp -r",
     "test": "vitest",
     "test:update": "vitest -u",
     "typecheck": "tsc --noEmit",
     "prepare": "simple-git-hooks",
     "play": "pnpm -C playground dev",
-    "play:build": "pnpm -C playground build"
+    "play:build": "pnpm -C playground build",
+    "deploy": "nr play:build"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.6.2",
     "@antfu/ni": "^0.21.12",
-    "@antfu/utils": "^0.7.7",
+    "@iconify-json/akar-icons": "^1.1.24",
+    "@iconify-json/carbon": "^1.1.31",
     "@types/node": "^20.10.7",
     "bumpp": "^9.2.1",
     "eslint": "^8.56.0",
     "esno": "^4.0.0",
     "lint-staged": "^15.2.0",
+    "magic-color": "workspace:*",
     "pnpm": "^8.14.0",
     "rimraf": "^5.0.5",
     "simple-git-hooks": "^2.9.0",
     "typescript": "^5.3.3",
     "unbuild": "^2.0.0",
+    "unocss": "^0.59.0",
+    "unocss-preset-useful": "^0.4.2",
     "vite": "^5.0.11",
-    "vitest": "^1.1.3"
+    "vitest": "^1.1.3",
+    "vue": "^3.4.21"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
