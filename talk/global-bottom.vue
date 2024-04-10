@@ -72,7 +72,8 @@ watchEffect(() => {
 </script>
 
 <template>
-  <span absolute pointer-events-none rounded-full z-100 mix-blend-plus-lighter bg-gradient-to-r shape="[-45deg]"
+  <span
+    absolute pointer-events-none rounded-full z-100 mix-blend-plus-lighter bg-gradient-to-r shape="[-45deg]"
     from="$vp-c-brand" to="#009ff7" :class="[transitionClass, currentSlideRoute.path !== '1' ? 'op75 dark:op50' : '!op-0']"
     :style="{
       top: `${top}%`,
@@ -81,5 +82,6 @@ watchEffect(() => {
       height: `${size}px`,
       transform: 'translate(-50%, -50%)',
       filter: `blur(${blur}px)`,
-    }" @transitionend="updateClass" />
+    }" @transitionend="updateClass"
+  />
 </template>

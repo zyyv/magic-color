@@ -125,8 +125,8 @@ importers:
         specifier: ^0.59.0
         version: 0.59.0(postcss@8.4.38)(rollup@3.28.1)(vite@5.2.8)
       unocss-preset-useful:
-        specifier: ^0.4.1
-        version: 0.4.1(unocss@0.59.0)
+        specifier: ^0.4.2
+        version: 0.4.2(unocss@0.59.0)
 
   talk-example:
     devDependencies:
@@ -3298,6 +3298,12 @@ packages:
     resolution: {integrity: sha512-gM1jy/HoUS/HeiuOt5u+fAAWT/PPLqfC8eWGRrtqm22zKOq0Ea/Lp8Jh+BApc1cGby2xw6lwiFJRbFbiPaFoNw==}
     dependencies:
       '@unocss/core': 0.58.5
+    dev: true
+
+  /@unocss/preset-rem-to-px@0.59.0:
+    resolution: {integrity: sha512-y0VumKRJehF4tdQGqjgyascmmwmVJc1Vie6jbsPLYFJwehvJcQH8n3icVM/bzRRZGyWdpuClxyJP6nNxxy6R6w==}
+    dependencies:
+      '@unocss/core': 0.59.0
     dev: true
 
   /@unocss/preset-tagify@0.55.7:
@@ -9045,19 +9051,17 @@ packages:
       - unocss
     dev: true
 
-  /unocss-preset-useful@0.4.1(unocss@0.59.0):
-    resolution: {integrity: sha512-Nvv6FEsX9l24LXYF1PCdBh/Vsz3723BDBhAjW2VGPRE+BaSciK8/1dYNTFUeL7tToEsFV/zNeXxkyU+X73JiXw==}
+  /unocss-preset-useful@0.4.2(unocss@0.59.0):
+    resolution: {integrity: sha512-ZhnSE0VT9KRYTQvzMCSK+NcSt0nRRYGFLQTxV4n/K8D2ENHn6N2SdsxwRidxnnMgSq3uMl2DEKUP7xZR658tzw==}
     dependencies:
-      '@unocss/core': 0.58.5
-      '@unocss/preset-attributify': 0.58.5
-      '@unocss/preset-icons': 0.58.5
-      '@unocss/preset-mini': 0.58.5
-      '@unocss/preset-rem-to-px': 0.58.5
-      '@unocss/preset-tagify': 0.58.5
-      '@unocss/preset-typography': 0.58.5
-      '@unocss/preset-uno': 0.58.5
-      '@unocss/preset-web-fonts': 0.58.5
-      magic.css: 1.4.8
+      '@unocss/preset-attributify': 0.59.0
+      '@unocss/preset-icons': 0.59.0
+      '@unocss/preset-mini': 0.59.0
+      '@unocss/preset-rem-to-px': 0.59.0
+      '@unocss/preset-tagify': 0.59.0
+      '@unocss/preset-typography': 0.59.0
+      '@unocss/preset-uno': 0.59.0
+      '@unocss/preset-web-fonts': 0.59.0
       postcss: 8.4.38
       postcss-js: 4.0.1(postcss@8.4.38)
       unocss-preset-scrollbar: 0.3.1(unocss@0.59.0)

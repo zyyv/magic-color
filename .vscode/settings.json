@@ -37,5 +37,7 @@
     "json",
     "jsonc",
     "yaml"
-  ]
+  ],
+
+  "unocss.root": ["talk"]
 }

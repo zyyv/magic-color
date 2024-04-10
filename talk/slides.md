@@ -5,12 +5,11 @@ theme: seriph
 # like them? see https://unsplash.com/collections/94734566/slidev
 background: https://cover.sli.dev
 # some information about your slides, markdown enabled
-title: Welcome to Slidev
+title: 探索颜色空间
 info: |
-  ## Slidev Starter Template
-  Presentation slides for developers.
+  ## Magic Color Space.
 
-  Learn more at [Sli.dev](https://sli.dev)
+  Learn more at [Magic Color](https://github.com/zyyv/magic-color)
 # apply any unocss classes to the current slide
 class: text-center
 # https://sli.dev/custom/highlighters.html
@@ -24,8 +23,33 @@ transition: slide-left
 mdc: true
 ---
 
-# Welcome to Slidev
+<div mt--2>
+<div flex justify-between items-center pr-20>
 
+<h1 flex="~ col">
+<div flex gap-3 font-mono grad-p-r>Magic Color</div>
+<div flex="~ gap3" items-center>魔法色彩</div>
+<div flex="~ gap3" items-center>探索颜色原理</div>
+</h1>
+<div flex justify-center items-center relative>
+  <div id="logo" absolute top='1/2' left='1/2' translate='-1/2'  w-60 h-60  hover-op-0 transition duration-1000
+bg-gradient-to-r shape="[-45deg]" from="$vp-c-brand" to="#009ff7" blur-120px rd-full>
+  </div>
+  <div text-40 i-logos-unocss />
+</div>
+
+</div>
+<div tracking-widest op50>
+Chris
+</div>
+</div>
+
+<div abs-bl mx-13 my-12 flex="~ col" text-sm text-left>
+  <div>Share Meeting</div>
+  <div text-sm opacity-50>June 14th, 2023</div>
+</div>
+
+<!--
 Presentation slides for developers
 
 <div class="pt-12">
@@ -42,7 +66,7 @@ Presentation slides for developers
     class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
     <carbon-logo-github />
   </a>
-</div>
+</div> -->
 
 <!--
 The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
