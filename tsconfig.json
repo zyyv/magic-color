@@ -4,7 +4,13 @@
     "lib": ["ESNext", "DOM"],
     "module": "ESNext",
     "moduleResolution": "node",
+    "paths": {
+      "magic-colors": ["./packages/magic-color/src/indenx.ts"]
+    },
     "resolveJsonModule": true,
+    "types": [
+      "vite/client"
+    ],
     "strict": true,
     "strictNullChecks": true,
     "esModuleInterop": true,

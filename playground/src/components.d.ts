@@ -15,6 +15,8 @@ declare module 'vue' {
     PalettePanel: typeof import('./components/Palette/PalettePanel.vue')['default']
     PalettePreview: typeof import('./components/Palette/PalettePreview.vue')['default']
     Picker: typeof import('./components/Picker.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
     ThemeButtons: typeof import('./components/ThemeButtons.vue')['default']
     ThemeHue: typeof import('./components/ThemeHue.vue')['default']
   }

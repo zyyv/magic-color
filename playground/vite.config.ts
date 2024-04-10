@@ -11,7 +11,7 @@ const r = (p: string) => path.resolve(__dirname, p)
 export default defineConfig({
   resolve: {
     alias: {
-      'magic-color': r('../src/index.ts'),
+      'magic-color': r('../packages/magic-color/src/index.ts'),
     },
   },
   plugins: [
