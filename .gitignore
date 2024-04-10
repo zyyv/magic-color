@@ -9,3 +9,8 @@ lib-cov
 logs
 node_modules
 temp
+*.local
+.vite-inspect
+.remote-assets
+components.d.ts
+talk-example/*/**
