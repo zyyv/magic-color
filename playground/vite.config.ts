@@ -16,7 +16,7 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    UnoCSS(),
+    UnoCSS('../unocss.config.ts') as any,
     AutoImport({
       imports: [
         'vue',
