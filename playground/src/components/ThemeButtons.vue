@@ -11,8 +11,10 @@ defineProps<{
 <template>
   <ul fcc text-white gap-2 mt-10>
     <li v-for="(v, k) in theme" :key="k" fccc>
-      <button px-3 py-2 text-sm rd-md important-duration-100 hover-scale-105 trans
-        :style="{ backgroundColor: v, color: getReadableTextColor(v) }">
+      <button
+        px-3 py-2 text-sm rd-md important-duration-100 hover-scale-105 trans
+        :style="{ backgroundColor: v, color: getReadableTextColor(v) }"
+      >
         button
       </button>
       <span>{{ k }}</span>

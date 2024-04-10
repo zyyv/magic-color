@@ -38,8 +38,6 @@ const aplhaStringify = computed({
 })
 
 function handleAlphaBlur(e: any) {
-  console.log(e.target.value)
-  console.log(aplhaStringify.value)
   if (aplhaStringify.value !== e.target.value)
     e.target.value = aplhaStringify.value
 }
