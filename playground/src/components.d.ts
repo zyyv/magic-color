@@ -7,8 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    copy: typeof import('./components/ThemeButtons copy.vue')['default']
-    ListColor: typeof import('./components/ListColor.vue')['default']
     Palette: typeof import('./components/Palette/index.vue')['default']
     PaletteControls: typeof import('./components/Palette/PaletteControls.vue')['default']
     PaletteInput: typeof import('./components/Palette/PaletteInput.vue')['default']
