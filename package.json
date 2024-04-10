@@ -6,7 +6,7 @@
   "packageManager": "pnpm@8.15.6",
   "scripts": {
     "dev": "pnpm -r -F=\"./packages/*\" --parallel run dev",
-    "build": "pnpm -r -F=\"./packages/*\" run build && nr play:build",
+    "build": "pnpm -r -F=\"./packages/*\" run build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepublishOnly": "nr build",
@@ -16,7 +16,8 @@
     "typecheck": "tsc --noEmit",
     "prepare": "simple-git-hooks",
     "play": "pnpm -C playground dev",
-    "play:build": "pnpm -C playground build"
+    "play:build": "pnpm -C playground build",
+    "deploy": "nr play:build"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.6.2",
