@@ -88,80 +88,154 @@ style: 'padding-left: 8rem;'
 </div>
 
 ---
+transition: slide-up
+---
+
+# 回顾「颜色」
+
+你所认识的颜色？
+
+<v-clicks>
+
+- **光学三原色**：<span inline-block w-4 h-4 mr-1 class="bg-[red]" ></span> 红、<span inline-block w-4 h-4 mr-1 class="bg-#0f0"></span> 绿、<span inline-block w-4 h-4 mr-1 class="bg-#00f"></span> 蓝。通常作用于 `RGB模式` 应用于生活的方方面面。
+
+- **美术三原色**：<span inline-block w-4 h-4 mr-1 class="bg-[cyan]" ></span> 青、<span inline-block w-4 h-4 mr-1 class="bg-[magenta]"></span> 品红、<span inline-block w-4 h-4 mr-1 class="bg-[yellow]"></span> 黄。通常作用于 `RYB模式` 在艺术、设计和绘画中都有广泛的使用场景 。
+
+- **七彩或彩虹色**：<span inline-block w-4 h-4 mr-1 class="bg-[red]"></span>红（赤）、
+<span inline-block w-4 h-4 mr-1 class="bg-[orange]"></span>橙、
+<span inline-block w-4 h-4 mr-1 class="bg-[yellow]"></span>黄、
+<span inline-block w-4 h-4 mr-1 class="bg-[green]"></span>绿、
+<span inline-block w-4 h-4 mr-1 class="bg-[cyan]"></span>青、
+<span inline-block w-4 h-4 mr-1 class="bg-[blue]"></span>蓝、
+<span inline-block w-4 h-4 mr-1 class="bg-[purple]"></span>紫、
+
+- ...
+
+</v-clicks>
+
+<div pcc pf v-show="$slidev.nav.clicks === 1">
+  <img rd src='/meta/rgb-mode.webp' />
+</div>
+
+<div pcc pf mt-10 v-show="$slidev.nav.clicks === 2">
+  <img rd src='/meta/ryb-mode.webp' />
+</div>
+
+---
 transition: fade-out
 ---
 
-# What is Slidev?
+# CSS颜色值
 
-Slidev is a slides maker and presenter designed for developers, consist of the following features
+在 CSS（层叠样式表）中，颜色用于定义网页元素的外观。
 
-- 📝 **Text-based** - focus on the content with Markdown, and then style them later
-- 🎨 **Themable** - theme can be shared and used with npm packages
-- 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
-- 🤹 **Interactive** - embedding Vue components to enhance your expressions
-- 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export into PDF, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - anything possible on a webpage
+在 CSS 中，可以使用以下几种方法来指定颜色：
 
-<br>
-<br>
+<v-clicks>
 
-Read more about [Why Slidev?](https://sli.dev/guide/why)
+- **关键词颜色值（Keyword）**：一些常见的颜色名称，比如"red"（红色）、"blue"（蓝色）等。
 
-<!--
-You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/guide/syntax#embedded-styles
--->
+- **十六进制颜色值（Hexadecimal）**：使用六位十六进制数字来表示颜色，如"#FF0000"代表红色，其中每两位代表红、绿、蓝色的分量。
 
-<style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-</style>
+- **RGB颜色值（RGB）**：使用红（Red）、绿（Green）、蓝（Blue）三个通道的数值来定义颜色，例如"rgb(255, 0, 0)"表示红色。
 
-<!--
-Here is another comment.
--->
+- **HSL颜色值（HSL）**：使用色相（Hue）、饱和度（Saturation）、亮度（Lightness）来定义颜色，例如"hsl(0, 100%, 50%)"表示红色。
+
+- **HSB颜色值（HSB Color Values）**：HSB颜色模型中，色相（Hue）、饱和度（Saturation）、亮度（Brightness）分别表示颜色的类型、纯度和明度。
+
+</v-clicks>
 
 ---
-transition: slide-up
+transition: slide-right
 level: 2
+clicks: 3
 ---
 
-# Navigation
+# KeyWord
 
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/navigation.html)
+关键词可以直接用于设置元素的文本颜色、背景颜色等。
 
-## Keyboard Shortcuts
+<div v-show="$slidev.nav.clicks < 3">
 
-|     |     |
-| --- | --- |
-| <kbd>right</kbd> / <kbd>space</kbd>| next animation or slide |
-| <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd> | previous slide |
-| <kbd>down</kbd> | next slide |
+````md magic-move
+```css
+/* css */
+div {
+  color: red;
+  background-color: lightblue;
+}
+```
+```html
+<!-- html -->
+<div style="color: red; background-color: lightblue;">KeyWord Color</div>
+```
+```ts
+// typescript
+div.style.color = 'red';
+div.style.backgroundColor = 'lightblue';
+```
+````
 
-<!-- https://sli.dev/guide/animations.html#click-animations -->
-<img
-  v-click
-  class="absolute -bottom-9 -left-7 w-80 opacity-50"
-  src="https://sli.dev/assets/arrow-bottom-left.svg"
-  alt=""
-/>
-<p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
+</div>
+
+<div  v-show="$slidev.nav.clicks === 3">
+
+#### 预定义颜色（第三方）
+
+<div max-h-80 of-auto rd-md>
+
+```ts {monaco-run}
+import { KeywordColors, UnoColors } from 'magic-color'
+
+console.log(KeywordColors)
+```
+
+</div>
+
+</div>
 
 ---
+transition: slide-left
+level: 2
 layout: two-cols
 layoutClass: gap-16
 ---
 
-# Table of contents
+# RBG Color
+
+RGB（红绿蓝）是一种常用的颜色表示方法，它基于光的加色混合原理
+
+在RGB模型中，每种颜色都是通过不同比例的红、绿、蓝三种颜色的混合而得到的。每种颜色的取值范围为0到255，其中0表示没有颜色，255表示颜色的最大强度。
+
+<Rgb />
+
+::right::
+1
+
+---
+transition: slide-left
+level: 2
+layout: two-cols
+layoutClass: gap-16
+---
+
+# Hexadecimal Color
+
+十六进制颜色值是最常用的颜色表示方法之一。
+
+十六进制颜色值由六位十六进制数字组成，每两位代表红、绿、蓝色的分量。
+
+```css
+/* css */
+div {
+  color: #FF0000;
+  background-color: #00FF00;
+}
+```
+
+::right::
+1
+<!-- # Table of contents
 
 You can use the `Toc` component to generate a table of contents for your slides:
 
@@ -173,7 +247,7 @@ The title will be inferred from your slide content, or you can override it with 
 
 ::right::
 
-<Toc v-click minDepth="1" maxDepth="2"></Toc>
+<Toc v-click minDepth="1" maxDepth="2"></Toc> -->
 
 ---
 layout: image-right

@@ -14,6 +14,7 @@
     "@slidev/theme-seriph": "latest",
     "@vueuse/core": "^10.9.0",
     "@vueuse/shared": "^10.9.0",
+    "magic-color": "workspace:*",
     "vue": "^3.4.21"
   }
 }
