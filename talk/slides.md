@@ -1,76 +1,91 @@
 ---
 # try also 'default' to start simple
-theme: seriph
-# random image from a curated Unsplash collection by Anthony
-# like them? see https://unsplash.com/collections/94734566/slidev
-background: https://cover.sli.dev
-# some information about your slides, markdown enabled
-title: 探索颜色空间
+theme: default
+title: '魔法色彩: 探索颜色原理'
 info: |
   ## Magic Color Space.
 
   Learn more at [Magic Color](https://github.com/zyyv/magic-color)
-# apply any unocss classes to the current slide
 class: text-center
-# https://sli.dev/custom/highlighters.html
 highlighter: shiki
-# https://sli.dev/guide/drawing
 drawings:
-  persist: false
-# slide transition: https://sli.dev/guide/animations#slide-transitions
+  persist: true
 transition: slide-left
-# enable MDC Syntax: https://sli.dev/guide/syntax#mdc-syntax
 mdc: true
 ---
 
-<div mt--2>
-<div flex justify-between items-center pr-20>
+<div fbc pr-20>
 
 <h1 flex="~ col">
-<div flex gap-3 font-mono grad-p-r>Magic Color</div>
-<div flex="~ gap3" items-center>魔法色彩</div>
-<div flex="~ gap3" items-center>探索颜色原理</div>
+  <div flex gap-3 font-ubuntu grad-p-r>Magic Color</div>
+  <div flex="~ gap3" items-center>魔法色彩</div>
+  <div flex="~ gap3" items-center>探索颜色原理</div>
 </h1>
+
 <div flex justify-center items-center relative>
   <div id="logo" absolute top='1/2' left='1/2' translate='-1/2'  w-60 h-60  hover-op-0 transition duration-1000
 bg-gradient-to-r shape="[-45deg]" from="$vp-c-brand" to="#009ff7" blur-120px rd-full>
   </div>
-  <div text-40 i-logos-unocss />
+  <img w-50 src='/logo.svg' />
 </div>
 
-</div>
-<div tracking-widest op50>
-Chris
-</div>
 </div>
 
 <div abs-bl mx-13 my-12 flex="~ col" text-sm text-left>
+  <div grad-color tracking-widest op50>
+    Chris
+  </div>
   <div>Share Meeting</div>
-  <div text-sm opacity-50>June 14th, 2023</div>
+  <div text-sm opacity-50>April 17th, 2024</div>
 </div>
 
-<!--
-Presentation slides for developers
+---
+transition: fade-out
+layout: intro
+growX: 10
+growY: 90
+style: 'padding-left: 8rem;'
+---
 
-<div class="pt-12">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
-    Press Space for next page <carbon:arrow-right class="inline"/>
-  </span>
+<Avatar />
+
+<div prose>
+  <p>
+  <i i-fluent-emoji-sparkles mr-1 />
+  Team member of
+  <IconsUnoCSS />
+  ,
+  <IconsElk />
+  , Creator of
+  <IconsOnuUI />
+  ,
+  <IconsUnPreset />
+  <i i-fluent-emoji-sparkles ml-1 />
+  </p>
+  <p>
+  In the community, I am also a ecological contributors of the
+  <IconsVite />
+  、
+  <IconsVue />
+  、
+  <IconsNuxt /> & etc.
+  </p>
 </div>
 
-<div class="abs-br m-6 flex gap-2">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon:edit />
-  </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub" title="Open in GitHub"
-    class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon-logo-github />
-  </a>
-</div> -->
-
-<!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
--->
+<div mt-10 fsc gap-4>
+  <div fsc gap-2>
+    <div i-carbon-user-sponsor op50 text-xl/>
+    <div><a href="https://zyob.top" target="_blank" class="border-none! font-300">zyob.top</a></div>
+  </div>
+  <div fsc gap-2>
+    <div i-carbon-logo-github op50 text-xl/>
+  <div><a href="https://github.com/zyyv" target="_blank" class="border-none! font-300">zyyv</a></div>
+  </div>
+  <div fsc gap-2>
+    <div i-carbon-logo-twitter op50 ma text-xl/>
+    <div><a href="https://twitter.com/chris_zyyv" target="_blank" class="border-none! font-300">chris_zyyv</a></div>
+  </div>
+</div>
 
 ---
 transition: fade-out
@@ -586,7 +601,7 @@ database "MySql" {
 ---
 foo: bar
 dragPos:
-  square: 691,33,167,_,-16
+  square: 596,130,136,_,-19
 ---
 
 # Draggable Elements
@@ -612,7 +627,7 @@ Double-click on the draggable elements to edit their positions.
 </v-drag>
 ```
 
-<v-drag pos="671,205,253,_,-15">
+<v-drag pos="653,300,253,_,-15">
   <div text-center text-3xl border border-main rounded>
     Double-click me!
   </div>
@@ -620,9 +635,6 @@ Double-click on the draggable elements to edit their positions.
 
 <img v-drag="'square'" src="https://sli.dev/logo.png">
 
----
-src: ./pages/multiple-entries.md
-hide: false
 ---
 
 ---

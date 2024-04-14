@@ -17,6 +17,8 @@
     "prepare": "simple-git-hooks",
     "play": "pnpm -C playground dev",
     "play:build": "pnpm -C playground build",
+    "talk": "pnpm -C talk dev",
+    "talk:build": "pnpm -C talk build",
     "deploy": "nr play:build"
   },
   "devDependencies": {
@@ -24,7 +26,11 @@
     "@antfu/ni": "^0.21.12",
     "@iconify-json/akar-icons": "^1.1.24",
     "@iconify-json/carbon": "^1.1.31",
+    "@iconify-json/fluent-emoji": "^1.1.18",
+    "@iconify-json/logos": "^1.1.42",
+    "@iconify/utils": "^2.1.22",
     "@types/node": "^20.10.7",
+    "@unocss/preset-mini": "^0.59.0",
     "bumpp": "^9.2.1",
     "eslint": "^8.56.0",
     "esno": "^4.0.0",
