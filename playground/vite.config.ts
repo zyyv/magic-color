@@ -4,15 +4,12 @@ import vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
-
-const r = (p: string) => path.resolve(__dirname, p)
+import { alias } from '../alias'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
-    alias: {
-      'magic-color': r('../packages/magic-color/src/index.ts'),
-    },
+    alias,
   },
   plugins: [
     vue(),
