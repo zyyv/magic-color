@@ -1,14 +1,13 @@
-import { computed, defineComponent, h, ref, resolveComponent, useModel } from 'vue'
+import { computed, defineComponent, h, ref, useModel } from 'vue'
 import type { ColorValue, HexColor, HsbColor, HslColor, RgbColor } from 'magic-color'
 import { createMagicColor } from 'magic-color'
-import PalettePanel from './PalettePanel.vue'
+import PalettePanel from './PalettePanel'
 
 export default defineComponent({
   props: {
     color: { type: String, default: '#ff0000' },
     alpha: { type: Number, default: 1 },
   },
-  components: [PalettePanel],
   emits: ['update:color', 'update:alpha'],
   setup(props) {
     const color = useModel(props, 'color')
