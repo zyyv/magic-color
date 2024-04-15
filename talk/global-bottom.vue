@@ -59,6 +59,7 @@ const blur = computed(() => 140 * +(formatter.value.growSize || 1) * scaleFactor
 const followMouse = computed(() => formatter.value.growFollow || pressed.value)
 const left = computed(() => (followMouse.value ? mouseX.value : formatter.value.growX ?? '80'))
 const top = computed(() => (followMouse.value ? mouseY.value : formatter.value.growY ?? '30'))
+const showCursor = computed(() => formatter.value.gradCursor ?? true)
 
 const transitionClass = ref('')
 function updateClass() {
@@ -74,7 +75,7 @@ watchEffect(() => {
 <template>
   <span
     absolute pointer-events-none rounded-full z-100 mix-blend-plus-lighter bg-gradient-to-r shape="[-45deg]"
-    from="$vp-c-brand" to="#009ff7" :class="[transitionClass, currentSlideRoute.path !== '1' ? 'op75 dark:op50' : '!op-0']"
+    from="$vp-c-brand" to="#009ff7" :class="[transitionClass, showCursor ? 'op75 dark:op50' : '!op-0']"
     :style="{
       top: `${top}%`,
       left: `${left}%`,
