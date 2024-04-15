@@ -99,15 +99,18 @@ transition: slide-up
 
 - **光学三原色**：<span inline-block w-4 h-4 mr-1 class="bg-[red]" ></span> 红、<span inline-block w-4 h-4 mr-1 class="bg-#0f0"></span> 绿、<span inline-block w-4 h-4 mr-1 class="bg-#00f"></span> 蓝。通常作用于 `RGB模式` 应用于生活的方方面面。
 
-- **美术三原色**：<span inline-block w-4 h-4 mr-1 class="bg-[cyan]" ></span> 青、<span inline-block w-4 h-4 mr-1 class="bg-[magenta]"></span> 品红、<span inline-block w-4 h-4 mr-1 class="bg-[yellow]"></span> 黄。通常作用于 `RYB模式` 在艺术、设计和绘画中都有广泛的使用场景 。
+- **美术三原色**：<span inline-block w-4 h-4 mr-1 class="bg-[cyan]" ></span> 青、<span inline-block w-4 h-4 mr-1 class="bg-[magenta]"></span> 品红、<span inline-block w-4 h-4 mr-1 class="bg-[yellow]"></span> 黄。通常作用于 `CMYK模式` 在艺术、设计和绘画中都有广泛的使用场景 。
 
-- **七彩或彩虹色**：<span inline-block w-4 h-4 mr-1 class="bg-[red]"></span>红（赤）、
+- **七彩光谱**：
+<span inline-block w-2 h-2 mr-1 rd-full class="bg-[red]"></span><span op-40>红外线(>700nm)</span>、
+<span inline-block w-4 h-4 mr-1 class="bg-[red]"></span>红（赤）、
 <span inline-block w-4 h-4 mr-1 class="bg-[orange]"></span>橙、
 <span inline-block w-4 h-4 mr-1 class="bg-[yellow]"></span>黄、
 <span inline-block w-4 h-4 mr-1 class="bg-[green]"></span>绿、
 <span inline-block w-4 h-4 mr-1 class="bg-[cyan]"></span>青、
 <span inline-block w-4 h-4 mr-1 class="bg-[blue]"></span>蓝、
 <span inline-block w-4 h-4 mr-1 class="bg-[purple]"></span>紫、
+<span inline-block w-2 h-2 mr-1 rd-full class="bg-[purple]"></span><span op-40>紫外线（<400nm）</span>
 
 - ...
 
@@ -117,8 +120,16 @@ transition: slide-up
   <img rd src='/meta/rgb-mode.webp' />
 </div>
 
-<div pcc pf mt-10 v-show="$slidev.nav.clicks === 2">
-  <img rd src='/meta/ryb-mode.webp' />
+<div pcc pf mt-14 v-show="$slidev.nav.clicks === 2">
+  <div fcc gap-5>
+  <div>
+
+  **自身可以发光** vs **自身不能发光**
+
+  <img class="max-w-100!" rd src='/meta/cmy-001.webp' />
+  </div>
+  <img rd src='/meta/cmy-001.png' />
+  </div>
 </div>
 
 ---
@@ -141,7 +152,7 @@ transition: fade-out
 
 - **HSL颜色值（HSL）**：使用色相（Hue）、饱和度（Saturation）、亮度（Lightness）来定义颜色，例如"hsl(0, 100%, 50%)"表示红色。
 
-- **HSB颜色值（HSB Color Values）**：HSB颜色模型中，色相（Hue）、饱和度（Saturation）、亮度（Brightness）分别表示颜色的类型、纯度和明度。
+- **HSB颜色值（HSB）**：HSB颜色模型中，色相（Hue）、饱和度（Saturation）、亮度（Brightness）分别表示颜色的类型、纯度和明度。
 
 </v-clicks>
 
@@ -207,16 +218,17 @@ RGB（红绿蓝）是一种常用的颜色表示方法，它基于光的加色�
 
 在RGB模型中，每种颜色都是通过不同比例的红、绿、蓝三种颜色的混合而得到的。每种颜色的取值范围为0到255，其中0表示没有颜色，255表示颜色的最大强度。
 
-<Rgb />
+![RGB](/meta/rgb-mode-squrae.png)
 
 ::right::
-1
+
+<div fccc h-full>
+<Rgb />
+</div>
 
 ---
 transition: slide-left
 level: 2
-layout: two-cols
-layoutClass: gap-16
 ---
 
 # Hexadecimal Color
@@ -233,8 +245,27 @@ div {
 }
 ```
 
-::right::
-1
+<Rgb v-show="$slidev.nav.clicks < 1" hex />
+
+<v-click>
+<br>
+
+#### 颜色透明度
+
+带有透明度通道的十六进制表示法中，通常使用8个字符表示颜色，前6个字符表示红、绿、蓝三个通道的亮度值，而最后两个字符表示透明度
+
+<code c-red>#FF0000</code> <code c-red op-100>FF</code> 表示红色，透明度为100%
+
+<p op-50>
+<code c-green>#00FF00</code> <code c-green>80</code> 表示绿色，透明度为50%
+</p>
+
+<p op-10>
+<code c-blue>#0000FF</code> <code c-blue>1A</code> 表示蓝色，透明度为10%
+</p>
+
+</v-click>
+
 <!-- # Table of contents
 
 You can use the `Toc` component to generate a table of contents for your slides:
@@ -250,131 +281,78 @@ The title will be inferred from your slide content, or you can override it with 
 <Toc v-click minDepth="1" maxDepth="2"></Toc> -->
 
 ---
-layout: image-right
-image: https://cover.sli.dev
----
-
-# Code
-
-Use code snippets and get the highlighting directly, and even types hover![^1]
-
-```ts {all|5|7|7-8|10|all} twoslash
-// TwoSlash enables TypeScript hover information
-// and errors in markdown code blocks
-// More at https://shiki.style/packages/twoslash
-
-import { computed, ref } from 'vue'
-
-const count = ref(0)
-const doubled = computed(() => count.value * 2)
-
-doubled.value = 2
-```
-
-<arrow v-click="[4, 5]" x1="350" y1="310" x2="195" y2="334" color="#953" width="2" arrowSize="1" />
-
-<!-- This allow you to embed external code blocks -->
-<<< @/snippets/external.ts#snippet
-
-<!-- Footer -->
-[^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
-
-<!-- Inline style -->
-<style>
-.footnotes-sep {
-  @apply mt-5 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
-</style>
-
-<!--
-Notes can also sync with clicks
-
-[click] This will be highlighted after the first click
-
-[click] Highlighted with `count = ref(0)`
-
-[click:3] Last click (skip two clicks)
--->
-
----
+transition: slide-down
 level: 2
 ---
 
-# Shiki Magic Move
+# HSB Color
 
-Powered by [shiki-magic-move](https://shiki-magic-move.netlify.app/), Slidev supports animations across multiple code snippets.
+一种直观的方法来表示颜色的色调、饱和度和亮度
 
-Add multiple code blocks and wrap them with <code>````md magic-move</code> (four backticks) to enable the magic move. For example:
+<div v-show="$slidev.nav.clicks <= 3">
 
-````md magic-move
-```ts {*|2|*}
-// step 1
-const author = reactive({
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-})
-```
-
-```ts {*|1-2|3-4|3-4,8}
-// step 2
-export default {
-  data() {
-    return {
-      author: {
-        name: 'John Doe',
-        books: [
-          'Vue 2 - Advanced Guide',
-          'Vue 3 - Basic Guide',
-          'Vue 4 - The Mystery'
-        ]
-      }
-    }
-  }
+```css
+/* css */
+div {
+  color: hsb(0, 100%, 50%);
+  background-color: hsb(120, 100%, 50%);
 }
 ```
 
-```ts
-// step 3
-export default {
-  data: () => ({
-    author: {
-      name: 'John Doe',
-      books: [
-        'Vue 2 - Advanced Guide',
-        'Vue 3 - Basic Guide',
-        'Vue 4 - The Mystery'
-      ]
-    }
-  })
+</div>
+
+<v-clicks>
+
+- **色调（Hue）**：表示颜色的类型，如红色、绿色、蓝色等。
+- **饱和度（Saturation）**：表示颜色的纯度，饱和度越高，颜色越鲜艳。
+- **亮度（Brightness）**：表示颜色的亮度，亮度越高，颜色越明亮。
+
+</v-clicks>
+
+<v-click>
+<Hsb />
+</v-click>
+
+---
+transition: slide-down
+level: 2
+---
+
+# HSL Color
+
+通过色相、饱和度和亮度来描述颜色
+
+<div v-show="$slidev.nav.clicks <= 3">
+
+```css
+/* css */
+div {
+  color: hsl(0, 100%, 50%);
+  background-color: hsl(120, 100%, 50%);
 }
 ```
 
-Non-code blocks are ignored.
+</div>
 
-```vue
-<!-- step 4 -->
-<script setup>
-const author = {
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-}
-</script>
-```
-````
+<v-clicks v-show="$slidev.nav.clicks <= 3">
+
+- **色调（Hue）**：表示颜色在色轮上的位置。
+- **饱和度（Saturation）**：颜色中灰度的百分比，当饱和度为0%时，颜色是灰色的，即没有彩色成分；当饱和度为100%时，颜色是最纯净的，没有灰度的混合。
+- **亮度（Brightness）**：表示颜色的亮度，亮度越高，颜色越明亮。
+
+</v-clicks>
+
+<br v-show="$slidev.nav.clicks <= 3">
+
+> 与 `HSB` 模型相比，`HSL` 模型更接近人类对颜色的感知。
+
+> 区别：HSB模型中的亮度（Brightness）表示颜色的明亮程度，是色彩的强度或亮度的度量。当亮度较高时，颜色看起来更加明亮，当亮度较低时，颜色看起来较暗。亮度的取值范围是0%到100%。
+
+> HSL模型中的亮度（Lightness）也表示颜色的明亮程度，但是与HSB模型中的亮度有所不同。HSL模型中的亮度更加接近于人眼对颜色明暗的感知。当亮度为0%时，颜色是黑色的；当亮度为100%时，颜色是白色的。亮度的取值范围同样是0%到100%。
+
+<v-click>
+<Hsl />
+</v-click>
 
 ---
 
