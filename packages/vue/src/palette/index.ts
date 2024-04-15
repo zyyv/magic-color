@@ -105,19 +105,21 @@ export default defineComponent({
       handlePanelChange,
     }
   },
-  render(ctx, cache, props, setup) {
-    const wrappedStyle = {
-      style: { width: '240px' },
-      class: 'h-fit bg-#272727 pb-8px shadow',
-    }
-
-    return h('div', wrappedStyle, [
+  render() {
+    return h('div', {
+      style: {
+        width: '240px',
+        height: 'fit-content',
+        backgroundColor: '#272727',
+        paddingBottom: '8px',
+      },
+    }, [
       h(PalettePanel, {
         width: 240,
         height: 240,
         barSize: 12,
-        color: setup.mcHsbColor,
-        onChange: setup.handlePanelChange,
+        color: this.mcHsbColor,
+        onChange: this.handlePanelChange,
       }),
     ])
   },
