@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { createMagicColor } from 'magic-color'
 
 const h = ref(0)
-const s = ref(0)
+const s = ref(1)
 const b = ref(0)
 
 const bg = computed(() => {
@@ -15,23 +15,26 @@ const bg = computed(() => {
 <template>
   <div fccc gap-2 mt-10>
     <div fcc gap-2>
+      h:
       <PaletteControls v-model="h" type="hue" />
-      <div w-48px>
+      <div w-36px>
         {{ Math.round(360 * h) }}
       </div>
     </div>
     <div fcc gap-2>
+      s:
       <PaletteControls v-model="s" type="alpha" color="#fff" />
-      <div w-48px>
+      <div w-36px>
         {{ Math.round(100 * s) }}
       </div>
     </div>
     <div fcc gap-2>
+      b:
       <PaletteControls v-model="b" type="alpha" color="#000" />
-      <div w-48px>
+      <div w-36px>
         {{ Math.round(100 * b) }}
       </div>
     </div>
-    <div w-20 h-20 trans :style="{ backgroundColor: bg }" b />
+    <div w-20 h-20 trans ml--24px :style="{ backgroundColor: bg }" b />
   </div>
 </template>

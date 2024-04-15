@@ -1,7 +1,7 @@
 ---
 # try also 'default' to start simple
 theme: default
-title: '魔法色彩: 探索颜色原理'
+title: '魔法色彩: 探索颜色空间'
 info: |
   ## Magic Color Space.
 
@@ -12,6 +12,7 @@ drawings:
   persist: true
 transition: slide-left
 mdc: true
+gradCursor: false
 ---
 
 <div fbc pr-20>
@@ -19,7 +20,7 @@ mdc: true
 <h1 flex="~ col">
   <div flex gap-3 font-ubuntu grad-p-r>Magic Color</div>
   <div flex="~ gap3" items-center>魔法色彩</div>
-  <div flex="~ gap3" items-center>探索颜色原理</div>
+  <div flex="~ gap3" items-center>探索颜色空间</div>
 </h1>
 
 <div flex justify-center items-center relative>
@@ -89,6 +90,7 @@ style: 'padding-left: 8rem;'
 
 ---
 transition: slide-up
+gradCursor: false
 ---
 
 # 回顾「颜色」
@@ -210,6 +212,7 @@ transition: slide-left
 level: 2
 layout: two-cols
 layoutClass: gap-16
+gradCursor: false
 ---
 
 # RBG Color
@@ -229,6 +232,7 @@ RGB（红绿蓝）是一种常用的颜色表示方法，它基于光的加色�
 ---
 transition: slide-left
 level: 2
+gradCursor: false
 ---
 
 # Hexadecimal Color
@@ -283,6 +287,7 @@ The title will be inferred from your slide content, or you can override it with 
 ---
 transition: slide-down
 level: 2
+gradCursor: false
 ---
 
 # HSB Color
@@ -316,6 +321,7 @@ div {
 ---
 transition: slide-down
 level: 2
+gradCursor: false
 ---
 
 # HSL Color
@@ -334,7 +340,7 @@ div {
 
 </div>
 
-<v-clicks v-show="$slidev.nav.clicks <= 3">
+<v-clicks>
 
 - **色调（Hue）**：表示颜色在色轮上的位置。
 - **饱和度（Saturation）**：颜色中灰度的百分比，当饱和度为0%时，颜色是灰色的，即没有彩色成分；当饱和度为100%时，颜色是最纯净的，没有灰度的混合。
@@ -344,88 +350,92 @@ div {
 
 <br v-show="$slidev.nav.clicks <= 3">
 
-> 与 `HSB` 模型相比，`HSL` 模型更接近人类对颜色的感知。
-
-> 区别：HSB模型中的亮度（Brightness）表示颜色的明亮程度，是色彩的强度或亮度的度量。当亮度较高时，颜色看起来更加明亮，当亮度较低时，颜色看起来较暗。亮度的取值范围是0%到100%。
-
-> HSL模型中的亮度（Lightness）也表示颜色的明亮程度，但是与HSB模型中的亮度有所不同。HSL模型中的亮度更加接近于人眼对颜色明暗的感知。当亮度为0%时，颜色是黑色的；当亮度为100%时，颜色是白色的。亮度的取值范围同样是0%到100%。
-
+<div v-show="$slidev.nav.clicks > 3">
 <v-click>
+<div fcc gap-10>
 <Hsl />
+</div>
 </v-click>
+</div>
 
 ---
+transition: fade-out
+---
 
-# Components
+# HSL vs HSB
+
+`hsl` 和 `hsb` 都是一种直观的颜色表示方法，但是它们之间有一些区别。
 
 <div grid="~ cols-2 gap-4">
 <div>
 
-You can use Vue components directly inside your slides.
+  相同点：
 
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
+<v-clicks>
 
-```html
-<Counter :count="10" />
-```
+- <span c-bilibili>都是**符合视观直觉**通过色相、饱和度和亮度来描述颜色。</span>
+- <span c-bilibili>H: 色相区间为0-360度，S: 饱和度区间为0-100%，L/B: 亮度/明度区间为0-100%。</span>
+- <span c-bilibili>S: 饱和度为0%时，颜色是**灰色**的，即没有彩色成分；当饱和度为100%时，颜色是最纯净的，没有灰度的混合。</span>
 
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
+</v-clicks>
 
 </div>
 <div>
 
-```html
-<Tweet id="1390115482657726468" />
-```
+不同点：
 
-<Tweet id="1390115482657726468" scale="0.65" />
+<v-clicks>
+
+- 亮/明度区别：
+  - HSL: <span c-purple>HSL模型中的亮度更接近于颜色的明暗程度</span>
+  - HSB: <span c-teal>HSB模型中的亮度更接近于颜色的明度或亮度</span>
+
+</v-clicks>
 
 </div>
 </div>
 
-<!--
-Presenter note with **bold**, *italic*, and ~~striked~~ text.
+---
+transition: fade-out
+gradCursor: false
+---
 
-Also, HTML elements are valid:
-<div class="flex w-full">
-  <span style="flex-grow: 1;">Left content</span>
-  <span>Right content</span>
+# HSL vs HSB
+
+`hsl` 和 `hsb` 都是一种直观的颜色表示方法，但是它们之间有一些区别。
+
+<div grid="~ cols-2 gap-4">
+<div>
+
+HSL：
+
+<img h-320px src='/meta/hsl-mode.png' />
+
 </div>
--->
+<div>
+
+HSB：
+
+<img w-full src='/meta/hsb-mode.png' />
+
+</div>
+</div>
 
 ---
 class: px-20
+gradCursor: false
 ---
 
-# Themes
+# 冷暖色系
 
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
+人情有冷暖，天气有冷暖，色彩，也有。
 
-<div grid="~ cols-2 gap-2" m="t-2">
+- 冷色： 通常给人一种凉爽、清新、安静的感觉···
+- 暖色： 通常给人一种温暖、活泼、充满活力的感觉···
 
-```yaml
----
-theme: default
----
-```
+<br />
 
-```yaml
----
-theme: seriph
----
-```
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true" alt="">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true" alt="">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
+<img w-50 src='/meta/warm-cool-001.webp' />
 
 ---
 
@@ -465,84 +475,28 @@ also allows you to add
 </div>
 
 ---
+class: fccc of-scroll
+gradCursor: false
+---
+# 配色黄金比
 
-# Motions
+应用于设计中的黄金比例，也可以应用于颜色的搭配中。（**60：30：10**）
 
-Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), triggered by `v-motion` directive.
-
-```html
-<div
-  v-motion
-  :initial="{ x: -80 }"
-  :enter="{ x: 0 }"
-  :click-3="{ x: 80 }"
-  :leave="{ x: 1000 }"
->
-  Slidev
-</div>
-```
-
-<div class="w-60 relative">
-  <div class="relative w-40 h-40">
-    <img
-      v-motion
-      :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-square.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ y: 500, x: -100, scale: 2 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-circle.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-triangle.png"
-      alt=""
-    />
+<div flex rd of-hidden w-full>
+  <div class="bg-red w-60% fcc p-10 text-4xl">
+    60% 主色相
   </div>
-
-  <div
-    class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
-    v-motion
-    :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
+  <div class="bg-green w-30% fcc p-10 text-2xl">
+    30% 辅助色相
+  </div>
+  <div class="bg-blue w-10% fcc py-10 text-xl">
+    10% 强调色相
   </div>
 </div>
 
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
-<script setup lang="ts">
-const final = {
-  x: 0,
-  y: 0,
-  rotate: 0,
-  scale: 1,
-  transition: {
-    type: 'spring',
-    damping: 10,
-    stiffness: 20,
-    mass: 2
-  }
-}
-</script>
-
-<div
-  v-motion
-  :initial="{ x:35, y: 30, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-
-[Learn More](https://sli.dev/guide/animations.html#motion)
-
-</div>
+<img v-click v-show="$slidev.nav.clicks === 1" mt-10 w-100 src='/meta/gold-design-001.jpeg' />
+<img v-click v-show="$slidev.nav.clicks === 2" mt-10 w-100 src='/meta/gold-design-002.jpeg' />
+<img v-click v-show="$slidev.nav.clicks === 3" mt-10 w-100 src='/meta/gold-design-003.jpeg' />
 
 ---
 
