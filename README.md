@@ -2,7 +2,7 @@
 
 # magic-color [![NPM version](https://img.shields.io/npm/v/magic-color?color=a1b858&label=)](https://www.npmjs.com/package/magic-color) [![Netlify Status](https://api.netlify.com/api/v1/badges/53ddaf28-1a23-40b2-8ed9-7ed65931744c/deploy-status)](https://app.netlify.com/sites/quiet-entremet-477970/deploys)
 
-Magic color creator.
+Make the colors be magical.
 
 ## Features
 
@@ -23,11 +23,11 @@ A lot of color tool functions for you to use, providing easy conversion, generat
 ### basic
 
 ```ts
-import { MagicColor, createMagicColor } from 'magic-color'
+import { MagicColor, createMagicColor, mc } from 'magic-color'
 
 const mc = new MagicColor('#ffffff', 'hex', '1')
-// or
-const mc = createMagicColor('#ffffff') // recommended
+// or (mc is createMagicColor alias)
+const mc = mc('#ffffff') // recommended
 ```
 
 `createMagicColor` will automatically infer the input color type and the opacity.
