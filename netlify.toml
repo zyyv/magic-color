@@ -8,5 +8,10 @@ NODE_VERSION = "20"
 
 [[redirects]]
 from = "/*"
-to = "/index.html"
+to = "/play/index.html"
+status = 200
+
+[[redirects]]
+from = "/talk/*"
+to = "/talk/index.html"
 status = 200
