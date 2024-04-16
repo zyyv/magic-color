@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "slidev build --base /talk/2024-04-17/magic-color/ --out ../playground/public/talk",
+    "build": "slidev build --base /talk/ --out ../playground/public/talk",
     "dev": "slidev --open",
     "export": "slidev export"
   },
