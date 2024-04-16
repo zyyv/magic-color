@@ -18,10 +18,10 @@ async function moveBuildFiles(dirPath: string, depth = 0) {
 
     if (isDir) {
       await moveBuildFiles(p, depth + 1)
-      await fs.rmdir(p)
+      // await fs.rmdir(p)
     }
     else {
-      const targetDirPath = dirPath.replace('dist', 'dist/play')
+      const targetDirPath = !dirPath.includes('play') ? dirPath.replace('dist', 'dist/play') : dirPath
       await ensureTargetDirExists(targetDirPath)
       await fs.rename(p, path.resolve(targetDirPath, file))
     }
