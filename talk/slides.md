@@ -114,7 +114,7 @@ gradCursor: false
 <span inline-block w-4 h-4 mr-1 class="bg-[purple]"></span>紫、
 <span inline-block w-2 h-2 mr-1 rd-full class="bg-[purple]"></span><span op-40>紫外线（<400nm）</span>
 
-- ...
+- **12/24 色相环**：
 
 </v-clicks>
 
@@ -131,6 +131,19 @@ gradCursor: false
   <img class="max-w-100!" rd src='/meta/cmy-001.webp' />
   </div>
   <img rd src='/meta/cmy-001.png' />
+  </div>
+</div>
+
+<div pcc pf mt-14 v-show="$slidev.nav.clicks === 3">
+  光是电磁波
+</div>
+
+<div pcc pf mt-14 v-show="$slidev.nav.clicks === 4">
+  <div fcc gap-5>
+  <div>
+    <img class="max-w-100!" rd src='/meta/circle-12.webp' />
+  </div>
+    <!-- <img rd src='/meta/circle-24.png' /> -->
   </div>
 </div>
 
@@ -442,6 +455,23 @@ gradCursor: false
 - 近似色：色相环上相差约60°之内的颜色，比同类色范围更广，如柠檬黄和橘黄。
 
 </v-clicks>
+
+<v-click>
+
+<div fixed pcc bg='#222' class="w-80% h-50% rd-xl p-4">
+
+通过 `magic-color`, 可以轻松判断是否为冷暖色系。
+
+```ts {monaco-run}
+import { isWarmColor } from 'magic-color'
+
+const color = '#ff0000'
+console.log(isWarmColor(color))
+```
+
+</div>
+
+</v-click>
 
 ---
 class: fccc of-scroll

@@ -7,6 +7,12 @@ import { alias } from '../alias'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/play/',
+  build: {
+    outDir: '../dist',
+    target: 'esnext',
+    emptyOutDir: true,
+  },
   resolve: {
     alias,
   },

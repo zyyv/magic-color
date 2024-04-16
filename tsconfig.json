@@ -21,6 +21,7 @@
     "**/dist/**",
     "**/node_modules/**",
     "eslint.config.js",
-    "talk-examples/**"
+    "talk-examples/**",
+    "**/public/**"
   ]
 }

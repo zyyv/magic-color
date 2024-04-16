@@ -16,7 +16,7 @@
     "typecheck": "tsc --noEmit",
     "prepare": "simple-git-hooks",
     "play": "pnpm -C playground dev",
-    "play:build": "pnpm -C playground build",
+    "play:build": "pnpm -C playground build && esno scripts/move-build-files.ts",
     "talk": "pnpm -C talk dev",
     "talk:build": "pnpm -C talk build",
     "deploy": "nr play:build"
