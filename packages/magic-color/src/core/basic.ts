@@ -183,3 +183,5 @@ export function guessType(color: string): ColorType | undefined {
       return type as ColorType
   }
 }
+
+export const mc: typeof createMagicColor = createMagicColor

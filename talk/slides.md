@@ -270,20 +270,6 @@ div {
 
 </v-click>
 
-<!-- # Table of contents
-
-You can use the `Toc` component to generate a table of contents for your slides:
-
-```html
-<Toc minDepth="1" maxDepth="1"></Toc>
-```
-
-The title will be inferred from your slide content, or you can override it with `title` and `level` in your frontmatter.
-
-::right::
-
-<Toc v-click minDepth="1" maxDepth="2"></Toc> -->
-
 ---
 transition: slide-down
 level: 2
@@ -428,51 +414,34 @@ gradCursor: false
 
 # 冷暖色系
 
-人情有冷暖，天气有冷暖，色彩，也有。
+天气有冷暖，色彩，也有。
+
+<div v-show="$slidev.nav.clicks < 1">
 
 - 冷色： 通常给人一种凉爽、清新、安静的感觉···
 - 暖色： 通常给人一种温暖、活泼、充满活力的感觉···
 
 <br />
 
+</div>
+
+<div flex gap-10>
+
 <img w-50 src='/meta/warm-cool-001.webp' />
-
----
-
-# Clicks Animations
-
-You can add `v-click` to elements to add a click animation.
-
-<div v-click>
-
-This shows up when you click the slide:
-
-```html
-<div v-click>This shows up when you click the slide.</div>
-```
+<img h-50 src='/meta/warm-cool-002.webp' />
 
 </div>
 
-<br>
+<br />
 
-<v-click>
+<v-clicks>
 
-The <span v-mark.red="3"><code>v-mark</code> directive</span>
-also allows you to add
-<span v-mark.circle.orange="4">inline marks</span>
-, powered by [Rough Notation](https://roughnotation.com/):
+- 互补色：色相环上180°相差的颜色，如红和绿。
+- 对比色：色相环上120° - 180°之间相差的颜色，相对接近但有对比度，如粉色和绿色。
+- 同类色：色相环上相差约30°的颜色，非常相近，如柠檬黄和中黄。
+- 近似色：色相环上相差约60°之内的颜色，比同类色范围更广，如柠檬黄和橘黄。
 
-```html
-<span v-mark.underline.orange>inline markers</span>
-```
-
-</v-click>
-
-<div mt-20 v-click>
-
-[Learn More](https://sli.dev/guide/animations#click-animations)
-
-</div>
+</v-clicks>
 
 ---
 class: fccc of-scroll
@@ -499,177 +468,236 @@ gradCursor: false
 <img v-click v-show="$slidev.nav.clicks === 3" mt-10 w-100 src='/meta/gold-design-003.jpeg' />
 
 ---
+gradCursor: false
+---
+# 色彩对比度
+无障碍色彩对比度
 
-# LaTeX
+<div grid="~ cols-2 gap-4">
+<div>
 
-LaTeX is supported out-of-box powered by [KaTeX](https://katex.org/).
+<v-clicks>
 
-<br>
+- <span text-red>什么是对比度 ？</span>
+  - <span text-green>对比度是两种颜色之间的亮度或颜色差异。对比度的比值越低，它们之间的差异越小。</span>
+- <a href="https://www.w3.org/TR/WCAG20/" traget="_blank"> WCAG </a> 的 AA级 与 AAA级 标准 ？
+  - 为了确保尽可能多的人可以使用您的产品，对比度需要符合 <span c-purple>WCAG</span> 的 <span c-teal fw-600>AA级</span> 与 <span c-teal fw-600>AAA级</span> 标准。
 
-Inline $\sqrt{3x-1}+(1+x)^2$
+</v-clicks>
 
-Block
-$$ {1|3|all}
-\begin{array}{c}
+</div>
+<div fccc v-click gap-10 bg-white rd>
 
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
-= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
+<div bg='#D5100C' class="w-80% py-4 text-center rd-md font-mono">
+色彩对比度检测 -> <span text-xl>5.37</span> : 1
+</div>
 
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
+<div bg='#010205' class="w-80% py-4 text-center rd-md font-mono">
+色彩对比度检测 -> <span text-xl>20.75</span> : 1
+</div>
 
-\nabla \cdot \vec{\mathbf{B}} & = 0
+</div>
+</div>
 
-\end{array}
-$$
+<div mt-10 v-show="$slidev.nav.clicks === 2">
 
-<br>
+> WCAG 的 AA级 要求小文本与背景的对比度至少为 <span c-teal fw-600>4.5：1</span>，大文本与背景的对比度至少为 <span c-teal fw-600>3：1</span>。 WCAG 的 AAA级 要求小文本与背景的对比度至少为 <span c-teal fw-600>7：1</span>，大文本与背景的对比度为<span c-teal fw-600> 4.5：1</span>。
 
-[Learn more](https://sli.dev/guide/syntax#latex)
+</div>
 
 ---
+gradCursor: false
+---
+# 色彩对比度
+无障碍色彩对比度
 
-# Diagrams
+如何计算颜色对比度？
 
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
+<div grid='~ gap-10' :class="$slidev.nav.clicks === 3 ? 'grid-cols-2' : ''">
 
-<div class="grid grid-cols-4 gap-5 pt-4 -mb-6">
+<div trans>
 
-```mermaid {scale: 0.5, alt: 'A simple sequence diagram'}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
+<v-click>
+
+```ts {monaco-run}
+import { getContrastRatio } from 'magic-color'
+
+const color = '#ffffff'
+const bgColor = '#010205' // #D5100C
+const ratio = getContrastRatio(color, bgColor)
+
+console.log(ratio)
 ```
 
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
+</v-click>
+
+<v-click>
+
+```ts {monaco-run}
+import { getReadableTextColor } from 'magic-color'
+
+const bgColor = '#010205' // #D5100C
+const color = getReadableTextColor(bgColor)
+
+console.log(color)
 ```
 
-```mermaid
-mindmap
-  root((mindmap))
-    Origins
-      Long history
-      ::icon(fa fa-book)
-      Popularisation
-        British popular psychology author Tony Buzan
-    Research
-      On effectiveness<br/>and features
-      On Automatic creation
-        Uses
-            Creative techniques
-            Strategic planning
-            Argument mapping
-    Tools
-      Pen and paper
-      Mermaid
-```
+</v-click>
 
-```plantuml {scale: 0.7}
-@startuml
+</div>
 
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
+<v-click>
+
+<div v-show='$slidev.nav.clicks === 3'>
+
+ <h3 mb-4 class="contrastText">
+
+  ~~color-contrast 函数~~
+
+ </h3>
+
+ `color-list`: 至少两个颜色值的逗号分隔列表，用于与第一个值进行比较。
+
+ ```css
+p {
+    --bg: #010205;
+    background: var(--bg);
+    color: color-contrast(var(--bg) vs #fff, #000);  /** 基于背景色，自动选择对比度更高的颜色 **/
 }
+ ```
 
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
+</div>
 
-cloud {
-  [Example 1]
-}
+</v-click>
 
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
+</div>
+
+<style>
+  .contrastText{
+     --bg: #010205;
+    background: var(--bg);
+    color: color-contrast(var(--bg) vs red, green);  /** 基于背景色，自动选择对比度更高的颜色 **/
   }
-  frame "Foo" {
-    [Frame 4]
-  }
+</style>
+
+---
+transition: fade-out
+gradCursor: false
+dragPos:
+  square: 56,1609,345,345
+---
+
+# Color Theme
+智能推算主题颜色搭配方案。（WIP）
+
+<div flex gap-4>
+
+<ThemeIntro />
+
+<div flex-1>
+
+合理的算法可以帮助我们更好的选择颜色搭配方案。
+
+<div v-show="$slidev.nav.clicks >= 1 || $slidev.nav.clicks <= 5" :class="$slidev.nav.clicks < 1 || $slidev.nav.clicks > 5 ? 'hidden!' : ''">
+
+<v-click>
+
+```ts {all|7|2-6|8-12|all}
+const variants = {
+  50: withTint(0.95),
+  100: withTint(0.9),
+  200: withTint(0.75),
+  300: withTint(0.6),
+  400: withTint(0.3),
+  500: (c: RgbColor) => c,
+  600: withShade(0.9),
+  700: withShade(0.6),
+  800: withShade(0.45),
+  900: withShade(0.3),
+  950: withShade(0.2),
 }
+```
 
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
+</v-click>
 
-@enduml
+</div>
+
+<v-click>
+
+<div v-show="$slidev.nav.clicks >= 6" class='h-315px of-auto'>
+
+##### 自定义主题输出
+
+```ts {monaco-run}
+import { theme } from 'magic-color'
+
+const colors = theme('#c084fc', {
+  // type: 'rgb',
+  // render: (meta) => {
+  //   return [
+  //     `--color-primary-${meta[0]}`,
+  //     meta[1].replace(/rgb\((.*)\)/, '$1').replace(/,/g, ''),
+  //   ]
+  // },
+})
+
+console.log(colors)
 ```
 
 </div>
 
-[Learn More](https://sli.dev/guide/syntax.html#diagrams)
+</v-click>
+
+</div>
+
+</div>
 
 ---
-foo: bar
-dragPos:
-  square: 596,130,136,_,-19
+transition: fade-out
 ---
 
-# Draggable Elements
+# Color Picker
+基于 `Canvas` 的颜色选择器
 
-Double-click on the draggable elements to edit their positions.
+<div fcc class="h-70% grad-color">
 
-<br>
+See [Example](https://color.zyob.top)
 
-###### Directive Usage
-
-```md
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-```
-
-<br>
-
-###### Component Usage
-
-```md
-<v-drag text-3xl>
-  <carbon:arrow-up />
-  Use the `v-drag` component to have a draggable container!
-</v-drag>
-```
-
-<v-drag pos="653,300,253,_,-15">
-  <div text-center text-3xl border border-main rounded>
-    Double-click me!
-  </div>
-</v-drag>
-
-<img v-drag="'square'" src="https://sli.dev/logo.png">
+</div>
 
 ---
-
+transition: fade-in
+class: fccc
 ---
 
-# Monaco Editor
+# Magic Color
+🪄 让颜色充满魔法
 
-Slidev provides built-in Monaco Editor support.
+<v-clicks>
 
-Add `{monaco}` to the code block to turn it into an editor:
+- 💫 Support `multi-color model` conversion.
+- 📦 Built-in color related components.
+- 🚀 Provides utility toolset functions
+- 🦄 Theme color generator and fully customizable.
+- 🥳 esm only & 0 dependencies & bundle size ~2.9kb.
 
-```ts {monaco}
-import { ref } from 'vue'
-import hello from './external'
+</v-clicks>
 
-const code = ref(hello())
-```
+---
+transition: fade-out
+---
 
-Use `{monaco-run}` to create an editor that can execute the code directly in the slide:
+# Magic Color Playground
+
+提供基本的颜色转换、颜色搭配、颜色生成等功能。
 
 ```ts {monaco-run}
-import { version } from 'vue'
+import { createMagicColor } from 'magic-color'
 
-function fibonacci(n: number): number {
-  return n <= 1
-    ? n
-    : fibonacci(n - 1) + fibonacci(n - 2) // you know, this is NOT the best way to do it :P
-}
+const colorString = 'rgb(255, 0, 0)'
+const color = createMagicColor(colorString)
 
-console.log(version, Array.from({ length: 10 }, (_, i) => fibonacci(i + 1)))
+console.log(color.toString())
 ```
 
 ---
@@ -677,6 +705,6 @@ layout: center
 class: text-center
 ---
 
-# Learn More
+# Thanks
 
-[Documentations](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)
+[Playground](https://color.zyob.top) · [GitHub](https://github.com/zyyv/magic-color)
