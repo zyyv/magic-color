@@ -99,13 +99,9 @@ gradCursor: false
 
 <v-clicks>
 
-- **光学三原色**：<span inline-block w-4 h-4 mr-1 class="bg-[red]" ></span> 红、<span inline-block w-4 h-4 mr-1 class="bg-#0f0"></span> 绿、<span inline-block w-4 h-4 mr-1 class="bg-#00f"></span> 蓝。通常作用于 `RGB模式` 应用于生活的方方面面。
-
-- **美术三原色**：<span inline-block w-4 h-4 mr-1 class="bg-[cyan]" ></span> 青、<span inline-block w-4 h-4 mr-1 class="bg-[magenta]"></span> 品红、<span inline-block w-4 h-4 mr-1 class="bg-[yellow]"></span> 黄。通常作用于 `CMYK模式` 在艺术、设计和绘画中都有广泛的使用场景 。
-
 - **七彩光谱**：
 <span inline-block w-2 h-2 mr-1 rd-full class="bg-[red]"></span><span op-40>红外线(>700nm)</span>、
-<span v-mark.red="{ at: 3 }"  >
+<span v-mark.red="{ at: 1 }"  >
 <span inline-block w-4 h-4 mr-1 class="bg-[red]"></span>红（赤）、
 <span inline-block w-4 h-4 mr-1 class="bg-[orange]"></span>橙、
 <span inline-block w-4 h-4 mr-1 class="bg-[yellow]"></span>黄、
@@ -116,15 +112,19 @@ gradCursor: false
 </span>
 <span inline-block w-2 h-2 mr-1 rd-full class="bg-[purple]"></span><span op-40>紫外线（<400nm）</span>
 
+- **光学三原色**：<span inline-block w-4 h-4 mr-1 class="bg-[red]" ></span> 红(255 0 0)、<span inline-block w-4 h-4 mr-1 class="bg-#0f0"></span> 绿(0 255 0)、<span inline-block w-4 h-4 mr-1 class="bg-#00f"></span> 蓝(0 0 255)。通常作用于 `RGB模式` 应用生活的方方面面。
+
+- **美术三原色**：<span inline-block w-4 h-4 mr-1 class="bg-[cyan]" ></span> 青(0 255 255)、<span inline-block w-4 h-4 mr-1 class="bg-[magenta]"></span> 品红(255 0 0)、<span inline-block w-4 h-4 mr-1 class="bg-[yellow]"></span> 黄(255 255 0)。通常作用于 `CMYK模式` 在艺术、设计和绘画中都有广泛的使用场景 。
+
 - **12/24 色相环**：
 
 </v-clicks>
 
-<div pcc pf v-show="$slidev.nav.clicks === 1">
+<div pcc pf mt-20 v-show="$slidev.nav.clicks === 2">
   <img rd src='/meta/rgb-mode.webp' />
 </div>
 
-<div pcc pf mt-14 v-show="$slidev.nav.clicks === 2">
+<div pcc pf mt-34 v-show="$slidev.nav.clicks === 3">
   <div fcc gap-5>
   <div>
 
@@ -139,8 +139,9 @@ gradCursor: false
   </div>
 </div>
 
-<div pcc pf mt-14 v-show="$slidev.nav.clicks === 3">
+<div pcc pf mt-14 fccc gap-2 v-show="$slidev.nav.clicks === 1">
   光是电磁波
+  <img class="max-w-100!" rd src='/meta/color-bo.png' />
 </div>
 
 <div pcc pf mt-14 v-show="$slidev.nav.clicks === 4 ">
@@ -168,11 +169,11 @@ transition: fade-out
 
 - **十六进制颜色值（Hexadecimal）**：使用六位十六进制数字来表示颜色，如"#FF0000"代表红色，其中每两位代表红、绿、蓝色的分量。
 
-- **RGB颜色值（RGB）**：使用红（Red）、绿（Green）、蓝（Blue）三个通道的数值来定义颜色，例如 ~~`rgb(255, 0, 0)`~~ `rgb(255 0 0)` 表示红色。-> **`rgb(R G B[ / A])`**
+- **RGB颜色值（RGB）**：使用红（0 - 255）、绿（0 - 255）、蓝（0 - 255）三个通道的数值来定义颜色，例如 ~~`rgb(255, 0, 0)`~~ `rgb(255 0 0)` 表示 <span text-red>红色</span>。-> **`rgb(R G B[ / A])`**
 
 - **HSL颜色值（HSL）**：使用色相（Hue）、饱和度（Saturation）、亮度（Lightness）来定义颜色，例如"hsl(0, 100%, 50%)"表示红色。
 
-- **HSB颜色值（HSB）**：HSB颜色模型中，色相（Hue）、饱和度（Saturation）、亮度（Brightness）分别表示颜色的类型、纯度和明度。
+- **HSB颜色值（HSB）**：HSB颜色模型中，色相（Hue）、饱和度（Saturation）、明度（Brightness）分别表示颜色的类型、纯度和明度。
 
 </v-clicks>
 
@@ -263,8 +264,8 @@ gradCursor: false
 ```css
 /* css */
 div {
-  color: #FF0000;
-  background-color: #00FF00;
+  color: #FF0000; /* #f00 */
+  background-color: #00FF00; /* #0f0 */
 }
 ```
 
