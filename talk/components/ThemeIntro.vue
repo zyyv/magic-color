@@ -149,7 +149,7 @@ const themeColor = theme(color)
       bg="#F7E8FF" w-20 h-8 fcc text-10px text-op-0 hover-text-op-100
       :style="{ color: getReadableTextColor(c), backgroundColor: c }"
     >
-      {{ color }}
+      {{ c }}
     </div>
   </div>
 </template>

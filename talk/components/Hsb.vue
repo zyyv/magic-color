@@ -16,21 +16,21 @@ const bg = computed(() => {
   <div fccc gap-2 mt-10>
     <div fcc gap-2>
       h:
-      <PaletteControls v-model="h" type="hue" />
+      <PaletteControls v-model="h" :width="168" :height="12" type="hue" />
       <div w-36px>
         {{ Math.round(360 * h) }}
       </div>
     </div>
     <div fcc gap-2>
       s:
-      <PaletteControls v-model="s" type="alpha" color="#fff" />
+      <PaletteControls v-model="s" :width="168" :height="12" type="alpha" color="#fff" />
       <div w-36px>
         {{ Math.round(100 * s) }}
       </div>
     </div>
     <div fcc gap-2>
       b:
-      <PaletteControls v-model="b" type="alpha" color="#000" />
+      <PaletteControls v-model="b" :width="168" :height="12" type="alpha" color="#000" />
       <div w-36px>
         {{ Math.round(100 * b) }}
       </div>

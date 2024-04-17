@@ -19,15 +19,15 @@ function toHexColor(value: number) {
 <template>
   <div fccc gap-2 mt-10>
     <div fcc gap-2>
-      <PaletteControls v-model="r" type="alpha" color="#f00" />
+      <PaletteControls v-model="r" :width="168" :height="12" type="alpha" color="#f00" />
       {{ hex ? toHexColor(r) : '' }}
     </div>
     <div fcc gap-2>
-      <PaletteControls v-model="g" type="alpha" color="#0f0" />
+      <PaletteControls v-model="g" :width="168" :height="12" type="alpha" color="#0f0" />
       {{ hex ? toHexColor(g) : '' }}
     </div>
     <div fcc gap-2>
-      <PaletteControls v-model="b" type="alpha" color="#00f" />
+      <PaletteControls v-model="b" :width="168" :height="12" type="alpha" color="#00f" />
       {{ hex ? toHexColor(b) : '' }}
     </div>
     <div w-20 h-20 trans :style="{ backgroundColor: color }" b />

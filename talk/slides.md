@@ -114,7 +114,7 @@ gradCursor: false
 
 - **光学三原色**：<span inline-block w-4 h-4 mr-1 class="bg-[red]" ></span> 红(255 0 0)、<span inline-block w-4 h-4 mr-1 class="bg-#0f0"></span> 绿(0 255 0)、<span inline-block w-4 h-4 mr-1 class="bg-#00f"></span> 蓝(0 0 255)。通常作用于 `RGB模式` 应用生活的方方面面。
 
-- **美术三原色**：<span inline-block w-4 h-4 mr-1 class="bg-[cyan]" ></span> 青(0 255 255)、<span inline-block w-4 h-4 mr-1 class="bg-[magenta]"></span> 品红(255 0 0)、<span inline-block w-4 h-4 mr-1 class="bg-[yellow]"></span> 黄(255 255 0)。通常作用于 `CMYK模式` 在艺术、设计和绘画中都有广泛的使用场景 。
+- **美术三原色**：<span inline-block w-4 h-4 mr-1 class="bg-[cyan]" ></span> 青(0 255 255)、<span inline-block w-4 h-4 mr-1 class="bg-[magenta]"></span> 品红(255 0 255)、<span inline-block w-4 h-4 mr-1 class="bg-[yellow]"></span> 黄(255 255 0)。通常作用于 `CMYK模式` 在艺术、设计和绘画中都有广泛的使用场景 。
 
 - **12/24 色相环**：
 
@@ -351,7 +351,7 @@ div {
 
 - **色调（Hue）**：表示颜色在色轮上的位置。
 - **饱和度（Saturation）**：颜色中灰度的百分比，当饱和度为0%时，颜色是灰色的，即没有彩色成分；当饱和度为100%时，颜色是最纯净的，没有灰度的混合。
-- **亮度（Brightness）**：表示颜色的亮度，亮度越高，颜色越明亮。
+- **明度（Brightness）**：表示颜色的明度，亮度越高，颜色越明亮。
 
 </v-clicks>
 
@@ -448,7 +448,7 @@ gradCursor: false
 
 <div flex gap-10>
 
-<img w-50 v-drag="[131,137,193,186,90]" src='/meta/warm-cool-001.webp' />
+<img w-50 v-drag="[65,-47,192,188,-6]" src='/meta/warm-cool-001.webp' />
 <img ml-60 h-50 src='/meta/warm-cool-002.webp' />
 
 </div>
