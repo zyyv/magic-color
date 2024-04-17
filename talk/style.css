@@ -112,4 +112,5 @@ h1 {
   background-clip: text !important;
   color: transparent !important;
   background-image: linear-gradient(45deg, rgb(192 132 252 / 1) 0%, rgb(248 113 113 / 1) 100%) !important;
+  font-family: "Ubuntu";
 }

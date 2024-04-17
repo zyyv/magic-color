@@ -105,6 +105,7 @@ gradCursor: false
 
 - **七彩光谱**：
 <span inline-block w-2 h-2 mr-1 rd-full class="bg-[red]"></span><span op-40>红外线(>700nm)</span>、
+<span v-mark.red="{ at: 3 }"  >
 <span inline-block w-4 h-4 mr-1 class="bg-[red]"></span>红（赤）、
 <span inline-block w-4 h-4 mr-1 class="bg-[orange]"></span>橙、
 <span inline-block w-4 h-4 mr-1 class="bg-[yellow]"></span>黄、
@@ -112,6 +113,7 @@ gradCursor: false
 <span inline-block w-4 h-4 mr-1 class="bg-[cyan]"></span>青、
 <span inline-block w-4 h-4 mr-1 class="bg-[blue]"></span>蓝、
 <span inline-block w-4 h-4 mr-1 class="bg-[purple]"></span>紫、
+</span>
 <span inline-block w-2 h-2 mr-1 rd-full class="bg-[purple]"></span><span op-40>紫外线（<400nm）</span>
 
 - **12/24 色相环**：
@@ -129,8 +131,11 @@ gradCursor: false
   **自身可以发光** vs **自身不能发光**
 
   <img class="max-w-100!" rd src='/meta/cmy-001.webp' />
+
   </div>
-  <img rd src='/meta/cmy-001.png' />
+
+  <img class="w-50%" rd src='/meta/cmy-001.png' />
+
   </div>
 </div>
 
@@ -138,7 +143,7 @@ gradCursor: false
   光是电磁波
 </div>
 
-<div pcc pf mt-14 v-show="$slidev.nav.clicks === 4">
+<div pcc pf mt-14 v-show="$slidev.nav.clicks === 4 ">
   <div fcc gap-5>
   <div>
     <img class="max-w-100!" rd src='/meta/circle-12.webp' />
@@ -163,7 +168,7 @@ transition: fade-out
 
 - **十六进制颜色值（Hexadecimal）**：使用六位十六进制数字来表示颜色，如"#FF0000"代表红色，其中每两位代表红、绿、蓝色的分量。
 
-- **RGB颜色值（RGB）**：使用红（Red）、绿（Green）、蓝（Blue）三个通道的数值来定义颜色，例如"rgb(255, 0, 0)"表示红色。
+- **RGB颜色值（RGB）**：使用红（Red）、绿（Green）、蓝（Blue）三个通道的数值来定义颜色，例如 ~~`rgb(255, 0, 0)`~~ `rgb(255 0 0)` 表示红色。-> **`rgb(R G B[ / A])`**
 
 - **HSL颜色值（HSL）**：使用色相（Hue）、饱和度（Saturation）、亮度（Lightness）来定义颜色，例如"hsl(0, 100%, 50%)"表示红色。
 
@@ -213,7 +218,8 @@ div.style.backgroundColor = 'lightblue';
 ```ts {monaco-run}
 import { KeywordColors, UnoColors } from 'magic-color'
 
-console.log(KeywordColors)
+console.log('built-in keyword color: ', KeywordColors)
+// console.log('UnoCSS colors: ', UnoColors)
 ```
 
 </div>
@@ -298,6 +304,7 @@ gradCursor: false
 ```css
 /* css */
 div {
+  /* invalid: not support */
   color: hsb(0, 100%, 50%);
   background-color: hsb(120, 100%, 50%);
 }
@@ -440,8 +447,8 @@ gradCursor: false
 
 <div flex gap-10>
 
-<img w-50 src='/meta/warm-cool-001.webp' />
-<img h-50 src='/meta/warm-cool-002.webp' />
+<img w-50 v-drag="[131,137,193,186,90]" src='/meta/warm-cool-001.webp' />
+<img ml-60 h-50 src='/meta/warm-cool-002.webp' />
 
 </div>
 
@@ -709,7 +716,8 @@ class: fccc
 - 📦 Built-in color related components.
 - 🚀 Provides utility toolset functions
 - 🦄 Theme color generator and fully customizable.
-- 🥳 esm only & 0 dependencies & bundle size ~2.9kb.
+- 🔥 esm only & 0 dependencies & bundle size ~2.9kb.
+- 🥳 etc...
 
 </v-clicks>
 
