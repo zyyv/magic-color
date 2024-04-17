@@ -4,6 +4,8 @@
 
 Make the colors be magical.
 
+You can watch my [talk](https://color.zyob.top/talk) to learn more basic knowledge points.
+
 ## Features
 
 - 💫 Support `multi-color model` conversion.
