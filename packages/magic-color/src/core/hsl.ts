@@ -17,9 +17,9 @@ export function parseHsl(color: string) {
     Number.parseInt(match[2]) / 100,
     Number.parseInt(match[3]) / 100,
   ] as HslColor
-  const opacity = match[4] ? Number.parseFloat(match[4]) : 1
+  const alpha = match[4] ? Number.parseFloat(match[4]) : 1
 
-  return { value, opacity }
+  return { value, alpha }
 }
 
 export function hslToHex(color: HslColor): HexColor {

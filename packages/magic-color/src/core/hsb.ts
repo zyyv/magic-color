@@ -16,9 +16,9 @@ export function parseHsb(color: string) {
     Number.parseInt(match[2]),
     Number.parseInt(match[3]),
   ] as HsbColor
-  const opacity = match[4] ? Number.parseFloat(match[4]) : 1
+  const alpha = match[4] ? Number.parseFloat(match[4]) : 1
 
-  return { value, opacity }
+  return { value, alpha }
 }
 
 function parseHsbToRgb(color: HsbColor): RgbColor {

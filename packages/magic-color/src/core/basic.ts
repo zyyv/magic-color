@@ -8,31 +8,33 @@ import { isKeyword, parseKeyword } from './keywords'
 export class MagicColor<T extends ColorType> implements ColorObject<T> {
   type: T
   value: Colors[T]
-  opacity: Opacity
+  alpha: Opacity
 
-  constructor(value: Colors[T], type: T, opacity: Opacity) {
+  _stack: MagicColor<any>[] = []
+
+  constructor(value: Colors[T], type: T, alpha: Opacity) {
     this.type = type
     this.value = value
-    this.opacity = opacity
+    this.alpha = alpha
   }
 
   toString(withOpacity = false): string {
     switch (this.type) {
       case 'keyword':
-        return this.value + (withOpacity ? opacityToString(this.opacity, true) : '')
+        return this.value + (withOpacity ? alphaToString(this.alpha, true) : '')
 
       case 'hex':
         return withOpacity
-          ? this.value + opacityToString(this.opacity, true)
+          ? this.value + alphaToString(this.alpha, true)
           : this.value as HexColor
 
       case 'rgb':
         return withOpacity
-          ? `rgba(${(this.value as RgbColor).join(', ')}, ${opacityToString(this.opacity)})`
+          ? `rgba(${(this.value as RgbColor).join(', ')}, ${alphaToString(this.alpha)})`
           : `rgb(${(this.value as RgbColor).join(', ')})`
 
       case 'hsl':
-        return `${this.type}${withOpacity ? 'a' : ''}(${[this.value[0], `${this.value[1]}%`, `${this.value[2]}%`].join(', ')}${withOpacity ? `, ${opacityToString(this.opacity)}` : ''})`
+        return `${this.type}${withOpacity ? 'a' : ''}(${[this.value[0], `${this.value[1]}%`, `${this.value[2]}%`].join(', ')}${withOpacity ? `, ${alphaToString(this.alpha)}` : ''})`
 
       case 'hsb':
         return `${this.type}(${[this.value[0], `${this.value[1]}%`, `${this.value[2]}%`].join(', ')})`
@@ -59,7 +61,7 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
         value = this.value
     }
 
-    return new MagicColor(value as RgbColor, 'rgb', this.opacity)
+    return new MagicColor(value as RgbColor, 'rgb', this.alpha)
   }
 
   toHex(): MagicColor<'hex'> {
@@ -79,7 +81,7 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
         value = this.value
     }
 
-    return new MagicColor(value as HexColor, 'hex', this.opacity)
+    return new MagicColor(value as HexColor, 'hex', this.alpha)
   }
 
   toHsl(): MagicColor<'hsl'> {
@@ -99,7 +101,7 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
         value = this.value
     }
 
-    return new MagicColor(value as HslColor, 'hsl', this.opacity)
+    return new MagicColor(value as HslColor, 'hsl', this.alpha)
   }
 
   toHsb(): MagicColor<'hsb'> {
@@ -119,38 +121,38 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
         value = this.value
     }
 
-    return new MagicColor(value as HsbColor, 'hsb', this.opacity)
+    return new MagicColor(value as HsbColor, 'hsb', this.alpha)
   }
 }
 
-export function createMagicColor<T extends ColorType = any>(value: string, type?: T, opacity?: Opacity): MagicColor<T>
-export function createMagicColor<T extends ColorType = any>(value: Colors[T], type: T, opacity?: Opacity): MagicColor<T>
-export function createMagicColor<T extends ColorType = any>(value: Colors[T] | string, type?: T, opacity?: Opacity): MagicColor<T> {
+export function createMagicColor<T extends ColorType = any>(value: string, type?: T, alpha?: Opacity): MagicColor<T>
+export function createMagicColor<T extends ColorType = any>(value: Colors[T], type: T, alpha?: Opacity): MagicColor<T>
+export function createMagicColor<T extends ColorType = any>(value: Colors[T] | string, type?: T, alpha?: Opacity): MagicColor<T> {
   if (typeof value === 'string') {
     const {
       value: _value,
       type: _type,
-      opacity: _opacity,
-    } = parseColorString(value)
+      alpha: _opacity,
+    } = resolveColorString(value)
 
     if (type && type !== _type)
       throw new Error(`Invalid color type: ${_type}.`)
 
-    return new MagicColor<any>(_value, _type, opacity ?? _opacity)
+    return new MagicColor<any>(_value, _type, alpha ?? _opacity)
   }
 
-  opacity = opacity ?? 1
+  alpha = alpha ?? 1
 
-  return new MagicColor<T>(value, type!, opacity)
+  return new MagicColor<T>(value, type!, alpha)
 }
 
-export function opacityToString(opacity: Opacity, toHex = false): string {
+export function alphaToString(alpha: Opacity, toHex = false): string {
   return toHex
-    ? Math.round(opacity * 255).toString(16).padStart(2, '0')
-    : `${Math.round(opacity * 10000) / 100}%`
+    ? Math.round(alpha * 255).toString(16).padStart(2, '0')
+    : `${Math.round(alpha * 10000) / 100}%`
 }
 
-function parseColorString(color: string) {
+function resolveColorString(color: string) {
   const type = guessType(color)
   if (!type)
     throw new Error(`Invalid color: ${color}.`)

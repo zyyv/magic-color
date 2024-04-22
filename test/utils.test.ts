@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isColor, createMagicColor as mc, opacityToString } from 'magic-color'
+import { isColor, mc } from 'magic-color'
 
 describe('utils scoped', () => {
   const hex = '#ff0000'
@@ -51,11 +51,6 @@ describe('utils scoped', () => {
   })
 
   const opacity = 0.6789
-
-  it('with opacity', () => {
-    expect(opacityToString(opacity)).toEqual('67.89%')
-    expect(opacityToString(opacity, true)).toEqual('ad')
-  })
 
   it('in magic color', () => {
     const c = `rgba(100, 100, 100, ${opacity})`

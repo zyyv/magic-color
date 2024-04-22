@@ -50,7 +50,7 @@ export default defineComponent({
 
     const displayBgColor = computed(() => {
       const mcColor = createMagicColor(color.value)
-      mcColor.opacity = alpha.value
+      mcColor.alpha = alpha.value
       return mcColor.toRgb().toString(true)
     })
 
