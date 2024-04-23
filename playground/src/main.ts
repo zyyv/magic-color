@@ -1,6 +1,4 @@
 import { createApp } from 'vue'
-
-// import { PalettePlugin } from '../../packages/vue/'
 import { PalettePlugin } from '@magic-color/vue'
 
 // eslint-disable-next-line ts/prefer-ts-expect-error
