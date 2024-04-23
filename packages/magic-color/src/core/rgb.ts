@@ -13,9 +13,9 @@ export function parseRgb(color: string) {
     throw new Error('Invalid RGB or RGBA color format.')
 
   const rgb = [match[1], match[2], match[3]].map(Number) as RgbColor
-  const opacity = match[4] ? Number.parseFloat(match[4]) : 1
+  const alpha = match[4] ? Number.parseFloat(match[4]) : 1
 
-  return { value: rgb, opacity }
+  return { value: rgb, alpha }
 }
 
 export function rgbToHex(color: RgbColor): HexColor {

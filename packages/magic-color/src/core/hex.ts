@@ -9,7 +9,7 @@ export function isHex(color: string): boolean {
 
 export function parseHex(color: HexColor) {
   let value: HexColor
-  let opacity = 1
+  let alpha = 1
 
   const match = color.match(hexRegex)
   if (!match)
@@ -23,10 +23,10 @@ export function parseHex(color: HexColor) {
   }
   else {
     value = match[1].substring(0, 6)
-    opacity = Number.parseInt(match[1].substring(6, 8), 16) / 255
+    alpha = Number.parseInt(match[1].substring(6, 8), 16) / 255
   }
 
-  return { value: `#${value}`, opacity }
+  return { value: `#${value}`, alpha }
 }
 
 export function hexToRgb(color: HexColor): RgbColor {

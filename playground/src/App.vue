@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Picker from './components/Picker.vue'
+
 const color = ref('#9455d3')
 const alpha = ref(1)
 </script>

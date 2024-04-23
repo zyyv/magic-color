@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@magic-color/vue": "workspace:*",
     "@vueuse/core": "^10.9.0",
     "vue": "^3.4.21"
   },

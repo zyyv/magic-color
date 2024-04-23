@@ -38,5 +38,5 @@ export type ColorValue = Colors[keyof Colors]
 export interface ColorObject<T extends ColorType> {
   type: T
   value: Colors[T]
-  opacity: Opacity
+  alpha: Opacity
 }

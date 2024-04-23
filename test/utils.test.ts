@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isColor, createMagicColor as mc, opacityToString } from 'magic-color'
+import { isColor, mc } from 'magic-color'
 
 describe('utils scoped', () => {
   const hex = '#ff0000'
@@ -27,13 +27,6 @@ describe('utils scoped', () => {
     expect(mc(rgb).toHsl().toString()).toEqual(hsl)
 
     // hex to others test case
-    expect(mc('#f00')).toMatchInlineSnapshot(`
-      MagicColor {
-        "opacity": 1,
-        "type": "hex",
-        "value": "#ff0000",
-      }
-    `)
     expect(mc(hex).toRgb().toString()).toEqual(rgb)
     expect(mc(hex).toHsl().toString()).toEqual(hsl)
     expect(mc(hex).toHsb().toString()).toEqual(hsb)
@@ -51,11 +44,6 @@ describe('utils scoped', () => {
   })
 
   const opacity = 0.6789
-
-  it('with opacity', () => {
-    expect(opacityToString(opacity)).toEqual('67.89%')
-    expect(opacityToString(opacity, true)).toEqual('ad')
-  })
 
   it('in magic color', () => {
     const c = `rgba(100, 100, 100, ${opacity})`

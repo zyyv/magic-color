@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { theme } from 'magic-color'
+import ThemeButtons from './ThemeButtons.vue'
+import ThemeHue from './ThemeHue.vue'
 
 const color = defineModel<string>()
 

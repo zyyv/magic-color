@@ -105,6 +105,7 @@ export default defineConfig({
           mono: ['Fira Code', 'Fira Mono:400,700'],
           ubuntu: 'Ubuntu',
         },
+        inlineImports: false,
       },
       icons: {
         extraProperties: {
