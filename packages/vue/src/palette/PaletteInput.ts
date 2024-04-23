@@ -1,33 +1,50 @@
-import { computed, defineComponent, defineModel, h } from 'vue'
+import type { ColorType } from 'magic-color'
+import { computed, defineComponent, h, useModel } from 'vue'
 
-export default defineComponent({
-  setup() {
-    const type = defineModel('type', { type: String })
-    const colorValue = defineModel('color', { type: [String, Object] })
-    const alpha = defineModel('alpha', { type: Number })
+type ArrayValue = [number, number, number]
+
+export default /* @__PURE__ */ defineComponent({
+  props: {
+    color: {
+      type: [String, Array as unknown as () => ArrayValue],
+    },
+    type: {
+      type: String as PropType<ColorType>,
+    },
+    alpha: {
+      type: Number,
+    },
+  },
+  emits: ['update:color', 'update:type', 'update:alpha'],
+  setup(props) {
+    const type = useModel(props, 'type')
+    const colorValue = useModel(props, 'color')
+    const alpha = useModel(props, 'alpha')
 
     const hexV = computed({
-      get: () => type.value === 'hex' ? colorValue.value : '',
+      get: () => {
+        return type.value === 'hex' ? colorValue.value as string : ''
+      },
       set: (v: string) => {
         colorValue.value = v
       },
     })
     const v0 = computed({
-      get: () => colorValue.value[0],
+      get: () => (colorValue.value as ArrayValue)[0],
       set: (v: number) => {
-        colorValue.value = [v, colorValue.value[1], colorValue.value[2]]
+        colorValue.value = [v, (colorValue.value as ArrayValue)[1], (colorValue.value as ArrayValue)[2]]
       },
     })
     const v1 = computed({
-      get: () => colorValue.value[1],
+      get: () => (colorValue.value as ArrayValue)[1],
       set: (v: number) => {
-        colorValue.value = [colorValue.value[0], v, colorValue.value[2]]
+        colorValue.value = [(colorValue.value as ArrayValue)[0], v, (colorValue.value as ArrayValue)[2]]
       },
     })
     const v2 = computed({
-      get: () => colorValue.value[2],
+      get: () => (colorValue.value as ArrayValue)[2],
       set: (v: number) => {
-        colorValue.value = [colorValue.value[0], colorValue.value[1], v]
+        colorValue.value = [(colorValue.value as ArrayValue)[0], (colorValue.value as ArrayValue)[1], v]
       },
     })
     const alphaStringify = computed({
@@ -52,6 +69,12 @@ export default defineComponent({
       handleAlphaBlur,
     }
   },
+  mounted() {
+    const css = `.no-spinners::-webkit-outer-spin-button,.no-spinners::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}`
+    const style = document.createElement('style')
+    style.appendChild(document.createTextNode(css))
+    document.head.appendChild(style)
+  },
   render() {
     return h('div', {
       style: {
@@ -73,9 +96,10 @@ export default defineComponent({
             width: '100%',
             height: '28px',
             backgroundColor: 'transparent',
+            outline: 'none',
           },
           value: this.type,
-          onChange: (e: Event) => this.type = (e.target as HTMLSelectElement).value,
+          onChange: (e: Event) => this.type = (e.target as HTMLSelectElement).value as ColorType,
         }, [
           h('option', { value: 'hex' }, 'HEX'),
           h('option', { value: 'rgb' }, 'RGB'),
@@ -87,59 +111,115 @@ export default defineComponent({
           display: 'flex',
           flex: '1',
           borderRadius: '2px',
+          border: '1px solid #3c3c3c',
         },
-        class: 'flex flex-1 rd-2px group ~ #3c3c3c op-0 hover b-op-100',
+        // TODO: group-hover
+        class: 'group',
       }, [
         this.type === 'hex'
           ? h('label', {
-            class: 'flex items-center flex-1 b-r ~ #3c3c3c op-0 group-hover-b-r op-100',
+            style: {
+              display: 'flex',
+              alignItems: 'center',
+              flex: '1',
+              borderRight: '1px solid #3c3c3c',
+            },
           }, [
             h('input', {
               value: this.hexV,
-              class: 'pl-8px outline-none bg-transparent w-full',
+              style: {
+                textAlign: 'center',
+                outline: 'none',
+                backgroundColor: 'transparent',
+                width: '100%',
+              },
               type: 'text',
               onInput: (e: Event) => this.hexV = (e.target as HTMLInputElement).value,
             }),
           ])
           : [
               h('label', {
-                class: 'flex items-center flex-1 b-r ~ #3c3c3c op-0 group-hover-b-r op-100',
+                style: {
+                  display: 'flex',
+                  alignItems: 'center',
+                  flex: '1',
+                  borderRight: '1px solid #3c3c3c',
+                },
               }, [
                 h('input', {
                   value: this.v0,
-                  class: 'no-spinners pl-8px w-full outline-none bg-transparent',
+                  style: {
+                    textAlign: 'center',
+                    outline: 'none',
+                    backgroundColor: 'transparent',
+                    width: '100%',
+                  },
+                  class: 'no-spinners',
                   min: '0',
                   type: 'number',
                   onInput: (e: Event) => this.v0 = Number((e.target as HTMLInputElement).value),
                 }),
               ]),
               h('label', {
-                class: 'flex items-center flex-1 b-r ~ #3c3c3c op-0 group-hover-b-r op-100',
+                style: {
+                  display: 'flex',
+                  alignItems: 'center',
+                  flex: '1',
+                  borderRight: '1px solid #3c3c3c',
+                },
               }, [
                 h('input', {
                   value: this.v1,
-                  class: 'no-spinners pl-8px w-full outline-none bg-transparent',
+                  style: {
+                    textAlign: 'center',
+                    outline: 'none',
+                    backgroundColor: 'transparent',
+                    width: '100%',
+                  },
+                  class: 'no-spinners',
                   type: 'number',
                   onInput: (e: Event) => this.v1 = Number((e.target as HTMLInputElement).value),
                 }),
               ]),
               h('label', {
-                class: 'flex items-center flex-1 b-r ~ #3c3c3c op-0 group-hover-b-r op-100',
+                style: {
+                  display: 'flex',
+                  alignItems: 'center',
+                  flex: '1',
+                  borderRight: '1px solid #3c3c3c',
+                },
               }, [
                 h('input', {
                   value: this.v2,
-                  class: 'no-spinners pl-8px w-full outline-none bg-transparent',
+                  style: {
+                    textAlign: 'center',
+                    outline: 'none',
+                    backgroundColor: 'transparent',
+                    width: '100%',
+                  },
+                  class: 'no-spinners',
                   type: 'number',
                   onInput: (e: Event) => this.v2 = Number((e.target as HTMLInputElement).value),
                 }),
               ]),
             ],
         h('label', {
-          class: `flex items-center h-100% ${this.type === 'hex' ? 'flex-[0_0_46px]' : 'flex-1'}`,
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            height: '100%',
+            flex: this.type === 'hex' ? '0 0 46px' : '1',
+          },
         }, [
           h('input', {
             value: this.alphaStringify,
-            class: 'no-spinners pl-8px w-full outline-none bg-transparent',
+            style: {
+              textAlign: 'center',
+              outline: 'none',
+              backgroundColor: 'transparent',
+              width: '100%',
+            },
+            class: 'no-spinners',
             type: 'number',
             min: '0',
             max: '100',

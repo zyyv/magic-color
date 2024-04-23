@@ -1,6 +1,6 @@
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, h, onMounted, ref } from 'vue'
 
-export default defineComponent({
+export default /* @__PURE__ */ defineComponent({
   props: {
     width: {
       type: Number,

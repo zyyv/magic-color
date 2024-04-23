@@ -41,6 +41,9 @@
     "build": "unbuild",
     "dev": "unbuild --stub"
   },
+  "dependencies": {
+    "magic-color": "workspace:*"
+  },
   "devDependencies": {
     "vue": "^3.4.21"
   }

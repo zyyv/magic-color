@@ -84,6 +84,10 @@ importers:
   packages/magic-color: {}
 
   packages/vue:
+    dependencies:
+      magic-color:
+        specifier: workspace:*
+        version: link:../magic-color
     devDependencies:
       vue:
         specifier: ^3.4.21
@@ -91,6 +95,9 @@ importers:
 
   playground:
     dependencies:
+      '@magic-color/vue':
+        specifier: workspace:*
+        version: link:../packages/vue
       '@vueuse/core':
         specifier: ^10.9.0
         version: 10.9.0(vue@3.4.21)

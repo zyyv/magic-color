@@ -3,7 +3,7 @@ import type { RgbColor } from 'magic-color'
 import { createMagicColor } from 'magic-color'
 import { useControlBlock } from './hook'
 
-export default defineComponent({
+export default /* @__PURE__ */ defineComponent({
   props: {
     type: {
       type: String as PropType<'hue' | 'alpha'>,
@@ -32,7 +32,6 @@ export default defineComponent({
 
     const width = ref(props.width)
     const height = ref(props.height)
-    const color = ref(props.color)
 
     const { canvasRef, barRef, onMouseDown } = useControlBlock({ onChange: ({ x }) => model.value = x })
 
@@ -107,7 +106,7 @@ export default defineComponent({
       }
     })
 
-    watch(() => color.value, () => {
+    watch(() => props.color, () => {
       if (ctx.value && props.type === 'alpha') {
         ctx.value.clearRect(0, 0, width.value, height.value)
         drawColorAlpha(ctx.value)

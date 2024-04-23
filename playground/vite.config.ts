@@ -30,8 +30,8 @@ export default defineConfig({
       vueTemplate: true,
       dts: 'src/auto-imports.d.ts',
     }),
-    Components({
-      dts: 'src/components.d.ts',
-    }),
+    // Components({
+    //   dts: 'src/components.d.ts',
+    // }),
   ],
 })
