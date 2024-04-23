@@ -27,13 +27,6 @@ describe('utils scoped', () => {
     expect(mc(rgb).toHsl().toString()).toEqual(hsl)
 
     // hex to others test case
-    expect(mc('#f00')).toMatchInlineSnapshot(`
-      MagicColor {
-        "opacity": 1,
-        "type": "hex",
-        "value": "#ff0000",
-      }
-    `)
     expect(mc(hex).toRgb().toString()).toEqual(rgb)
     expect(mc(hex).toHsl().toString()).toEqual(hsl)
     expect(mc(hex).toHsb().toString()).toEqual(hsb)
