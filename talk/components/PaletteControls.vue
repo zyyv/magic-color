@@ -1,7 +1,7 @@
 <script lang='ts' setup>
 import { type RgbColor, createMagicColor } from 'magic-color'
 import { computed, defineModel, defineProps, onMounted, ref, watch, withDefaults } from 'vue'
-import { useControlBlock } from '../../playground/src/components/Palette/hook'
+import { useControlBlock } from '../../packages/vue/src/palette/hook'
 
 const props = withDefaults(defineProps<{
   width?: number

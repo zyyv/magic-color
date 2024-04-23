@@ -8,6 +8,7 @@
     "export": "slidev export"
   },
   "dependencies": {
+    "@magic-color/vue": "workspace:*",
     "@slidev/cli": "^0.49.0-beta.1",
     "@slidev/client": "0.49.0-beta.1",
     "@slidev/theme-default": "latest",
