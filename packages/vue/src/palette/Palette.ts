@@ -167,9 +167,9 @@ export default /* @__PURE__ */ defineComponent({
         'alpha': this.alpha,
         'color': this.colorValue,
         'type': this.type,
-        'onUpdate:modelValue:alpha': (value: number) => this.alpha = value,
-        'onUpdate:modelValue:color': (value: ColorValue) => this.colorValue = value,
-        'onUpdate:modelValue:type': (value: ColorType) => this.type = value,
+        'onUpdate:alpha': (value: number) => this.alpha = value,
+        'onUpdate:color': (value: ColorValue) => this.colorValue = value,
+        'onUpdate:type': (value: ColorType) => this.type = value,
       }),
     ])
   },
