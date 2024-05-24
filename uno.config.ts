@@ -21,7 +21,7 @@ export default defineConfig({
         }
       }
     }],
-    [/^(.+)::(.+)$/, ([, n, v], { theme }) => {
+    [/^([^:]+)::([^:]+)$/, ([, n, v], { theme }) => {
       const color = parseColor(v, theme)
       if (color?.cssColor?.type === 'rgb' && color.cssColor.components) {
         return {
