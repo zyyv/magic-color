@@ -5,7 +5,9 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "paths": {
-      "magic-colors": ["./packages/magic-color/src/indenx.ts"]
+      "magic-color": ["./packages/magic-color/src/indenx.ts"],
+      "@magic-color/core": ["./packages/core/src/indenx.ts"],
+      "@magic-color/vue": ["./packages/vue/src/indenx.ts"]
     },
     "resolveJsonModule": true,
     "types": [

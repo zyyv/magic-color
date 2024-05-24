@@ -1,4 +1,4 @@
-import type { HsbColor, HslColor, RgbColor } from './types'
+import type { HsbColor, HslColor, RgbColor } from '../types'
 import { rgbToHex } from './rgb'
 
 const hsbRegex = /^hsb\((\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\)$/

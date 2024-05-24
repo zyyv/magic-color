@@ -1,4 +1,4 @@
-import type { RgbColor } from './types'
+import type { RgbColor } from '@magic-color/core'
 import { createMagicColor, guessType } from './basic'
 
 export function isColor(color: string): boolean {

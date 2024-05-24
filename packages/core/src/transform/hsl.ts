@@ -1,5 +1,5 @@
+import type { HexColor, HsbColor, HslColor, RgbColor } from '../types'
 import { rgbToHex, rgbToHsb } from './rgb'
-import type { HexColor, HsbColor, HslColor, RgbColor } from './types'
 
 const hslRegex = /^hsl\((\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\)$/
 const hslaRegex = /^hsla\((\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*,\s*(0?\.\d+|1)\)$/

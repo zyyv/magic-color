@@ -81,7 +81,13 @@ importers:
         specifier: ^3.4.27
         version: 3.4.27(typescript@5.4.5)
 
-  packages/magic-color: {}
+  packages/core: {}
+
+  packages/magic-color:
+    dependencies:
+      '@magic-color/core':
+        specifier: workspace:*
+        version: link:../core
 
   packages/vue:
     dependencies:

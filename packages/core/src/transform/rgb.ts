@@ -1,4 +1,4 @@
-import type { HexColor, HsbColor, HslColor, RgbColor } from './types'
+import type { HexColor, HsbColor, HslColor, RgbColor } from '../types'
 
 const rgbRegex = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/
 const rgbaRegex = /^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(0?\.\d+|1)\)$/

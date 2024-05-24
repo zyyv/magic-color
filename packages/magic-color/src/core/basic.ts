@@ -1,16 +1,13 @@
-import type { ColorObject, ColorType, Colors, HexColor, HsbColor, HslColor, Opacity, RgbColor } from './types'
-import { hsbToHex, hsbToHsl, hsbToRgb, isHsb, parseHsb } from './hsb'
-import { hslToHex, hslToHsb, hslToRgb, isHsl, parseHsl } from './hsl'
-import { hexToHsb, hexToHsl, hexToRgb, isHex, parseHex } from './hex'
-import { isRgb, parseRgb, rgbToHex, rgbToHsb, rgbToHsl } from './rgb'
-import { isKeyword, parseKeyword } from './keywords'
+import type { ColorType, Colors, HexColor, HsbColor, HslColor, Opacity, RgbColor } from '@magic-color/core'
+import { hexToHsb, hexToHsl, hexToRgb, hsbToHex, hsbToHsl, hsbToRgb, hslToHex, hslToHsb, hslToRgb, isHex, isHsb, isHsl, isKeyword, isRgb, parseHex, parseHsb, parseHsl, parseKeyword, parseRgb, rgbToHex, rgbToHsb, rgbToHsl } from '@magic-color/core'
+import type { ColorObject } from './types'
 
 export class MagicColor<T extends ColorType> implements ColorObject<T> {
   type: T
   value: Colors[T]
   alpha: Opacity
 
-  _stack: MagicColor<any>[] = []
+  private _stack: MagicColor<any>[] = []
 
   constructor(value: Colors[T], type: T, alpha: Opacity) {
     this.type = type
@@ -58,10 +55,12 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
         value = hsbToRgb(this.value as HsbColor)
         break
       default:
-        value = this.value
+        value = this.value as RgbColor
     }
 
-    return new MagicColor(value as RgbColor, 'rgb', this.alpha)
+    this._push<'rgb'>(value, 'rgb', this.alpha)
+
+    return this as MagicColor<'rgb'>
   }
 
   toHex(): MagicColor<'hex'> {
@@ -78,10 +77,12 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
         break
       case 'keyword':
       default:
-        value = this.value
+        value = this.value as HexColor
     }
 
-    return new MagicColor(value as HexColor, 'hex', this.alpha)
+    this._push<'hex'>(value, 'hex', this.alpha)
+
+    return this as MagicColor<'hex'>
   }
 
   toHsl(): MagicColor<'hsl'> {
@@ -98,10 +99,12 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
         value = hsbToHsl(this.value as HsbColor)
         break
       default:
-        value = this.value
+        value = this.value as HslColor
     }
 
-    return new MagicColor(value as HslColor, 'hsl', this.alpha)
+    this._push<'hsl'>(value, 'hsl', this.alpha)
+
+    return this as MagicColor<'hsl'>
   }
 
   toHsb(): MagicColor<'hsb'> {
@@ -118,10 +121,32 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
         value = hslToHsb(this.value as HslColor)
         break
       default:
-        value = this.value
+        value = this.value as HsbColor
     }
 
-    return new MagicColor(value as HsbColor, 'hsb', this.alpha)
+    this._push<'hsb'>(value, 'hsb', this.alpha)
+
+    return this as MagicColor<'hsb'>
+  }
+
+  private _push<T extends ColorType = any>(value: Colors[T], type: ColorType, alpha: Opacity) {
+    this._stack.push(new MagicColor(value, type, alpha))
+    // @ts-expect-error - value is not assignable to type Colors[T]
+    this.value = value
+    // @ts-expect-error - type is not assignable to type T
+    this.type = type
+  }
+
+  get history(): MagicColor<any>[] {
+    return this._stack
+  }
+
+  get last(): MagicColor<any> {
+    return this._stack[this._stack.length - 1]
+  }
+
+  get first(): MagicColor<any> {
+    return this._stack[0]
   }
 }
 

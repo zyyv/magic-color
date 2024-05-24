@@ -1,4 +1,4 @@
-import type { HexColor, HsbColor, HslColor, RgbColor } from './types'
+import type { HexColor, HsbColor, HslColor, RgbColor } from '../types'
 import { rgbToHsb } from './rgb'
 
 const hexRegex = /^#?([a-f\d]{3}|[a-f\d]{6}|[a-f\d]{8})$/i

@@ -1,4 +1,4 @@
-import type { HexColor } from './types'
+import type { HexColor } from '../types'
 import { parseHex } from './hex'
 
 export const KeywordColors: Record<string, HexColor> = {

@@ -1,4 +1,4 @@
-import type { ColorType, RgbColor } from './core/types'
+import type { ColorType, RgbColor } from '@magic-color/core'
 import { createMagicColor } from './core'
 
 function tint(components: RgbColor, intensity: number) {
@@ -18,17 +18,17 @@ function withShade(intensity: number) {
 }
 
 export interface ThemeMetas {
-  '50': string
-  '100': string
-  '200': string
-  '300': string
-  '400': string
-  '500': string
-  '600': string
-  '700': string
-  '800': string
-  '900': string
-  '950': string
+  50: string
+  100: string
+  200: string
+  300: string
+  400: string
+  500: string
+  600: string
+  700: string
+  800: string
+  900: string
+  950: string
 }
 
 export interface ThemeOptions {
