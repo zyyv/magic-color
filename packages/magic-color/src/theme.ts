@@ -79,6 +79,7 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
 
   const defaultOptions: ThemeOptions = {
     type: mc.type,
+    // @ts-expect-error - render is rightable
     render: c => c,
   }
 
@@ -128,7 +129,7 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
       colors,
       Object.fromEntries([
         finnalRender([
-          name as keyof ThemeMetas,
+          name as unknown as keyof ThemeMetas,
           fn(mc.toRgb().value),
         ]),
       ]),
