@@ -129,6 +129,21 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     return this as MagicColor<'hsb'>
   }
 
+  to(type: ColorType) {
+    switch (type) {
+      case 'rgb':
+        return this.toRgb()
+      case 'hex':
+        return this.toHex()
+      case 'hsl':
+        return this.toHsl()
+      case 'hsb':
+        return this.toHsb()
+      default:
+        throw new Error('Invalid color type.')
+    }
+  }
+
   private _push<T extends ColorType = any>(value: Colors[T], type: ColorType, alpha: Opacity) {
     this._stack.push(new MagicColor(value, type, alpha))
     // @ts-expect-error - value is not assignable to type Colors[T]
@@ -147,6 +162,18 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
 
   get first(): MagicColor<any> {
     return this._stack[0]
+  }
+
+  revert() {
+    if (this._stack.length) {
+      const last = this._stack.pop()
+      this.value = last!.value
+      this.type = last!.type
+    }
+  }
+
+  clear() {
+    this._stack = []
   }
 }
 

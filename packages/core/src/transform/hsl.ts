@@ -14,8 +14,8 @@ export function parseHsl(color: string) {
     throw new Error('Invalid HSL color format.')
   const value = [
     Number.parseInt(match[1]),
-    Number.parseInt(match[2]) / 100,
-    Number.parseInt(match[3]) / 100,
+    Number.parseInt(match[2]),
+    Number.parseInt(match[3]),
   ] as HslColor
   const alpha = match[4] ? Number.parseFloat(match[4]) : 1
 
@@ -28,33 +28,52 @@ export function hslToHex(color: HslColor): HexColor {
 
 export function hslToRgb(color: HslColor): RgbColor {
   const [h, s, l] = color
+  const sNormalized = s / 100
+  const lNormalized = l / 100
 
-  let r, g, b
-  if (s === 0) {
-    r = g = b = l
+  const c = (1 - Math.abs(2 * lNormalized - 1)) * sNormalized
+  const x = c * (1 - Math.abs((h / 60) % 2 - 1))
+  const m = lNormalized - c / 2
+  let r = 0
+  let g = 0
+  let b = 0
+
+  if (h >= 0 && h < 60) {
+    r = c
+    g = x
+    b = 0
   }
-  else {
-    const hue2rgb = (p: number, q: number, t: number) => {
-      if (t < 0)
-        t += 1
-      if (t > 1)
-        t -= 1
-      if (t < 1 / 6)
-        return p + (q - p) * 6 * t
-      if (t < 1 / 2)
-        return q
-      if (t < 2 / 3)
-        return p + (q - p) * (2 / 3 - t) * 6
-      return p
-    }
-    const q = l < 0.5 ? l * (1 + s) : l + s - l * s
-    const p = 2 * l - q
-    r = hue2rgb(p, q, h / 360 + 1 / 3)
-    g = hue2rgb(p, q, h / 360)
-    b = hue2rgb(p, q, h / 360 - 1 / 3)
+  else if (h >= 60 && h < 120) {
+    r = x
+    g = c
+    b = 0
+  }
+  else if (h >= 120 && h < 180) {
+    r = 0
+    g = c
+    b = x
+  }
+  else if (h >= 180 && h < 240) {
+    r = 0
+    g = x
+    b = c
+  }
+  else if (h >= 240 && h < 300) {
+    r = x
+    g = 0
+    b = c
+  }
+  else if (h >= 300 && h < 360) {
+    r = c
+    g = 0
+    b = x
   }
 
-  return [r * 255, g * 255, b * 255]
+  return [
+    Math.round((r + m) * 255),
+    Math.round((g + m) * 255),
+    Math.round((b + m) * 255),
+  ]
 }
 
 export function hslToHsb(color: HslColor): HsbColor {
