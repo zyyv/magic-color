@@ -32,6 +32,7 @@ export function useControlBlock(options: useControlBlockOptions = {}) {
   const realHeight = ref(0)
 
   function handleMouseDown(e: MouseEvent) {
+    e.preventDefault()
     startX.value = e.clientX
     startY.value = e.clientY
     startLeft.value = barRef.value!.offsetLeft
@@ -45,6 +46,7 @@ export function useControlBlock(options: useControlBlockOptions = {}) {
 
   function handleMouseMove(e: MouseEvent) {
     e.preventDefault()
+    barRef.value!.style.cursor = 'grabbing'
     const disX = startLeft.value + e.clientX - startX.value
     const disY = startTop.value + e.clientY - startY.value
     const left = Math.min(Math.max(disX, 0), realWidth.value)
