@@ -25,31 +25,35 @@ A lot of color tool functions for you to use, providing easy conversion, generat
 ### basic
 
 ```ts
-import { MagicColor, createMagicColor, mc } from 'magic-color'
+import { MagicColor } from 'magic-color'
 
-const mc = new MagicColor('#ffffff', 'hex', '1')
-// or (mc is createMagicColor alias)
-const mc = mc('#ffffff') // recommended
+const mc = new MagicColor('#ffffff') // auto parse color
+const mc = new MagicColor('#ffffff', 'hex') // specify color type
+const mc = new MagicColor('#ffffff', 'hex', 1) // specify opacity
 ```
 
-`createMagicColor` will automatically infer the input color type and the opacity.
+`MagicColor` will automatically infer the input color type and the opacity.
 
 Now support color types: `RGB`, `HEX`, `HSL`, `HSB`, `Keyword`.
 
 You can convert between supported types.
 
 ```ts
-mc.toRgb().value // [255, 255, 255]
-mc.toHex().value // '#ffffff'
-mc.toHsl().value // [0, 0, 100]
-mc.toHsb().value // [0, 0, 100]
+mc.toRgb() // RGB value: [255, 255, 255]
+mc.toHex() // HEX value: '#ffffff'
+mc.toHsl() // HSL value: [0, 0, 100]
+mc.toHsb() // HSB value: [0, 0, 100]
+
+// or you can use the `to` method
+mc.to('your transformed type')
 ```
 
 If you want to output a color string, you can use the `toString` method, and you can choose whether you need opacity.
 
 ```ts
-mc.toRgb().toString() // 'rgb(255, 255, 255)'
+mc.toString() // '#ffffff'
 // with opacity
+mc.toString(true) // '#ffffffff'
 mc.toRgb().toString(true) // 'rgba(255, 255, 255, 100%)'
 ```
 
