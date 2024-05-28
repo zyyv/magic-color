@@ -9,10 +9,50 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
 
   private _stack: MagicColor<any>[] = []
 
-  constructor(value: Colors[T], type: T, alpha: Opacity) {
-    this.type = type
-    this.value = value
-    this.alpha = alpha
+  constructor(value: string)
+  constructor(value: Colors[T] | string, type: T)
+  constructor(value: Colors[T] | string, type: T, alpha: Opacity)
+  constructor(...args: any[]) {
+    if (args.length === 1) {
+      if (typeof args[0] === 'string') {
+        const {
+          value,
+          type,
+          alpha,
+        } = resolveColorString(args[0])
+
+        this.value = value as Colors[T]
+        this.type = type as T
+        this.alpha = alpha
+      }
+      else {
+        throw new TypeError('Invalid color type.')
+      }
+    }
+    else if (args.length >= 2) {
+      if (typeof args[0] === 'string') {
+        const {
+          value,
+          type,
+          alpha,
+        } = resolveColorString(args[0])
+
+        if (args[1] !== type)
+          throw new Error(`Invalid color type: ${args[1]}.`)
+
+        this.value = value as Colors[T]
+        this.type = type as T
+        this.alpha = args[2] ?? alpha
+      }
+      else {
+        this.value = args[0]
+        this.type = args[1]
+        this.alpha = args[2] ?? 1
+      }
+    }
+    else {
+      throw new Error('Invalid color type.')
+    }
   }
 
   toString(withOpacity = false): string {
@@ -224,6 +264,9 @@ function resolveColorString(color: string) {
 }
 
 export function guessType(color: string): ColorType | undefined {
+  if (!color)
+    return
+
   const map = {
     rgb: isRgb,
     hex: isHex,

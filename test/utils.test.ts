@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ColorType } from 'magic-color'
-import { isColor, mc } from 'magic-color'
+import { MagicColor, isColor, mc } from 'magic-color'
 
 describe('utils scoped', () => {
   const hex = '#d15b14'
@@ -31,6 +31,17 @@ describe('utils scoped', () => {
     const value = color.to(type as any).value as number[]
     return value.every((v, i) => isClose(v, compareValue[i]))
   }
+
+  it('create Magic Color', () => {
+    expect(new MagicColor('#d15b14').toString()).toMatchInlineSnapshot(`"#d15b14"`)
+    expect(new MagicColor('#d15b14', 'hex').toString()).toMatchInlineSnapshot(`"#d15b14"`)
+    expect(new MagicColor('#d15b14', 'hex', 0.1).toString(true)).toMatchInlineSnapshot(`"#d15b141a"`)
+    expect(new MagicColor('rgb(209, 91, 20)').toHex().toString()).toMatchInlineSnapshot(`"#d15b14"`)
+    // Error test case: invalid color
+    expect(() => new MagicColor('')).toThrowError('Invalid color')
+    // Error test case: different type
+    expect(() => new MagicColor('rgb(122,122,122)', 'hex')).toThrowError('Invalid color type: hex.')
+  })
 
   it('isColor', () => {
     expect(colors.every(isColor)).toEqual(true)
