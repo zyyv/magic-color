@@ -39,6 +39,6 @@ jobs:
       - name: Publish to NPM
         run: pnpm -r publish --access public --no-git-checks
 
-      # - run: npx changelogithub
-      #   env:
-      #     GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - run: npx changelogithub
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
