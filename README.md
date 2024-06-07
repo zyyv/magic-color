@@ -1,10 +1,35 @@
+<p align="center">
 <img src="https://raw.githubusercontent.com/zyyv/magic-color/main/public/logo.svg" style="width:100px;" />
+</p>
 
-# magic-color [![NPM version](https://img.shields.io/npm/v/magic-color?color=a1b858&label=)](https://www.npmjs.com/package/magic-color) [![Netlify Status](https://api.netlify.com/api/v1/badges/53ddaf28-1a23-40b2-8ed9-7ed65931744c/deploy-status)](https://app.netlify.com/sites/quiet-entremet-477970/deploys)
+<h1 align="center">magic-color</h1>
 
-Make the colors be magical.
+<p align="center">🌈 Make the colors be magical.</p>
 
-You can watch my [talk](https://color.zyob.top/talk) to learn more basic knowledge points.
+<p align="center">
+<a>
+<img src="https://img.shields.io/npm/v/magic-color?style=flat&colorA=080f12&colorB=1fa669" alt="npm version" />
+</a>
+<a>
+<img src="https://img.shields.io/npm/dm/magic-color?style=flat&colorA=080f12&colorB=1fa669" alt="npm downloads" />
+</a>
+<a>
+<img src="https://api.netlify.com/api/v1/badges/53ddaf28-1a23-40b2-8ed9-7ed65931744c/deploy-status" alt="Netlify Status" />
+</a>
+<a>
+<img src="https://img.shields.io/bundlephobia/minzip/magic-color?style=flat&colorA=080f12&colorB=1fa669&label=minzip" alt="bundle" />
+</a>
+<a>
+<img src="https://img.shields.io/badge/jsdocs-reference-080f12?style=flat&colorA=080f12&colorB=1fa669" alt="JSDocs" />
+</a>
+<a>
+<img src="https://img.shields.io/github/license/zyyv/magic-color.svg?style=flat&colorA=080f12&colorB=1fa669" alt="License" />
+</a>
+</p>
+
+<p align="center">
+Watch my <a href="https://color.zyob.top/talk" target='_blank'>Talk</a> to learn more basic knowledge points.
+</p>
 
 ## Features
 
@@ -12,7 +37,7 @@ You can watch my [talk](https://color.zyob.top/talk) to learn more basic knowled
 - 📦 Built-in color related components.
 - 🚀 Provides utility toolset functions
 - 🦄 Theme color generator and fully customizable.
-- 🥳 esm only & 0 dependencies.
+- 🥳 `esm` only & 0 dependencies.
 
 ## Usage
 
