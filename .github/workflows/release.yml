@@ -30,10 +30,11 @@ jobs:
       - name: PNPM build ٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ
         run: pnpm build
 
-      - name: Publish to NPM 🚀
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to NPM
+        run: pnpm -r publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          NPM_CONFIG_PROVENANCE: true
 
       # - run: npx changelogithub
       #   env:
