@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@magic-color/vue": "workspace:*",
-    "@slidev/cli": "0.49.4",
-    "@slidev/client": "0.49.4",
+    "@slidev/cli": "0.49.9",
+    "@slidev/client": "0.49.9",
     "@slidev/theme-default": "latest",
     "@slidev/theme-seriph": "latest",
     "@vueuse/core": "^10.10.0",
