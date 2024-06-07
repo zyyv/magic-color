@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: lts/*
           cache: pnpm
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies 📦️
         run: pnpm i
@@ -30,7 +31,7 @@ jobs:
         run: pnpm build
 
       - name: Publish to NPM 🚀
-        uses: simenandre/publish-with-pnpm@v2
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
 
