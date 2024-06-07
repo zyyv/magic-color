@@ -12,7 +12,7 @@ You can watch my [talk](https://color.zyob.top/talk) to learn more basic knowled
 - 📦 Built-in color related components.
 - 🚀 Provides utility toolset functions
 - 🦄 Theme color generator and fully customizable.
-- 🥳 esm only & 0 dependencies.
+- 🥳 `esm` only & 0 dependencies.
 
 ## Usage
 
