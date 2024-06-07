@@ -1,5 +1,5 @@
 {
   "name": "@zyyv/magic-color",
-  "version": "1.0.4-beta.7",
+  "version": "1.0.4-beta.8",
   "exports": "./src/index.ts"
 }

@@ -1,7 +1,7 @@
 {
   "name": "talk",
   "type": "module",
-  "version": "1.0.4-beta.7",
+  "version": "1.0.4-beta.8",
   "private": true,
   "scripts": {
     "build": "slidev build --base /talk/ --out ../playground/public/talk",
