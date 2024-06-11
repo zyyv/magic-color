@@ -7,6 +7,8 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
   value: Colors[T]
   alpha: Opacity
 
+  cloned = false
+
   private _stack: MagicColor<any>[] = []
 
   constructor(value: string)
@@ -204,16 +206,26 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     return this._stack[0]
   }
 
-  revert() {
-    if (this._stack.length) {
-      const last = this._stack.pop()
-      this.value = last!.value
-      this.type = last!.type
-    }
+  revert(deep = 1) {
+    if (deep > this._stack.length)
+      throw new Error('Invalid deep.')
+
+    const mc = this._stack[this._stack.length - deep - 1]
+    this.type = mc.type
+    this.value = mc.value
+    this.alpha = mc.alpha
+    this._stack.slice(0, this._stack.length - deep)
   }
 
   clear() {
     this._stack = []
+  }
+
+  clone(): MagicColor<T> {
+    const mc = new MagicColor(this.value, this.type, this.alpha)
+    mc._stack = this._stack.slice()
+    mc.cloned = true
+    return mc
   }
 }
 
