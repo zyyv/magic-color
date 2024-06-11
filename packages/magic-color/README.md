@@ -1,10 +1,35 @@
+<p align="center">
 <img src="https://raw.githubusercontent.com/zyyv/magic-color/main/public/logo.svg" style="width:100px;" />
+</p>
 
-# magic-color [![NPM version](https://img.shields.io/npm/v/magic-color?color=a1b858&label=)](https://www.npmjs.com/package/magic-color) [![Netlify Status](https://api.netlify.com/api/v1/badges/53ddaf28-1a23-40b2-8ed9-7ed65931744c/deploy-status)](https://app.netlify.com/sites/quiet-entremet-477970/deploys)
+<h1 align="center">magic-color</h1>
 
-Make the colors be magical.
+<p align="center">🌈 Make the colors be magical.</p>
 
-You can watch my [talk](https://color.zyob.top/talk) to learn more basic knowledge points.
+<p align="center">
+<a>
+<img src="https://img.shields.io/npm/v/magic-color?style=flat&colorA=080f12&colorB=1fa669" alt="npm version" />
+</a>
+<a>
+<img src="https://img.shields.io/npm/dm/magic-color?style=flat&colorA=080f12&colorB=1fa669" alt="npm downloads" />
+</a>
+<a>
+<img src="https://api.netlify.com/api/v1/badges/53ddaf28-1a23-40b2-8ed9-7ed65931744c/deploy-status" alt="Netlify Status" />
+</a>
+<a>
+<img src="https://img.shields.io/bundlephobia/minzip/magic-color?style=flat&colorA=080f12&colorB=1fa669&label=minzip" alt="bundle" />
+</a>
+<a>
+<img src="https://img.shields.io/badge/jsdocs-reference-080f12?style=flat&colorA=080f12&colorB=1fa669" alt="JSDocs" />
+</a>
+<a>
+<img src="https://img.shields.io/github/license/zyyv/magic-color.svg?style=flat&colorA=080f12&colorB=1fa669" alt="License" />
+</a>
+</p>
+
+<p align="center">
+Watch my <a href="https://color.zyob.top/talk" target='_blank'>Talk</a> to learn more basic knowledge points.
+</p>
 
 ## Features
 
@@ -12,7 +37,7 @@ You can watch my [talk](https://color.zyob.top/talk) to learn more basic knowled
 - 📦 Built-in color related components.
 - 🚀 Provides utility toolset functions
 - 🦄 Theme color generator and fully customizable.
-- 🥳 esm only & 0 dependencies.
+- 🥳 `esm` only & 0 dependencies.
 
 ## Usage
 
@@ -25,31 +50,35 @@ A lot of color tool functions for you to use, providing easy conversion, generat
 ### basic
 
 ```ts
-import { MagicColor, createMagicColor, mc } from 'magic-color'
+import { MagicColor } from 'magic-color'
 
-const mc = new MagicColor('#ffffff', 'hex', '1')
-// or (mc is createMagicColor alias)
-const mc = mc('#ffffff') // recommended
+const mc = new MagicColor('#ffffff') // auto parse color
+const mc = new MagicColor('#ffffff', 'hex') // specify color type
+const mc = new MagicColor('#ffffff', 'hex', 1) // specify opacity
 ```
 
-`createMagicColor` will automatically infer the input color type and the opacity.
+`MagicColor` will automatically infer the input color type and the opacity.
 
 Now support color types: `RGB`, `HEX`, `HSL`, `HSB`, `Keyword`.
 
 You can convert between supported types.
 
 ```ts
-mc.toRgb().value // [255, 255, 255]
-mc.toHex().value // '#ffffff'
-mc.toHsl().value // [0, 0, 100]
-mc.toHsb().value // [0, 0, 100]
+mc.toRgb() // RGB value: [255, 255, 255]
+mc.toHex() // HEX value: '#ffffff'
+mc.toHsl() // HSL value: [0, 0, 100]
+mc.toHsb() // HSB value: [0, 0, 100]
+
+// or you can use the `to` method
+mc.to('your transformed type')
 ```
 
 If you want to output a color string, you can use the `toString` method, and you can choose whether you need opacity.
 
 ```ts
-mc.toRgb().toString() // 'rgb(255, 255, 255)'
+mc.toString() // '#ffffff'
 // with opacity
+mc.toString(true) // '#ffffffff'
 mc.toRgb().toString(true) // 'rgba(255, 255, 255, 100%)'
 ```
 

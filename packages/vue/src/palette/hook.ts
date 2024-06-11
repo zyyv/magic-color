@@ -15,10 +15,17 @@ interface useControlBlockOptions {
    * @default true
    */
   overflows?: boolean
+
+  /**
+   * Whether to disable the control block
+   *
+   * @default false
+   */
+  disable?: boolean
 }
 
 export function useControlBlock(options: useControlBlockOptions = {}) {
-  const { onChange, overflows = true } = options
+  const { onChange, overflows = true, disable = false } = options
 
   const canvasRef = ref<HTMLCanvasElement | null>(null)
   const barRef = ref<HTMLDivElement | null>(null)
@@ -32,6 +39,8 @@ export function useControlBlock(options: useControlBlockOptions = {}) {
   const realHeight = ref(0)
 
   function handleMouseDown(e: MouseEvent) {
+    if (disable)
+      return
     e.preventDefault()
     startX.value = e.clientX
     startY.value = e.clientY
@@ -45,6 +54,8 @@ export function useControlBlock(options: useControlBlockOptions = {}) {
   }
 
   function handleMouseMove(e: MouseEvent) {
+    if (disable)
+      return
     e.preventDefault()
     barRef.value!.style.cursor = 'grabbing'
     const disX = startLeft.value + e.clientX - startX.value
@@ -63,6 +74,8 @@ export function useControlBlock(options: useControlBlockOptions = {}) {
   }
 
   function handleMouseUp() {
+    if (disable)
+      return
     barRef.value!.style.cursor = 'grab'
     barRef.value!.style.transition = 'all 0.2s ease-in-out'
 
@@ -70,6 +83,8 @@ export function useControlBlock(options: useControlBlockOptions = {}) {
   }
 
   function handleClick(e: MouseEvent) {
+    if (disable)
+      return
     e.stopPropagation()
     barRef.value!.style.transition = 'all 0.2s ease-in-out'
     const left = Math.min(Math.max(e.offsetX - (overflows ? barRef.value!.offsetWidth / 2 : 0), 0), realWidth.value)

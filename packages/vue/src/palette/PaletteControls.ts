@@ -5,8 +5,12 @@ import { useControlBlock } from './hook'
 
 export default /* @__PURE__ */ defineComponent({
   props: {
+    disable: {
+      type: Boolean,
+      default: false,
+    },
     type: {
-      type: String as PropType<'hue' | 'alpha'>,
+      type: String as PropType<'hue' | 'alpha' | 'normal'>,
       default: 'hue',
     },
     width: {
@@ -21,9 +25,20 @@ export default /* @__PURE__ */ defineComponent({
       type: String,
       default: '#f00',
     },
+    /**
+     * The value of the control block. It should be a number between 0 and 1.
+     */
     modelValue: {
       type: Number,
       default: 1,
+    },
+    barColor: {
+      type: String,
+      default: '#f87171',
+    },
+    wrapperColor: {
+      type: String,
+      default: '#3c3c3c',
     },
   },
   emits: ['update:modelValue'],
@@ -32,8 +47,12 @@ export default /* @__PURE__ */ defineComponent({
 
     const width = ref(props.width)
     const height = ref(props.height)
+    const disable = ref(props.disable)
 
-    const { canvasRef, barRef, onMouseDown } = useControlBlock({ onChange: ({ x }) => model.value = x })
+    const { canvasRef, barRef, onMouseDown } = useControlBlock({
+      disable: disable.value,
+      onChange: ({ x }) => model.value = x,
+    })
 
     const ctx = ref<CanvasRenderingContext2D | null>(null)
 
@@ -46,9 +65,10 @@ export default /* @__PURE__ */ defineComponent({
       borderRadius: '50%',
       border: '2px solid white',
       boxShadow: 'rgba(0, 0, 0, 0.2) 0px 0px 0px 0.6px',
-      backgroundColor: getCurrentBgColor(),
-      cursor: 'grab',
+      backgroundColor: getBarBgColor(),
+      cursor: disable.value ? 'not-allowed' : 'grab',
       userSelect: 'none',
+      transition: 'left 0.3s ease-in-out',
     }))
 
     const wrapperStyle = computed(() => ({
@@ -58,14 +78,17 @@ export default /* @__PURE__ */ defineComponent({
       width: `${width.value}px`,
     }))
 
-    function getCurrentBgColor() {
-      if (props.type === 'alpha') {
-        const rgb = createMagicColor(props.color, 'hex', model.value).toRgb().value
-        const c = rgb.map(i => i + Math.round((255 - i) * (1 - model.value))) as RgbColor
-        return createMagicColor(c, 'rgb', model.value).toString()
-      }
-      else {
-        return createMagicColor([Math.round(model.value * 360), 100, 100], 'hsb', 1).toHex().toString()
+    function getBarBgColor() {
+      switch (props.type) {
+        case 'alpha': {
+          const rgb = createMagicColor(props.color, 'hex', model.value).toRgb().value
+          const c = rgb.map(i => i + Math.round((255 - i) * (1 - model.value))) as RgbColor
+          return createMagicColor(c, 'rgb', model.value).toString()
+        }
+        case 'hue':
+          return createMagicColor([Math.round(model.value * 360), 100, 100], 'hsb', 1).toHex().toString()
+        default:
+          return props.barColor
       }
     }
 
@@ -98,11 +121,26 @@ export default /* @__PURE__ */ defineComponent({
       ctx.fillRect(0, 0, props.width, props.height)
     }
 
+    function drawColorNormal(ctx: CanvasRenderingContext2D) {
+      ctx.fillStyle = props.wrapperColor
+      ctx.fillRect(0, 0, props.width, props.height)
+    }
+
     onMounted(() => {
       const _ctx = canvasRef.value?.getContext('2d')
       if (_ctx) {
         ctx.value = _ctx
-        props.type === 'hue' ? drawColorHue(ctx.value) : drawColorAlpha(ctx.value)
+        switch (props.type) {
+          case 'hue':
+            drawColorHue(_ctx)
+            break
+          case 'alpha':
+            drawColorAlpha(_ctx)
+            break
+          default:
+            drawColorNormal(_ctx)
+            break
+        }
       }
     })
 
