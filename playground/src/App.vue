@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { randomColor } from 'magic-color'
 import Picker from './components/Picker.vue'
 import Hash from './components/Hash.vue'
 
-const color = ref('#529e82')
+const color = ref(randomColor())
 const alpha = ref(1)
 </script>
 
