@@ -1,9 +1,5 @@
 import type { RgbColor } from '@magic-color/core'
-import { createMagicColor, guessType } from './basic'
-
-export function isColor(color: string): boolean {
-  return guessType(color) !== undefined
-}
+import { createMagicColor } from './core/basic'
 
 /**
  * Get the contrast ratio between two colors. The contrast ratio is a value between 1 and 21.
@@ -128,9 +124,9 @@ interface ReadableOptions {
 }
 
 /**
- * Get the readable Text color with `WCGA` standard.
+ * Get the readable Text color with `WCAG` standard.
  *
- * 使用 `WCGA` 标准获取可读性文本颜色。
+ * 使用 `WCAG` 标准获取可读性文本颜色。
  *
  * @param options {@link ReadableOptions} The background color or option Configuration.
  */
