@@ -127,6 +127,15 @@ interface ReadableOptions {
   fallbackTextColor?: string
 }
 
+/**
+ * Get the readable Text color with `WCGA` standard.
+ *
+ * 使用 `WCGA` 标准获取可读性文本颜色。
+ *
+ * @param options {@link ReadableOptions} The background color or option Configuration.
+ */
+export function getReadableTextColor(options: string): string
+export function getReadableTextColor(options: ReadableOptions): string
 export function getReadableTextColor(options: ReadableOptions | string) {
   const _options = typeof options === 'string' ? { bgColor: options } : options
   const {
