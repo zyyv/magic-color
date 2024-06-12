@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import Picker from './components/Picker.vue'
 import Hash from './components/Hash.vue'
 
