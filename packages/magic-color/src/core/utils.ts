@@ -32,7 +32,7 @@ export function getContrastRatio(c1: string, c2: string): number {
   const lighter = Math.max(luminance1, luminance2)
   const darker = Math.min(luminance1, luminance2)
 
-  return (lighter + 0.05) / (darker + 0.05)
+  return Number.parseFloat(((lighter + 0.05) / (darker + 0.05)).toFixed(2))
 }
 
 /**
