@@ -68,7 +68,7 @@ export default /* @__PURE__ */ defineComponent({
       backgroundColor: getBarBgColor(),
       cursor: disable.value ? 'not-allowed' : 'grab',
       userSelect: 'none',
-      transition: 'left 0.3s ease-in-out',
+      ...((disable.value || props.type === 'normal') ? { transition: 'left 0.3s ease-in-out' } : {}),
     }))
 
     const wrapperStyle = computed(() => ({
