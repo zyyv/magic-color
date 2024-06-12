@@ -26,24 +26,41 @@ const hashValue = computed(() => {
       </div>
       <Palette v-model:color="color" v-model:alpha="alpha" />
 
-      <div w-full space-y-2>
-        <div fsc gap-4>
+      <div w-full text-center space-y-2>
+        <div fbc gap-4>
           <input
-            v-model="hashInput" text-sm w-40 px-2 py-1 rd
-            b="~ #3c3c3c" bg-transparent c-white
-            outline-none
-            type="text"
-            placeholder="Enter a string to hash"
-            placeholder-text="gray op-60"
+            v-model="hashInput" text-sm w-40 px-2 py-1 rd b="~ #3c3c3c" bg-transparent c-white outline-none
+            type="text" placeholder="Enter a string to hash" placeholder-text="gray op-60"
           >
 
-          <p font-mono text-transparent bg-clip-text bg-gradient-to-r from-red to-purple>
+          <p
+            :class="hashValue?.hex ? '' : 'font-mono text-transparent bg-clip-text bg-gradient-to-r from-red to-purple'"
+            :style="{ color: hashValue?.hex }"
+          >
             {{ hashValue?.hex ?? '👈 Hash' }}
           </p>
         </div>
-        <PaletteControls disable type="normal" :model-value="(hashValue?.r ?? 0) / 255" bar-color="transparent" wrapper-color="#f87171dd" />
-        <PaletteControls disable type="normal" :model-value="(hashValue?.g ?? 0) / 255" bar-color="transparent" wrapper-color="#4ade80dd" />
-        <PaletteControls disable type="normal" :model-value="(hashValue?.b ?? 0) / 255" bar-color="transparent" wrapper-color="#60a5fadd" />
+        <div c-white fbc text-sm lh-20px>
+          <PaletteControls
+            disable type="normal" :model-value="(hashValue?.r ?? 0) / 255" bar-color="transparent"
+            wrapper-color="#f87171dd"
+          />
+          <span text-red>{{ hashValue?.r || 'Red' }}</span>
+        </div>
+        <div c-white fbc text-sm lh-20px>
+          <PaletteControls
+            disable type="normal" :model-value="(hashValue?.g ?? 0) / 255" bar-color="transparent"
+            wrapper-color="#4ade80dd"
+          />
+          <span text-green>{{ hashValue?.g || 'Green' }}</span>
+        </div>
+        <div c-white fbc text-sm lh-20px>
+          <PaletteControls
+            disable type="normal" :model-value="(hashValue?.b ?? 0) / 255" bar-color="transparent"
+            wrapper-color="#60a5fadd"
+          />
+          <span text-blue>{{ hashValue?.b || 'Blue' }}</span>
+        </div>
       </div>
     </div>
     <Picker v-model="color" />
