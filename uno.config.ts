@@ -1,5 +1,5 @@
 import type { Preset, RuleContext } from 'unocss'
-import { defineConfig } from 'unocss'
+import { defineConfig, transformerDirectives } from 'unocss'
 import type { UsefulTheme } from 'unocss-preset-useful'
 import { presetUseful } from 'unocss-preset-useful'
 import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders'
@@ -136,4 +136,5 @@ export default defineConfig({
     }) as Preset<UsefulTheme>,
   ],
   separators: ['_', '-', ':'],
+  transformers: [transformerDirectives()],
 })

@@ -2,7 +2,7 @@
 import Picker from './components/Picker.vue'
 import Hash from './components/Hash.vue'
 
-const color = ref('#9455d3')
+const color = ref('#529e82')
 const alpha = ref(1)
 </script>
 
