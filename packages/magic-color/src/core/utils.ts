@@ -62,12 +62,6 @@ export function calcuRelativeLuminance(rgb: RgbColor): number {
   return 0.2126 * red + 0.7152 * green + 0.0722 * blue
 }
 
-export function getReadableTextColor(bgColor: string, textColor = '#ffffff'): '#000000' | '#ffffff' {
-  return getContrastRatio(textColor, bgColor) >= 4.5
-    ? '#ffffff'
-    : '#000000'
-}
-
 /**
  * Determine whether a color is a warm color.
  *
@@ -105,4 +99,42 @@ export function isWarmColor(color: string): boolean {
   }
 
   return (hue >= 0 && hue <= 60) || (hue >= 300 && hue <= 360)
+}
+
+interface ReadableOptions {
+  bgColor: string
+
+  /**
+   * The text color. Default is `#ffffff`.
+   *
+   * 文本颜色，默认为 `#ffffff`。
+   */
+
+  textColor?: string
+
+  /**
+   * The ratio of the contrast ratio. Default is `4.5`.
+   *
+   * 对比度比值，默认为 `4.5`。
+   */
+  ratio?: number
+
+  /**
+   * The text color when the contrast ratio is not met. Default is `#000000`.
+   *
+   * 当对比度不符合时的文本颜色，默认为 `#000000`。
+   */
+  fallbackTextColor?: string
+}
+
+export function getReadableTextColor(options: ReadableOptions | string) {
+  const _options = typeof options === 'string' ? { bgColor: options } : options
+  const {
+    bgColor,
+    textColor = '#ffffff',
+    fallbackTextColor = '#000000',
+    ratio = 4.5,
+  } = _options
+
+  return getContrastRatio(bgColor, textColor) >= ratio ? textColor : fallbackTextColor
 }
