@@ -12,7 +12,7 @@ const bench = ref(1)
 const options = [
   { label: 'All', value: 1 },
   { label: '4.5+ AA', value: 4.5 },
-  { label: '7+ AA', value: 7 },
+  { label: '7+ AAA', value: 7 },
 ]
 </script>
 
