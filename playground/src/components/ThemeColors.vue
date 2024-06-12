@@ -27,8 +27,8 @@ const { copy } = useClipboard()
       </li>
     </ul>
 
-    <div my-8 prose c-white fccc ma>
-      <h2>
+    <section my-8 c-white fccc ma>
+      <h2 text-xl text-transparent bg-clip-text bg-gradient-to-r from-red via-green to-blue>
         Ratio Table
       </h2>
       <table>
@@ -121,7 +121,7 @@ const { copy } = useClipboard()
           </tr>
         </tbody>
       </table>
-    </div>
+    </section>
   </div>
 </template>
 
