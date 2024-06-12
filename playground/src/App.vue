@@ -10,6 +10,7 @@ const alpha = ref(1)
   <header fc my-8>
     <h1 text-4xl fw-600 text-transparent bg-clip-text bg-gradient-to-r from-purple to-red>
       <a href="https://github.com/zyyv/magic-color" target="_blank">
+        <img inline-block w-10 src="/logo.svg" alt="logo">
         Magic Color
       </a>
       <span text-sm>palette.</span>
