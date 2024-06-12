@@ -3,7 +3,7 @@ import type { theme } from 'magic-color'
 import { getContrastRatio, getReadableTextColor } from 'magic-color'
 import { defineProps } from 'vue'
 
-const { colors } = defineProps<{
+defineProps<{
   colors: ReturnType<typeof theme>
 }>()
 
@@ -64,7 +64,7 @@ const { copy } = useClipboard()
                 {{ getContrastRatio('#fff', '#fff') }}
               </div>
             </td>
-            <td v-for="(v) in colors" :key="v">
+            <td v-for="(v, k) in colors" :key="`${k}${v}`">
               <div :style="{ backgroundColor: v, color: '#fff' }">
                 {{ getContrastRatio(v, '#fff') }}
               </div>
@@ -75,6 +75,7 @@ const { copy } = useClipboard()
               </div>
             </td>
           </tr>
+
           <tr v-for="(_, k) in colors" :key="k">
             <td fw-bold>
               <div>
@@ -86,7 +87,7 @@ const { copy } = useClipboard()
                 {{ getContrastRatio('#fff', colors[k]) }}
               </div>
             </td>
-            <td v-for="(v) in colors" :key="v">
+            <td v-for="(v, j) in colors" :key="`${k}${j}${v}`">
               <div :style="{ backgroundColor: v, color: colors[k] }">
                 {{ getContrastRatio(v, colors[k]) }}
               </div>
@@ -97,6 +98,7 @@ const { copy } = useClipboard()
               </div>
             </td>
           </tr>
+
           <tr>
             <td fw-bold>
               <div>
@@ -108,7 +110,7 @@ const { copy } = useClipboard()
                 {{ getContrastRatio('#fff', '#000') }}
               </div>
             </td>
-            <td v-for="(v) in colors" :key="v">
+            <td v-for="(v, k) in colors" :key="`${k}${v}`">
               <div :style="{ backgroundColor: v, color: '#000' }">
                 {{ getContrastRatio(v, '#000') }}
               </div>
