@@ -4,7 +4,7 @@ import { randomColor } from 'magic-color'
 import Picker from './components/Picker.vue'
 import Hash from './components/Hash.vue'
 
-const color = ref(randomColor())
+const color = ref(import.meta.env.DEV ? '#529e82' : randomColor())
 const alpha = ref(1)
 </script>
 
