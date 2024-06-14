@@ -1,34 +1,55 @@
 <script setup lang="ts">
 import type { theme } from 'magic-color'
-import { defineProps, ref } from 'vue'
+import { computed, defineProps, ref, watch } from 'vue'
 import RatioTableSquare from './RatioTableSquare.vue'
 
 defineProps<{
   colors: ReturnType<typeof theme>
 }>()
 
-const bench = ref(1)
-
-const options = [
+const contrasts = ['WCAG', 'APCA']
+const WCAG_Options = [
   { label: 'All', value: 1 },
   { label: '4.5+ AA', value: 4.5 },
   { label: '7+ AAA', value: 7 },
 ]
+const APCA_Options = [
+  { label: 'All', value: 0 },
+  { label: '50%+', value: 0.5 },
+  { label: '70%+', value: 0.7 },
+  { label: '90%+', value: 0.9 },
+]
+
+const ratio = ref(1)
+const type = ref('WCAG')
+const options = computed(() => type.value === 'WCAG' ? WCAG_Options : APCA_Options)
+
+watch(type, () => ratio.value = options.value[0].value)
 </script>
 
 <template>
   <section my-8 c-white fccc ma w-full>
     <div>
       <div fcc mb-4 pr>
-        <h2 w-fit text-xl text-transparent bg-clip-text bg-gradient-to-r from-red via-green to-blue>
+        <ul b="~ #3c3c3c" p1 rd pa top-0 left-0 fcc gap-2>
+          <li
+            v-for="c in contrasts" :key="c"
+            text-sm px-2 cursor-pointer rd-sm
+            :class="type === c ? 'bg-purple/10 text-purple' : ''"
+            @click="type = c"
+          >
+            {{ c }}
+          </li>
+        </ul>
+        <h2 w-fit text-xl text-transparent bg-clip-text bg-gradient-to-r from-purple to-yellow>
           Ratio Table
         </h2>
         <ul b="~ #3c3c3c" px2 py1 rd pa top-0 right-0 fcc gap-2>
           <li
             v-for="opt in options" :key="opt.value"
             text-sm px-2 cursor-pointer rd-sm
-            :class="bench === opt.value ? 'bg-yellow/10 text-yellow' : ''"
-            @click="bench = opt.value"
+            :class="ratio === opt.value ? 'bg-yellow/10 text-yellow' : ''"
+            @click="ratio = opt.value"
           >
             {{ opt.label }}
           </li>
@@ -64,13 +85,13 @@ const options = [
               </div>
             </td>
             <td>
-              <RatioTableSquare background-color="#fff" color="#fff" :ratio="bench" />
+              <RatioTableSquare :type background-color="#fff" color="#fff" :ratio />
             </td>
             <td v-for="(v, k) in colors" :key="`${k}${v}`">
-              <RatioTableSquare :background-color="v" color="#fff" :ratio="bench" />
+              <RatioTableSquare :type :background-color="v" color="#fff" :ratio />
             </td>
             <td>
-              <RatioTableSquare background-color="#000" color="#fff" :ratio="bench" />
+              <RatioTableSquare :type background-color="#000" color="#fff" :ratio />
             </td>
           </tr>
 
@@ -81,13 +102,13 @@ const options = [
               </div>
             </td>
             <td>
-              <RatioTableSquare background-color="#fff" :color="colors[k]" :ratio="bench" />
+              <RatioTableSquare :type background-color="#fff" :color="colors[k]" :ratio />
             </td>
             <td v-for="(v, j) in colors" :key="`${k}${j}${v}`">
-              <RatioTableSquare :background-color="v" :color="colors[k]" :ratio="bench" />
+              <RatioTableSquare :type :background-color="v" :color="colors[k]" :ratio />
             </td>
             <td>
-              <RatioTableSquare background-color="#000" :color="colors[k]" :ratio="bench" />
+              <RatioTableSquare :type background-color="#000" :color="colors[k]" :ratio />
             </td>
           </tr>
 
@@ -98,13 +119,13 @@ const options = [
               </div>
             </td>
             <td>
-              <RatioTableSquare background-color="#fff" color="#000" :ratio="bench" />
+              <RatioTableSquare :type background-color="#fff" color="#000" :ratio />
             </td>
             <td v-for="(v, k) in colors" :key="`${k}${v}`">
-              <RatioTableSquare :background-color="v" color="#000" :ratio="bench" />
+              <RatioTableSquare :type :background-color="v" color="#000" :ratio />
             </td>
             <td>
-              <RatioTableSquare background-color="#000" color="#000" :ratio="bench" />
+              <RatioTableSquare :type background-color="#000" color="#000" :ratio />
             </td>
           </tr>
         </tbody>

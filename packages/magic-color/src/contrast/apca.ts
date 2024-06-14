@@ -1,5 +1,5 @@
 import type { RgbColor } from '@magic-color/core'
-import { createMagicColor } from '../core/basic'
+import { createMagicColor } from '../core'
 
 export function getAPCAContrastRatio(c1: string, c2: string): number {
   const _c1 = createMagicColor(c1).toRgb().value
@@ -12,6 +12,16 @@ export function getAPCAContrastRatio(c1: string, c2: string): number {
   const __c2 = calcuContrast(_c2)
 
   return Number.parseFloat(((__c1 - __c2) / Math.sqrt(l1 ** 2 + l2 ** 2)).toFixed(3))
+
+  // const fgLuminance = getLuminance(fgColor)
+  // const bgLuminance = getLuminance(bgColor)
+
+  // // 将亮度转换为感知亮度 Lstar 值
+  // const fgLstar = luminanceToLstar(fgLuminance)
+  // const bgLstar = luminanceToLstar(bgLuminance)
+
+  // // 计算并返回 APCA 对比度值
+  // return 100 * Math.log2((fgLstar + 5.5) / (bgLstar + 5.5))
 }
 
 /**
