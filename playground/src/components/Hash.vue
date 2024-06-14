@@ -16,8 +16,8 @@ const hashValue = computed(() => {
         v-model="hashInput" text-sm w-40 px-2 py-1 rd b="~ #3c3c3c" bg-transparent c-white outline-none
         type="text" placeholder="Enter a string to hash" placeholder-text="gray op-60"
       >
-
       <p
+        text-sm
         :class="hashValue?.hex ? '' : 'font-mono text-transparent bg-clip-text bg-gradient-to-r from-red to-purple'"
         :style="{ color: hashValue?.hex }"
       >

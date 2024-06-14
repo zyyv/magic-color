@@ -558,11 +558,11 @@ gradCursor: false
 <v-click>
 
 ```ts {monaco-run}
-import { getContrastRatio } from 'magic-color'
+import { getWCAGContrastRatio } from 'magic-color'
 
 const color = '#ffffff'
 const bgColor = '#010205' // #D5100C
-const ratio = getContrastRatio(color, bgColor)
+const ratio = getWCAGContrastRatio(color, bgColor)
 
 console.log(ratio)
 ```

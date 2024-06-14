@@ -1,5 +1,5 @@
 import type { RgbColor } from '@magic-color/core'
-import { createMagicColor } from './core/basic'
+import { createMagicColor } from '../core/basic'
 
 /**
  * Get the contrast ratio between two colors. The contrast ratio is a value between 1 and 21.
@@ -13,12 +13,12 @@ import { createMagicColor } from './core/basic'
  *
  * @example
  * ```ts
- * getContrastRatio('#000000', '#ffffff') // 21
- * getContrastRatio('#000000', '#000000') // 1
- * getContrastRatio('#000000', '#ff0000') // 4.23
+ * getWCAGContrastRatio('#000000', '#ffffff') // 21
+ * getWCAGContrastRatio('#000000', '#000000') // 1
+ * getWCAGContrastRatio('#000000', '#ff0000') // 4.23
  * ```
  */
-export function getContrastRatio(c1: string, c2: string): number {
+export function getWCAGContrastRatio(c1: string, c2: string): number {
   const _c1 = createMagicColor(c1).toRgb().value
   const _c2 = createMagicColor(c2).toRgb().value
 
@@ -47,7 +47,7 @@ export function getContrastRatio(c1: string, c2: string): number {
  * calcuRelativeLuminance([255, 0, 0]) // 0.2126
  * ```
  */
-export function calcuRelativeLuminance(rgb: RgbColor): number {
+function calcuRelativeLuminance(rgb: RgbColor): number {
   const [red, green, blue] = rgb.map((channel) => {
     const channelNormalized = channel / 255
     return channelNormalized <= 0.03928
@@ -56,45 +56,6 @@ export function calcuRelativeLuminance(rgb: RgbColor): number {
   })
 
   return 0.2126 * red + 0.7152 * green + 0.0722 * blue
-}
-
-/**
- * Determine whether a color is a warm color.
- *
- * 判断颜色是否是暖色。
- *
- * @param color The color to be judged.
- *
- * @returns Whether the color is a warm color.
- *
- * @example
- * ```ts
- * isWarmColor('#ff0000') // true
- * isWarmColor('#00ff00') // false
- * ```
- */
-export function isWarmColor(color: string): boolean {
-  const [r, g, b] = createMagicColor(color).toRgb().value
-  let hue = 0
-  if (r === g && g === b) {
-    hue = 0 // 灰色
-  }
-  else {
-    const max = Math.max(r, g, b)
-    const min = Math.min(r, g, b)
-    const delta = max - min
-
-    if (max === r)
-      hue = (g - b) / delta + (g < b ? 6 : 0)
-    else if (max === g)
-      hue = (b - r) / delta + 2
-    else
-      hue = (r - g) / delta + 4
-
-    hue *= 60
-  }
-
-  return (hue >= 0 && hue <= 60) || (hue >= 300 && hue <= 360)
 }
 
 interface ReadableOptions {
@@ -141,5 +102,5 @@ export function getReadableTextColor(options: ReadableOptions | string) {
     ratio = 4.5,
   } = _options
 
-  return getContrastRatio(bgColor, textColor) >= ratio ? textColor : fallbackTextColor
+  return getWCAGContrastRatio(bgColor, textColor) >= ratio ? textColor : fallbackTextColor
 }

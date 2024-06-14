@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getContrastRatio } from 'magic-color'
+import { getWCAGContrastRatio } from 'magic-color'
 import { computed, defineProps } from 'vue'
 
 const props = defineProps<{
@@ -8,7 +8,7 @@ const props = defineProps<{
   ratio: number
 }>()
 
-const calcRatio = computed(() => getContrastRatio(props.backgroundColor, props.color))
+const calcRatio = computed(() => getWCAGContrastRatio(props.backgroundColor, props.color))
 const isDisplay = computed(() => calcRatio.value >= props.ratio)
 </script>
 
