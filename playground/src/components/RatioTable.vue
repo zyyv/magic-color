@@ -7,21 +7,22 @@ defineProps<{
   colors: ReturnType<typeof theme>
 }>()
 
-const contrasts = ['WCAG', 'APCA']
+type ContrastType = 'WCAG' | 'APCA'
+
+const contrasts: ContrastType[] = ['APCA', 'WCAG']
 const WCAG_Options = [
   { label: 'All', value: 1 },
-  { label: '4.5+ AA', value: 4.5 },
-  { label: '7+ AAA', value: 7 },
+  { label: '4.5+ (AA)', value: 4.5 },
+  { label: '7+ (AAA)', value: 7 },
 ]
 const APCA_Options = [
   { label: 'All', value: 0 },
-  { label: '50%+', value: 0.5 },
-  { label: '70%+', value: 0.7 },
-  { label: '90%+', value: 0.9 },
+  { label: '75%+', value: 75 },
+  { label: '90%+', value: 90 },
 ]
 
-const ratio = ref(1)
-const type = ref('WCAG')
+const ratio = ref(APCA_Options[0].value)
+const type = ref<ContrastType>('APCA')
 const options = computed(() => type.value === 'WCAG' ? WCAG_Options : APCA_Options)
 
 watch(type, () => ratio.value = options.value[0].value)
@@ -35,20 +36,22 @@ watch(type, () => ratio.value = options.value[0].value)
           <li
             v-for="c in contrasts" :key="c"
             text-sm px-2 cursor-pointer rd-sm
-            :class="type === c ? 'bg-purple/10 text-purple' : ''"
+            :class="type === c ? 'bg-purple/10 text-purple' : 'text-#999'"
             @click="type = c"
           >
             {{ c }}
           </li>
         </ul>
         <h2 w-fit text-xl text-transparent bg-clip-text bg-gradient-to-r from-purple to-yellow>
-          Ratio Table
+          Ratio
+          <i class="c-yellow/90" i-carbon-table-alias />
+          Table
         </h2>
-        <ul b="~ #3c3c3c" px2 py1 rd pa top-0 right-0 fcc gap-2>
+        <ul b="~ #3c3c3c" p1 rd pa top-0 right-0 fcc gap-2>
           <li
             v-for="opt in options" :key="opt.value"
             text-sm px-2 cursor-pointer rd-sm
-            :class="ratio === opt.value ? 'bg-yellow/10 text-yellow' : ''"
+            :class="ratio === opt.value ? 'bg-yellow/10 text-yellow' : 'text-#999'"
             @click="ratio = opt.value"
           >
             {{ opt.label }}

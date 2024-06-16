@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getAPCAContrastRatio, getWCAGContrastRatio } from 'magic-color'
+import { calcAPCA, getWCAGContrastRatio } from 'magic-color'
 import { computed, defineProps } from 'vue'
 
 const props = defineProps<{
@@ -10,38 +10,37 @@ const props = defineProps<{
 }>()
 
 const calcRatio = computed(() => {
-  if (props.type === 'WCAG') {
+  if (props.type === 'WCAG')
     return getWCAGContrastRatio(props.backgroundColor, props.color)
-  }
-  else if (props.type === 'APCA') {
-    return getAPCAContrastRatio(props.backgroundColor, props.color)
-  }
+
+  else if (props.type === 'APCA')
+    return calcAPCA(props.backgroundColor, props.color)
+
   return 'N/A'
 })
 const isDisplay = computed(() => {
-  if (props.type === 'WCAG') {
-    return calcRatio.value >= props.ratio
-  }
-  else if (props.type === 'APCA') {
-    return Math.abs(calcRatio.value) >= props.ratio
-  }
+  if (props.type === 'WCAG')
+    return Number(calcRatio.value) >= props.ratio
+
+  else if (props.type === 'APCA')
+    return Math.abs(Number(calcRatio.value)) >= props.ratio
+
   return false
 })
 const text = computed(() => {
   if (isDisplay.value) {
-    if (props.type === 'WCAG') {
+    if (props.type === 'WCAG')
       return calcRatio.value
-    }
-    else if (props.type === 'APCA') {
-      return `${Math.floor(calcRatio.value * 100)}%`
-    }
+
+    else if (props.type === 'APCA')
+      return (Number(calcRatio.value.toString())).toFixed(1)
   }
   return ''
 })
 </script>
 
 <template>
-  <div class="squared" :class="[isDisplay ? '' : 'placeholder']" :style="isDisplay ? { backgroundColor, color } : {}">
+  <div class="squared" trans :class="[isDisplay ? '' : 'placeholder']" :style="isDisplay ? { backgroundColor, color } : {}">
     {{ text }}
   </div>
 </template>
