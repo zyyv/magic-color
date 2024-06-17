@@ -9,7 +9,7 @@
     "build": "pnpm -r -F=\"./packages/*\" run build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepublishOnly": "nr build",
+    "prepublishOnly": "nr sync-docs && nr build",
     "release": "nr lint:fix && bumpp -r",
     "test": "vitest",
     "test:update": "vitest -u",
@@ -19,7 +19,8 @@
     "play:build": "pnpm -C playground build && esno scripts/move-build-files.ts",
     "talk": "pnpm -C talk dev",
     "talk:build": "pnpm -C talk build",
-    "deploy": "rimraf dist && nr build && nr talk:build && nr play:build"
+    "deploy": "rimraf dist && nr build && nr talk:build && nr play:build",
+    "sync-docs": "esno scripts/sync-docs.ts"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.21.1",
