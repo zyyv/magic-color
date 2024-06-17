@@ -50,8 +50,9 @@ export function APCAcontrast(txtY: number, bgY: number, places = -1) {
     Number.isNaN(txtY)
     || Number.isNaN(bgY)
     || Math.min(txtY, bgY) < icp[0]
-
-    || Math.max(txtY, bgY) > icp[1]) {
+    || Math.max(txtY, bgY) > icp[1]
+  ) {
+    // --
     return 0.0
   }
 

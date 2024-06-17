@@ -163,7 +163,8 @@ theme('#9955ff', {
 
 ## Credits
 
-- [theme-colors](https://github.com/unjs/theme-colors) - (*Better than it*)
+- [apca-w3](https://github.com/Myndex/apca-w3)
+- [theme-colors](https://github.com/unjs/theme-colors)
 
 ## license
 
