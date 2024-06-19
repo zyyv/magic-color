@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { theme } from 'magic-color'
-import ThemeButtons from './ThemeButtons.vue'
-import ThemeHue from './ThemeHue.vue'
+import ThemeColors from './ThemeColors.vue'
+import RatioTable from './RatioTable.vue'
 
 const color = defineModel<string>()
-
-const results = computed(() => {
+const colors = computed(() => {
   try {
     return theme(color.value!)
   }
@@ -17,7 +16,7 @@ const results = computed(() => {
 
 <template>
   <div fccc>
-    <ThemeButtons :theme="results" />
-    <ThemeHue :theme="results" />
+    <ThemeColors :colors />
+    <RatioTable :colors />
   </div>
 </template>
