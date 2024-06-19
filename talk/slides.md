@@ -731,10 +731,10 @@ transition: fade-out
 提供基本的颜色转换、颜色搭配、颜色生成等功能。
 
 ```ts {monaco-run}
-import { createMagicColor } from 'magic-color'
+import { MagicColor } from 'magic-color'
 
 const colorString = 'rgb(255, 0, 0)'
-const color = createMagicColor(colorString)
+const color = new MagicColor(colorString)
 
 console.log(color.toString())
 ```

@@ -1,6 +1,6 @@
 import { type PropType, computed, defineComponent, h, onMounted, ref, useModel, watch } from 'vue'
 import type { RgbColor } from 'magic-color'
-import { createMagicColor } from 'magic-color'
+import { MagicColor } from 'magic-color'
 import { useControlBlock } from './hook'
 
 export default /* @__PURE__ */ defineComponent({
@@ -81,12 +81,12 @@ export default /* @__PURE__ */ defineComponent({
     function getBarBgColor() {
       switch (props.type) {
         case 'alpha': {
-          const rgb = createMagicColor(props.color, 'hex', model.value).toRgb().value
+          const rgb = new MagicColor(props.color, 'hex', model.value).toRgb().value
           const c = rgb.map(i => i + Math.round((255 - i) * (1 - model.value))) as RgbColor
-          return createMagicColor(c, 'rgb', model.value).toString()
+          return new MagicColor(c, 'rgb', model.value).toString()
         }
         case 'hue':
-          return createMagicColor([Math.round(model.value * 360), 100, 100], 'hsb', 1).toHex().toString()
+          return new MagicColor([Math.round(model.value * 360), 100, 100], 'hsb', 1).toHex().toString()
         default:
           return props.barColor
       }

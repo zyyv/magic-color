@@ -1,5 +1,5 @@
 import type { ColorType, RgbColor } from '@magic-color/core'
-import { createMagicColor } from './core'
+import { MagicColor } from './core'
 
 function tint(components: RgbColor, intensity: number) {
   return components.map(c => Math.round(c + (255 - c) * intensity)) as RgbColor
@@ -75,7 +75,7 @@ export interface ThemeOptions {
  * @returns ThemeMetas
  */
 export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
-  const mc = createMagicColor(color)
+  const mc = new MagicColor(color)
 
   const defaultOptions: ThemeOptions = {
     type: mc.type,
@@ -90,16 +90,16 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
 
     switch (type) {
       case 'hsl':
-        cs = createMagicColor(meta[1], 'rgb').toHsl().toString()
+        cs = new MagicColor(meta[1], 'rgb').hsl()
         break
       case 'hsb':
-        cs = createMagicColor(meta[1], 'rgb').toHsb().toString()
+        cs = new MagicColor(meta[1], 'rgb').hsb()
         break
       case 'hex':
-        cs = createMagicColor(meta[1], 'rgb').toHex().toString()
+        cs = new MagicColor(meta[1], 'rgb').hex()
         break
       case 'rgb':
-        cs = createMagicColor(meta[1], 'rgb').toRgb().toString()
+        cs = new MagicColor(meta[1], 'rgb').rgb()
         break
       default:
         throw new Error(`Invalid type: ${type}`)

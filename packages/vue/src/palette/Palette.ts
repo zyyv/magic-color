@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, ref, useModel } from 'vue'
 import type { ColorType, ColorValue, HexColor, HsbColor, HslColor, RgbColor } from 'magic-color'
-import { createMagicColor } from 'magic-color'
+import { MagicColor } from 'magic-color'
 import PalettePanel from './PalettePanel'
 import PalettePreview from './PalettePreview'
 import PaletteControls from './PaletteControls'
@@ -16,23 +16,23 @@ export default /* @__PURE__ */ defineComponent({
     const color = useModel(props, 'color')
     const alpha = useModel(props, 'alpha')
 
-    const type = ref<ColorType>(createMagicColor(color.value).type)
+    const type = ref<ColorType>(new MagicColor(color.value).type)
 
     const mcHsbColor = computed({
-      get: () => createMagicColor(color.value).toHsb().value,
+      get: () => new MagicColor(color.value).toHsb().value,
       set: (v) => {
         switch (type.value) {
           case 'hex':
-            color.value = createMagicColor(v, 'hsb').toHex().toString()
+            color.value = new MagicColor(v, 'hsb').hex()
             break
           case 'rgb':
-            color.value = createMagicColor(v, 'hsb').toRgb().toString()
+            color.value = new MagicColor(v, 'hsb').rgb()
             break
           case 'hsl':
-            color.value = createMagicColor(v, 'hsb').toHsl().toString()
+            color.value = new MagicColor(v, 'hsb').hsl()
             break
           case 'hsb':
-            color.value = createMagicColor(v, 'hsb').toString()
+            color.value = new MagicColor(v, 'hsb').toString()
             break
           default:
             break
@@ -49,10 +49,10 @@ export default /* @__PURE__ */ defineComponent({
       },
     })
 
-    const controlColor = computed(() => createMagicColor(color.value).toHex().toString())
+    const controlColor = computed(() => new MagicColor(color.value).toHex().toString())
 
     const displayBgColor = computed(() => {
-      const mcColor = createMagicColor(color.value)
+      const mcColor = new MagicColor(color.value)
       mcColor.alpha = alpha.value
       return mcColor.toRgb().toString(true)
     })
@@ -61,13 +61,13 @@ export default /* @__PURE__ */ defineComponent({
       get: () => {
         switch (type.value) {
           case 'hex':
-            return createMagicColor(color.value).toHex().value
+            return new MagicColor(color.value).toHex().value
           case 'rgb':
-            return createMagicColor(color.value).toRgb().value
+            return new MagicColor(color.value).toRgb().value
           case 'hsl':
-            return createMagicColor(color.value).toHsl().value
+            return new MagicColor(color.value).toHsl().value
           case 'hsb':
-            return createMagicColor(color.value).toHsb().value
+            return new MagicColor(color.value).toHsb().value
           default:
             return ''
         }
@@ -75,16 +75,16 @@ export default /* @__PURE__ */ defineComponent({
       set: (v: ColorValue) => {
         switch (type.value) {
           case 'hex':
-            color.value = createMagicColor(v as HexColor, 'hex').toString()
+            color.value = new MagicColor(v as HexColor, 'hex').toString()
             break
           case 'rgb':
-            color.value = createMagicColor(v as RgbColor, 'rgb').toString()
+            color.value = new MagicColor(v as RgbColor, 'rgb').toString()
             break
           case 'hsl':
-            color.value = createMagicColor(v as HslColor, 'hsl').toString()
+            color.value = new MagicColor(v as HslColor, 'hsl').toString()
             break
           case 'hsb':
-            color.value = createMagicColor(v as HsbColor, 'hsb').toString()
+            color.value = new MagicColor(v as HsbColor, 'hsb').toString()
             break
           default:
             break

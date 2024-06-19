@@ -31,7 +31,7 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
         throw new TypeError('Invalid color type.')
       }
     }
-    else if (args.length >= 2) {
+    else if ([2, 3].includes(args.length)) {
       if (typeof args[0] === 'string') {
         const {
           value,
@@ -57,23 +57,23 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     }
   }
 
-  toString(withOpacity = false): string {
+  toString(withAlpha = false): string {
     switch (this.type) {
       case 'keyword':
-        return this.value + (withOpacity ? alphaToString(this.alpha, true) : '')
+        return this.value + (withAlpha ? alphaToString(this.alpha, true) : '')
 
       case 'hex':
-        return withOpacity
+        return withAlpha
           ? this.value + alphaToString(this.alpha, true)
           : this.value as HexColor
 
       case 'rgb':
-        return withOpacity
+        return withAlpha
           ? `rgba(${(this.value as RgbColor).join(', ')}, ${alphaToString(this.alpha)})`
           : `rgb(${(this.value as RgbColor).join(', ')})`
 
       case 'hsl':
-        return `${this.type}${withOpacity ? 'a' : ''}(${[this.value[0], `${this.value[1]}%`, `${this.value[2]}%`].join(', ')}${withOpacity ? `, ${alphaToString(this.alpha)}` : ''})`
+        return `${this.type}${withAlpha ? 'a' : ''}(${[this.value[0], `${this.value[1]}%`, `${this.value[2]}%`].join(', ')}${withAlpha ? `, ${alphaToString(this.alpha)}` : ''})`
 
       case 'hsb':
         return `${this.type}(${[this.value[0], `${this.value[1]}%`, `${this.value[2]}%`].join(', ')})`
@@ -186,6 +186,22 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     }
   }
 
+  hex(withAlpha = false) {
+    return this.toHex().toString(withAlpha)
+  }
+
+  rgb(withAlpha = false) {
+    return this.toRgb().toString(withAlpha)
+  }
+
+  hsl(withAlpha = false) {
+    return this.toHsl().toString(withAlpha)
+  }
+
+  hsb(withAlpha = false) {
+    return this.toHsb().toString(withAlpha)
+  }
+
   private _push<T extends ColorType = any>(value: Colors[T], type: ColorType, alpha: Opacity) {
     this._stack.push(new MagicColor(value, type, alpha))
     // @ts-expect-error - value is not assignable to type Colors[T]
@@ -227,27 +243,6 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     mc.cloned = true
     return mc
   }
-}
-
-export function createMagicColor<T extends ColorType = any>(value: string, type?: T, alpha?: Opacity): MagicColor<T>
-export function createMagicColor<T extends ColorType = any>(value: Colors[T], type: T, alpha?: Opacity): MagicColor<T>
-export function createMagicColor<T extends ColorType = any>(value: Colors[T] | string, type?: T, alpha?: Opacity): MagicColor<T> {
-  if (typeof value === 'string') {
-    const {
-      value: _value,
-      type: _type,
-      alpha: _opacity,
-    } = resolveColorString(value)
-
-    if (type && type !== _type)
-      throw new Error(`Invalid color type: ${_type}.`)
-
-    return new MagicColor<any>(_value, _type, alpha ?? _opacity)
-  }
-
-  alpha = alpha ?? 1
-
-  return new MagicColor<T>(value, type!, alpha)
 }
 
 export function alphaToString(alpha: Opacity, toHex = false): string {
@@ -292,5 +287,3 @@ export function guessType(color: string): ColorType | undefined {
       return type as ColorType
   }
 }
-
-export const mc: typeof createMagicColor = createMagicColor
