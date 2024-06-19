@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { calcAPCA, getWCAGContrastRatio } from 'magic-color'
+import { calcAPCA, calcWCAG } from 'magic-color'
 import { computed } from 'vue'
 
 const props = defineProps<{
@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const calcRatio = computed(() => {
   if (props.type === 'WCAG')
-    return getWCAGContrastRatio(props.backgroundColor, props.color)
+    return calcWCAG(props.backgroundColor, props.color)
 
   else if (props.type === 'APCA')
     return calcAPCA(props.backgroundColor, props.color)
@@ -35,7 +35,8 @@ const text = computed(() => {
     else if (props.type === 'APCA')
       return (Number(calcRatio.value.toString())).toFixed(1)
   }
-  return ''
+
+  return undefined
 })
 </script>
 

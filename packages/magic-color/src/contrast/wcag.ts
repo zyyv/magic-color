@@ -1,5 +1,6 @@
 import type { RgbColor } from '@magic-color/core'
 import { createMagicColor } from '../core/basic'
+import { SA98G } from './constant'
 
 /**
  * Get the contrast ratio between two colors. The contrast ratio is a value between 1 and 21.
@@ -13,12 +14,12 @@ import { createMagicColor } from '../core/basic'
  *
  * @example
  * ```ts
- * getWCAGContrastRatio('#000000', '#ffffff') // 21
- * getWCAGContrastRatio('#000000', '#000000') // 1
- * getWCAGContrastRatio('#000000', '#ff0000') // 4.23
+ * calcWCAG('#000000', '#ffffff') // 21
+ * calcWCAG('#000000', '#000000') // 1
+ * calcWCAG('#000000', '#ff0000') // 4.23
  * ```
  */
-export function getWCAGContrastRatio(c1: string, c2: string): number {
+export function calcWCAG(c1: string, c2: string): number {
   const _c1 = createMagicColor(c1).toRgb().value
   const _c2 = createMagicColor(c2).toRgb().value
 
@@ -55,7 +56,7 @@ function calcuRelativeLuminance(rgb: RgbColor): number {
       : ((channelNormalized + 0.055) / 1.055) ** 2.4
   })
 
-  return 0.2126 * red + 0.7152 * green + 0.0722 * blue
+  return SA98G.sRco * red + SA98G.sGco * green + SA98G.sBco * blue
 }
 
 interface ReadableOptions {
@@ -102,5 +103,5 @@ export function getReadableTextColor(options: ReadableOptions | string) {
     ratio = 4.5,
   } = _options
 
-  return getWCAGContrastRatio(bgColor, textColor) >= ratio ? textColor : fallbackTextColor
+  return calcWCAG(bgColor, textColor) >= ratio ? textColor : fallbackTextColor
 }
