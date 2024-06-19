@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { calcAPCA, getWCAGContrastRatio } from 'magic-color'
-import { computed, defineProps } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps<{
   backgroundColor: string

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { theme } from 'magic-color'
-import { defineProps } from 'vue'
 import ThemeColorItem from './ThemeColorItem.vue'
 
 defineProps<{

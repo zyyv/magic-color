@@ -1,3 +1,8 @@
+/**
+ * Credit to [@Myndex](https://github.com/Myndex) and copy from [apca-w3](https://github.com/Myndex/apca-w3)
+ * @see https://github.com/Myndex/apca-w3
+ */
+
 import type { RgbColor } from '@magic-color/core'
 import { createMagicColor } from '../core'
 
@@ -39,7 +44,7 @@ const SA98G = {
   mOffsetOut: 0.3128657958707580,
 }
 
-export function APCAcontrast(txtY: number, bgY: number, places = -1) {
+function APCAcontrast(txtY: number, bgY: number, places = -1) {
   // send linear Y (luminance) for text and background.
   // txtY and bgY must be between 0.0-1.0
 // IMPORTANT: Do not swap, polarity is important.
@@ -127,20 +132,106 @@ export function APCAcontrast(txtY: number, bgY: number, places = -1) {
     return (outputContrast * 100.0).toFixed(places)
   }
   else { return 0.0 }
-} // End APCAcontrast()
-
-export function calcAPCA(textColor: string, bgColor: string, places = -1) {
-  return APCAcontrast(
-    sRGBtoY(createMagicColor(textColor).toRgb().value),
-    sRGBtoY(createMagicColor(bgColor).toRgb().value),
-    places,
-  )
 }
 
-export function sRGBtoY(rgb: RgbColor = [0, 0, 0]) { // send sRGB 8bpc (0xFFFFFF) or string
+function sRGBtoY(rgb: RgbColor = [0, 0, 0]) { // send sRGB 8bpc (0xFFFFFF) or string
   const simpleExp = (chan: number) => (chan / 255.0) ** SA98G.mainTRC
 
   return SA98G.sRco * simpleExp(rgb[0])
     + SA98G.sGco * simpleExp(rgb[1])
     + SA98G.sBco * simpleExp(rgb[2])
+}
+
+function alphaBlend(rgbaFG = [0, 0, 0, 1.0], rgbBG = [0, 0, 0], round = true) {
+  rgbaFG[3] = Math.max(Math.min(rgbaFG[3], 1.0), 0.0) // clamp alpha 0-1
+  const compBlend = 1.0 - rgbaFG[3]
+  const rgbOut: RgbColor = [0, 0, 0] // or just use rgbBG to retain other elements?
+
+  for (let i = 0; i < 3; i++) {
+    rgbOut[i] = rgbBG[i] * compBlend + rgbaFG[i] * rgbaFG[3]
+    if (round)
+      rgbOut[i] = Math.min(Math.round(rgbOut[i] as number), 255)
+  };
+  return rgbOut
+}
+
+export function calcAPCA(textColor: string, bgColor: string, places = -1, round = true) {
+  const mcText = createMagicColor(textColor).toRgb()
+  const mcBg = createMagicColor(bgColor).toRgb()
+  const alpha = mcText.alpha
+
+  const bgClr = mcBg.value
+  let txClr = mcText.value
+
+  const hasAlpha = alpha !== 1
+
+  if (hasAlpha)
+    txClr = alphaBlend([...txClr, alpha], bgClr, round)
+
+  return APCAcontrast(sRGBtoY(txClr), sRGBtoY(bgClr), places)
+}
+
+export function reverseAPCA(
+  contrast = 0,
+  color?: string,
+  knownType: 'background' | 'text' = 'background',
+) {
+  if (Math.abs(contrast) < 9)
+    return false
+  // abs contrast must be > 9
+
+  let knownY = color ? sRGBtoY(createMagicColor(color).toRgb().value) : 1.0
+  let unknownY = knownY
+  let knownExp
+  let unknownExp
+
+  /// //   APCA   0.0.98G - 4g - W3 Compatible Constants   ////////////////////
+
+  const scale = contrast > 0 ? SA98G.scaleBoW : SA98G.scaleWoB
+  const offset = contrast > 0 ? SA98G.loBoWoffset : -SA98G.loWoBoffset
+
+  contrast = (Number.parseFloat(contrast.toString()) * 0.01 + offset) / scale
+
+  // Soft clamps Y if it is near black.
+  knownY = (knownY > SA98G.blkThrs)
+    ? knownY
+    : knownY + (SA98G.blkThrs - knownY) ** SA98G.blkClmp
+
+  // set the known and unknown exponents
+  if (knownType === 'background') {
+    knownExp = contrast > 0 ? SA98G.normBG : SA98G.revBG
+    unknownExp = contrast > 0 ? SA98G.normTXT : SA98G.revTXT
+    unknownY = (knownY ** knownExp - contrast) ** (1 / unknownExp)
+    if (Number.isNaN(unknownY))
+      return false
+  }
+  else if (knownType === 'text') {
+    knownExp = contrast > 0 ? SA98G.normTXT : SA98G.revTXT
+    unknownExp = contrast > 0 ? SA98G.normBG : SA98G.revBG
+    unknownY = (contrast + knownY ** knownExp) ** (1 / unknownExp)
+    if (Number.isNaN(unknownY))
+      return false
+  }
+  else { return false } // return false on error
+
+  // return contrast +'----'+unknownY;
+
+  if (unknownY > 1.06 || unknownY < 0)
+    return false // return false on overflow
+  // if (unknownY < 0) { return false } // return false on underflow
+  // unknownY = Math.max(unknownY,0.0);
+
+  //  unclamp
+  unknownY = (unknownY > SA98G.blkThrs)
+    ? unknownY
+    : (((unknownY + SA98G.mOffsetIn) * SA98G.mFactor) ** SA98G.mExp * SA98G.mFactInv) - SA98G.mOffsetOut
+
+  //    unknownY - 0.22 * Math.pow(unknownY*0.5, 1/blkClmp);
+
+  unknownY = Math.max(Math.min(unknownY, 1.0), 0.0)
+
+  const hexB = (Math.round(unknownY ** SA98G.mainTRCencode * 255)
+  ).toString(16).padStart(2, '0')
+
+  return `#${hexB}${hexB}${hexB}`
 }

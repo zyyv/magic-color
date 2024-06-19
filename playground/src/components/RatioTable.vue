@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { theme } from 'magic-color'
-import { computed, defineProps, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import RatioTableSquare from './RatioTableSquare.vue'
 
 defineProps<{

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { theme } from 'magic-color'
 import { getReadableTextColor } from 'magic-color'
-import { defineProps } from 'vue'
 
 defineProps<{
   k: string

@@ -164,6 +164,7 @@ theme('#9955ff', {
 ## Credits
 
 - [apca-w3](https://github.com/Myndex/apca-w3)
+- [chroma.js](https://github.com/gka/chroma.js)
 - [theme-colors](https://github.com/unjs/theme-colors)
 
 ## license
