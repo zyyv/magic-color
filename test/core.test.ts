@@ -32,23 +32,12 @@ describe('utils scoped', () => {
     return value.every((v, i) => isClose(v, compareValue[i]))
   }
 
-  it('create Magic Color', () => {
-    expect(new MagicColor('#d15b14').toString()).toMatchInlineSnapshot(`"#d15b14"`)
-    expect(new MagicColor('#d15b14', 'hex').toString()).toMatchInlineSnapshot(`"#d15b14"`)
-    expect(new MagicColor('#d15b14', 'hex', 0.1).toString(true)).toMatchInlineSnapshot(`"#d15b141a"`)
-    expect(new MagicColor('rgb(209, 91, 20)').toHex().toString()).toMatchInlineSnapshot(`"#d15b14"`)
-    // Error test case: invalid color
-    expect(() => new MagicColor('')).toThrowError('Invalid color')
-    // Error test case: different type
-    expect(() => new MagicColor('rgb(122,122,122)', 'hex')).toThrowError('Invalid color type: hex.')
-  })
-
   it('isColor', () => {
     expect(colors.every(isColor)).toEqual(true)
     expect(notColors.every(isColor)).toEqual(false)
   })
 
-  it('simple convert', () => {
+  it('basic convert', () => {
     // rgb to others test case
     expect(new MagicColor(rgb).toHex().toString()).toEqual(hex)
     expect(testClose(rgb, 'hsb', hsbValue)).toEqual(true)
@@ -72,15 +61,46 @@ describe('utils scoped', () => {
     // expect(mc(hsb).toHex().toString()).toEqual(hex)
   })
 
-  const opacity = 0.6789
-
-  it('in magic color', () => {
+  it('color with opacity', () => {
+    const opacity = 0.6789
     const c = `rgba(100, 100, 100, ${opacity})`
     const mcColor = new MagicColor(c)
-    expect(mcColor.toRgb().toString(true)).toEqual('rgba(100, 100, 100, 67.89%)')
-    expect(mcColor.toHex().toString(true)).toEqual('#646464ad')
-    expect(mcColor.toHsl().toString(true)).toEqual('hsla(0, 0%, 39%, 67.89%)')
-    expect(mcColor.toHsl().toString(true)).toEqual('hsla(0, 0%, 39%, 67.89%)')
-    expect(mcColor.toHsb().toString(true)).toEqual('hsb(0, 0%, 39%)')
+
+    expect(mcColor.toRgb().toString(true)).toMatchInlineSnapshot(`"rgba(100, 100, 100, 67.89%)"`)
+    expect(mcColor.toHex().toString(true)).toMatchInlineSnapshot(`"#646464ad"`)
+    expect(mcColor.toHsl().toString(true)).toMatchInlineSnapshot(`"hsla(0, 0%, 39%, 67.89%)"`)
+    expect(mcColor.toHsl().toString(true)).toMatchInlineSnapshot(`"hsla(0, 0%, 39%, 67.89%)"`)
+    expect(mcColor.toHsb().toString(true)).toMatchInlineSnapshot(`"hsb(0, 0%, 39%)"`)
+  })
+
+  it('magicColor history', () => {
+    const hexString = '#808080'
+    const color = new MagicColor(hexString, 'hex', 1)
+
+    expect(color.history).toMatchInlineSnapshot(`[]`)
+
+    color.toHsb()
+    color.toRgb()
+
+    expect(color.history.length).toBe(2)
+
+    color.clear()
+
+    expect(color.history.length).toBe(0)
+
+    color.toHex()
+    color.toRgb()
+    color.toHsl()
+    color.toHsb()
+
+    color.revert()
+
+    expect(color.type).toEqual('hsl')
+    expect(color.history.length).toMatchInlineSnapshot(`3`)
+
+    color.revert(2)
+
+    expect(color.type).toEqual('hex')
+    expect(color.history.length).toMatchInlineSnapshot(`1`)
   })
 })

@@ -1,4 +1,4 @@
-import { createMagicColor } from '../core'
+import { MagicColor } from '../core'
 
 export * from './apca'
 export * from './wcag'
@@ -19,7 +19,7 @@ export * from './wcag'
  * ```
  */
 export function isWarmColor(color: string): boolean {
-  const [r, g, b] = createMagicColor(color).toRgb().value
+  const [r, g, b] = new MagicColor(color).toRgb().value
   let hue = 0
   if (r === g && g === b) {
     hue = 0 // 灰色

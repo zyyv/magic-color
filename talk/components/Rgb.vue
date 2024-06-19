@@ -1,6 +1,6 @@
 <script lang='ts' setup>
 import { computed, ref } from 'vue'
-import { mc } from 'magic-color'
+import { MagicColor } from 'magic-color'
 
 const { hex } = defineProps<{ hex?: boolean }>()
 
@@ -31,6 +31,6 @@ function toHexColor(value: number) {
       {{ hex ? toHexColor(b) : '' }}
     </div>
     <div w-20 h-20 trans :style="{ backgroundColor: color }" b />
-    {{ hex ? mc(color).toHex().toString().toUpperCase() : color }}
+    {{ hex ? new MagicColor(color).hex().toUpperCase() : color }}
   </div>
 </template>
