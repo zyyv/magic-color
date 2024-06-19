@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ColorType } from 'magic-color'
-import { MagicColor, isColor, mc } from 'magic-color'
+import { MagicColor, isColor } from 'magic-color'
 
 describe('utils scoped', () => {
   const hex = '#d15b14'
@@ -27,7 +27,7 @@ describe('utils scoped', () => {
   }
 
   function testClose<T extends Omit<ColorType, 'hex'>>(valueString: string, type: T, compareValue: number[]) {
-    const color = mc(valueString)
+    const color = new MagicColor(valueString)
     const value = color.to(type as any).value as number[]
     return value.every((v, i) => isClose(v, compareValue[i]))
   }
@@ -39,12 +39,12 @@ describe('utils scoped', () => {
 
   it('basic convert', () => {
     // rgb to others test case
-    expect(mc(rgb).toHex().toString()).toEqual(hex)
+    expect(new MagicColor(rgb).toHex().toString()).toEqual(hex)
     expect(testClose(rgb, 'hsb', hsbValue)).toEqual(true)
     expect(testClose(rgb, 'hsl', hslValue)).toEqual(true)
 
     // hex to others test case
-    expect(mc(hex).toRgb().toString()).toEqual(rgb)
+    expect(new MagicColor(hex).toRgb().toString()).toEqual(rgb)
     expect(testClose(hex, 'hsb', hsbValue)).toEqual(true)
     expect(testClose(hex, 'hsl', hslValue)).toEqual(true)
 
@@ -64,7 +64,7 @@ describe('utils scoped', () => {
   it('color with opacity', () => {
     const opacity = 0.6789
     const c = `rgba(100, 100, 100, ${opacity})`
-    const mcColor = mc(c)
+    const mcColor = new MagicColor(c)
 
     expect(mcColor.toRgb().toString(true)).toMatchInlineSnapshot(`"rgba(100, 100, 100, 67.89%)"`)
     expect(mcColor.toHex().toString(true)).toMatchInlineSnapshot(`"#646464ad"`)
@@ -77,88 +77,30 @@ describe('utils scoped', () => {
     const hexString = '#808080'
     const color = new MagicColor(hexString, 'hex', 1)
 
-    expect(color.history).toMatchInlineSnapshot(`
-      [
-        MagicColor {
-          "_stack": [Circular],
-          "alpha": 1,
-          "cloned": false,
-          "type": "hex",
-          "value": "#808080",
-        },
-      ]
-    `)
+    expect(color.history).toMatchInlineSnapshot(`[]`)
 
     color.toHsb()
+    color.toRgb()
 
-    expect(color.history).toMatchInlineSnapshot(`
-      [
-        MagicColor {
-          "_stack": [Circular],
-          "alpha": 1,
-          "cloned": false,
-          "type": "hsb",
-          "value": [
-            0,
-            0,
-            50,
-          ],
-        },
-        MagicColor {
-          "_stack": [
-            [Circular],
-          ],
-          "alpha": 1,
-          "cloned": false,
-          "type": "hsb",
-          "value": [
-            0,
-            0,
-            50,
-          ],
-        },
-      ]
-    `)
+    expect(color.history.length).toBe(2)
 
-    // hex -> hex => rgb => hsl => hsb => rgb => hex
+    color.clear()
 
-    // color.toHsb().toRgb().toHsl().toHsb().toRgb().toHex()
+    expect(color.history.length).toBe(0)
 
-    // expect(color.history.length).toEqual(7)
-    // expect(color.first.value).toEqual(hexString)
-    // expect(color.last.value).toEqual(hexString)
-    // color.revert()
-    // expect(color.history.map(i => i.type)).toMatchInlineSnapshot(`
-    //   [
-    //     "rgb",
-    //     "hsb",
-    //     "rgb",
-    //     "hsl",
-    //     "hsb",
-    //     "rgb",
-    //     "hex",
-    //   ]
-    // `)
-    // expect(color.history.length).toEqual(6)
-    // expect(color.type).toEqual('rgb')
-    // color.revert(2)
-    // expect(color.type).toEqual('hsl')
-    // expect(color.last).toMatchInlineSnapshot(`
-    //   MagicColor {
-    //     "_stack": [
-    //       [Circular],
-    //     ],
-    //     "alpha": 1,
-    //     "type": "hsb",
-    //     "value": [
-    //       0,
-    //       0,
-    //       50,
-    //     ],
-    //   }
-    // `)
-    // expect(color.last.type).toEqual('hsl')
-    // color.revert()
-    // expect(color.last.value).toEqual(hex)
+    color.toHex()
+    color.toRgb()
+    color.toHsl()
+    color.toHsb()
+
+    color.revert()
+
+    expect(color.type).toEqual('hsl')
+    expect(color.history.length).toMatchInlineSnapshot(`3`)
+
+    color.revert(2)
+
+    expect(color.type).toEqual('hex')
+    expect(color.history.length).toMatchInlineSnapshot(`1`)
   })
 })

@@ -230,7 +230,7 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     this.type = mc.type
     this.value = mc.value
     this.alpha = mc.alpha
-    this._stack.slice(0, this._stack.length - deep)
+    this._stack = this._stack.slice(0, this._stack.length - deep)
   }
 
   clear() {
