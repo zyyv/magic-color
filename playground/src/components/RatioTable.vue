@@ -29,8 +29,8 @@ watch(type, () => ratio.value = options.value[0].value)
 </script>
 
 <template>
-  <section my-8 c-white fccc ma w-full>
-    <div>
+  <section my-8 w-700px>
+    <section c-white>
       <div fcc mb-4 pr>
         <ul b="~ #3c3c3c" p1 rd pa top-0 left-0 fcc gap-2>
           <li
@@ -133,7 +133,7 @@ watch(type, () => ratio.value = options.value[0].value)
           </tr>
         </tbody>
       </table>
-    </div>
+    </section>
   </section>
 </template>
 

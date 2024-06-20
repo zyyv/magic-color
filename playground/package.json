@@ -11,6 +11,7 @@
   "dependencies": {
     "@magic-color/vue": "workspace:*",
     "@vueuse/core": "^10.10.1",
+    "chart.js": "^4.4.3",
     "vue": "^3.4.27"
   },
   "devDependencies": {
