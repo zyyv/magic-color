@@ -34,3 +34,7 @@ export interface Colors {
 
 export type ColorType = keyof Colors
 export type ColorValue = Colors[keyof Colors]
+
+export interface UnoColors {
+  [key: string]: UnoColors & { DEFAULT?: string } | string
+}

@@ -10,7 +10,7 @@ import { SA98G } from './constant'
 function APCAcontrast(txtY: number, bgY: number, places = -1) {
   // send linear Y (luminance) for text and background.
   // txtY and bgY must be between 0.0-1.0
-// IMPORTANT: Do not swap, polarity is important.
+  // IMPORTANT: Do not swap, polarity is important.
 
   const icp = [0.0, 1.1] // input range clamp / input error check
 
