@@ -17,8 +17,8 @@ const { copy, copied } = useClipboard()
     class="group"
     important-duration-100
     hover-scale-105 trans fccc
-    p-4 rd-md h-14 md:h-24 text-sm
-    font-mono cursor-pointer
+    p-4 rd-md h-14 md:h-24 text-sm w-22
+    cursor-pointer
     :style="{
       backgroundColor: v,
       color: getReadableTextColor({
@@ -27,10 +27,10 @@ const { copy, copied } = useClipboard()
         fallbackTextColor: colors[900],
       }),
     }"
-    @click="copy(v)"
+    @click="copy(v.toUpperCase())"
   >
     <span>{{ k }}</span>
-    <span>{{ v }}</span>
+    <span>{{ v.toUpperCase() }}</span>
     <i pa top-2 right-2 op-0 group-hover-op-100 trans :class="copied ? 'i-carbon-checkmark' : 'i-carbon-bring-forward'" />
   </div>
 </template>

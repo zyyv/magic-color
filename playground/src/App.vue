@@ -17,5 +17,5 @@ const alpha = ref(1)
       <span text-sm>palette.</span>
     </h1>
   </header>
-  <Container v-model:color="color" v-model:alpha="alpha" mt-8 />
+  <Container v-model:color="color" v-model:alpha="alpha" font-sans mt-8 />
 </template>

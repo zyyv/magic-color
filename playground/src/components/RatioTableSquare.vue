@@ -2,19 +2,24 @@
 import { calcAPCA, calcWCAG } from 'magic-color'
 import { computed } from 'vue'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   backgroundColor: string
   color: string
-  ratio: number
-  type: 'WCAG' | 'APCA'
-}>()
+  text?: string
+  ratio?: number
+  type?: 'WCAG' | 'APCA' | 'NORMAL'
+}>(), {
+  type: 'NORMAL',
+  text: '',
+  ratio: 1,
+})
 
 const calcRatio = computed(() => {
   if (props.type === 'WCAG')
     return calcWCAG(props.backgroundColor, props.color)
 
   else if (props.type === 'APCA')
-    return calcAPCA(props.backgroundColor, props.color)
+    return Number.parseFloat((calcAPCA(props.backgroundColor, props.color) as number).toFixed(1))
 
   return 'N/A'
 })
@@ -25,6 +30,9 @@ const isDisplay = computed(() => {
   else if (props.type === 'APCA')
     return Math.abs(Number(calcRatio.value)) >= props.ratio
 
+  else if (props.type === 'NORMAL')
+    return true
+
   return false
 })
 const text = computed(() => {
@@ -33,10 +41,10 @@ const text = computed(() => {
       return calcRatio.value
 
     else if (props.type === 'APCA')
-      return (Number(calcRatio.value.toString())).toFixed(1)
+      return calcRatio.value
   }
 
-  return undefined
+  return props.text
 })
 </script>
 

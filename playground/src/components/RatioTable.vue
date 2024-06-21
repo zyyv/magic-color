@@ -82,7 +82,7 @@ watch(type, () => ratio.value = options.value[0].value)
         </thead>
         <tbody>
           <tr>
-            <td fw-bold>
+            <td fw-bold text-sm>
               <div>
                 White
               </div>
@@ -99,7 +99,7 @@ watch(type, () => ratio.value = options.value[0].value)
           </tr>
 
           <tr v-for="(_, k) in colors" :key="k">
-            <td fw-bold>
+            <td fw-bold text-sm>
               <div>
                 {{ k }}
               </div>
@@ -116,7 +116,7 @@ watch(type, () => ratio.value = options.value[0].value)
           </tr>
 
           <tr>
-            <td fw-bold>
+            <td fw-bold text-sm>
               <div>
                 Black
               </div>
