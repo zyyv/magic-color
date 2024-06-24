@@ -53,6 +53,5 @@ export const colorbrewer: Record<string, string[]> = {
 }
 
 // add lowercase aliases for case-insensitive matches
-for (const key of Object.keys(colorbrewer)) {
+for (const key of Object.keys(colorbrewer))
   colorbrewer[key.toLowerCase()] = colorbrewer[key]
-}

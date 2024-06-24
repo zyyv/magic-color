@@ -18,6 +18,10 @@ export type HexColor = string
  * CSS color keyword
  */
 export type KeywordColor = string
+/**
+ * [0-100, -128-127, -128-127]
+ */
+export type LabColor = [number, number, number]
 
 /**
  * 0-1
@@ -30,6 +34,7 @@ export interface Colors {
   hex: HexColor
   hsb: HsbColor
   hsl: HslColor
+  lab: LabColor
 }
 
 export type ColorType = keyof Colors

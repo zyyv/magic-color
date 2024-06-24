@@ -1,5 +1,5 @@
-import type { HexColor, HsbColor, HslColor, RgbColor } from '../types'
-import { rgbToHsb } from './rgb'
+import type { HexColor, HsbColor, HslColor, LabColor, RgbColor } from '../types'
+import { rgbToHsb, rgbToLab } from './rgb'
 
 const hexRegex = /^#?([a-f\d]{3}|[a-f\d]{6}|[a-f\d]{8})$/i
 
@@ -69,6 +69,10 @@ export function hexToHsl(color: HexColor): HslColor {
 
 export function hexToHsb(color: HexColor): HsbColor {
   return rgbToHsb(hexToRgb(color))
+}
+
+export function hexToLab(color: HexColor): LabColor {
+  return rgbToLab(hexToRgb(color))
 }
 
 export function toHex(c: number) {

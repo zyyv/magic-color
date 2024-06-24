@@ -1,5 +1,5 @@
-import type { ColorType, Colors, HexColor, HsbColor, HslColor, Opacity, RgbColor } from '@magic-color/core'
-import { hexToHsb, hexToHsl, hexToRgb, hsbToHex, hsbToHsl, hsbToRgb, hslToHex, hslToHsb, hslToRgb, isHex, isHsb, isHsl, isKeyword, isRgb, parseHex, parseHsb, parseHsl, parseKeyword, parseRgb, rgbToHex, rgbToHsb, rgbToHsl } from '@magic-color/core'
+import type { ColorType, Colors, HexColor, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/core'
+import { hexToHsb, hexToHsl, hexToLab, hexToRgb, hsbToHex, hsbToHsl, hsbToLab, hsbToRgb, hslToHex, hslToHsb, hslToLab, hslToRgb, isHex, isHsb, isHsl, isKeyword, isRgb, labToHex, labToHsb, labToHsl, labToRgb, parseHex, parseHsb, parseHsl, parseKeyword, parseLab, parseRgb, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab } from '@magic-color/core'
 import type { ColorObject } from './types'
 
 export class MagicColor<T extends ColorType> implements ColorObject<T> {
@@ -12,8 +12,8 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
   private _stack: MagicColor<any>[] = []
 
   constructor(value: string)
-  constructor(value: Colors[T] | string, type: T)
-  constructor(value: Colors[T] | string, type: T, alpha: Opacity)
+  constructor(value: Colors[T], type: T)
+  constructor(value: Colors[T], type: T, alpha: Opacity)
   constructor(...args: any[]) {
     if (args.length === 1) {
       if (typeof args[0] === 'string') {
@@ -78,6 +78,9 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
       case 'hsb':
         return `${this.type}(${[this.value[0], `${this.value[1]}%`, `${this.value[2]}%`].join(', ')})`
 
+      case 'lab':
+        return `${this.type}(${(this.value as LabColor).join(' ')}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
+
       default:
         throw new Error('Invalid color type.')
     }
@@ -95,6 +98,9 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
         break
       case 'hsb':
         value = hsbToRgb(this.value as HsbColor)
+        break
+      case 'lab':
+        value = labToRgb(this.value as LabColor)
         break
       default:
         value = this.value as RgbColor
@@ -116,6 +122,9 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
         break
       case 'hsb':
         value = hsbToHex(this.value as HsbColor)
+        break
+      case 'lab':
+        value = labToHex(this.value as LabColor)
         break
       case 'keyword':
       default:
@@ -140,6 +149,9 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
       case 'hsb':
         value = hsbToHsl(this.value as HsbColor)
         break
+      case 'lab':
+        value = labToHsl(this.value as LabColor)
+        break
       default:
         value = this.value as HslColor
     }
@@ -162,6 +174,9 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
       case 'hsl':
         value = hslToHsb(this.value as HslColor)
         break
+      case 'lab':
+        value = labToHsb(this.value as LabColor)
+        break
       default:
         value = this.value as HsbColor
     }
@@ -169,6 +184,31 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     this._push<'hsb'>(value, 'hsb', this.alpha)
 
     return this as MagicColor<'hsb'>
+  }
+
+  toLab(): MagicColor<'lab'> {
+    let value
+    switch (this.type) {
+      case 'keyword':
+      case 'hex':
+        value = hexToLab(this.value as HexColor)
+        break
+      case 'rgb':
+        value = rgbToLab(this.value as RgbColor)
+        break
+      case 'hsl':
+        value = hslToLab(this.value as HslColor)
+        break
+      case 'hsb':
+        value = hsbToLab(this.value as HsbColor)
+        break
+      default:
+        value = this.value as LabColor
+    }
+
+    this._push<'lab'>(value, 'lab', this.alpha)
+
+    return this as MagicColor<'lab'>
   }
 
   to(type: ColorType) {
@@ -181,25 +221,31 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
         return this.toHsl()
       case 'hsb':
         return this.toHsb()
+      case 'lab':
+        return this.toLab()
       default:
         throw new Error('Invalid color type.')
     }
   }
 
   hex(withAlpha = false) {
-    return this.toHex().toString(withAlpha)
+    return this.clone().toHex().toString(withAlpha)
   }
 
   rgb(withAlpha = false) {
-    return this.toRgb().toString(withAlpha)
+    return this.clone().toRgb().toString(withAlpha)
   }
 
   hsl(withAlpha = false) {
-    return this.toHsl().toString(withAlpha)
+    return this.clone().toHsl().toString(withAlpha)
   }
 
   hsb(withAlpha = false) {
-    return this.toHsb().toString(withAlpha)
+    return this.clone().toHsb().toString(withAlpha)
+  }
+
+  lab(withAlpha = false) {
+    return this.clone().toLab().toString(withAlpha)
   }
 
   private _push<T extends ColorType = any>(value: Colors[T], type: ColorType, alpha: Opacity) {
@@ -262,6 +308,7 @@ function resolveColorString(color: string) {
     hsl: parseHsl,
     hsb: parseHsb,
     keyword: parseKeyword,
+    lab: parseLab,
   }
 
   return {
