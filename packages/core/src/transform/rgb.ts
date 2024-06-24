@@ -49,7 +49,7 @@ export function rgbToHsl(color: RgbColor): HslColor {
     h *= 60
   }
 
-  return [Math.round(h), Math.round(s * 100), Math.round(l * 100)]
+  return [h, s * 100, l * 100]
 }
 
 export function rgbToHsb(color: RgbColor): HsbColor {
@@ -78,7 +78,7 @@ export function rgbToHsb(color: RgbColor): HsbColor {
     h /= 6
   }
 
-  return [Math.round(h * 360), Math.round(s * 100), Math.round(v * 100)]
+  return [h * 360, s * 100, v * 100]
 }
 
 export function rgbToLab(color: RgbColor): LabColor {
@@ -106,5 +106,5 @@ export function rgbToLab(color: RgbColor): LabColor {
   const [x, y, z] = rgb2xyz(color)
   const l = 116 * y - 16
 
-  return [l < 0 ? 0 : l, 500 * (x - y), 200 * (y - z)].map(Math.round) as LabColor
+  return [l < 0 ? 0 : l, 500 * (x - y), 200 * (y - z)] as LabColor
 }

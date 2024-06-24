@@ -60,20 +60,14 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
   toString(withAlpha = false): string {
     switch (this.type) {
       case 'keyword':
+      case 'hex':
         return this.value + (withAlpha ? alphaToString(this.alpha, true) : '')
 
-      case 'hex':
-        return withAlpha
-          ? this.value + alphaToString(this.alpha, true)
-          : this.value as HexColor
-
       case 'rgb':
-        return withAlpha
-          ? `rgba(${(this.value as RgbColor).join(', ')}, ${alphaToString(this.alpha)})`
-          : `rgb(${(this.value as RgbColor).join(', ')})`
+        return `${this.type}(${(this.value as RgbColor).join(' ')}${withAlpha ? ` / ${this.alpha}` : ''})`
 
       case 'hsl':
-        return `${this.type}${withAlpha ? 'a' : ''}(${[this.value[0], `${this.value[1]}%`, `${this.value[2]}%`].join(', ')}${withAlpha ? `, ${alphaToString(this.alpha)}` : ''})`
+        return `${this.type}(${(this.value as HslColor).join(' ')}${withAlpha ? ` / ${this.alpha}` : ''})`
 
       case 'hsb':
         return `${this.type}(${[this.value[0], `${this.value[1]}%`, `${this.value[2]}%`].join(', ')})`

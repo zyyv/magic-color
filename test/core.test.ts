@@ -66,11 +66,11 @@ describe('utils scoped', () => {
     const c = `rgba(100, 100, 100, ${opacity})`
     const mcColor = new MagicColor(c)
 
-    expect(mcColor.rgb(true)).toMatchInlineSnapshot(`"rgba(100, 100, 100, 67.89%)"`)
+    expect(mcColor.rgb(true)).toMatchInlineSnapshot(`"rgb(100 100 100 / 0.6789)"`)
     expect(mcColor.hex(true)).toMatchInlineSnapshot(`"#646464ad"`)
-    expect(mcColor.hsl(true)).toMatchInlineSnapshot(`"hsla(0, 0%, 39%, 67.89%)"`)
-    expect(mcColor.hsl(true)).toMatchInlineSnapshot(`"hsla(0, 0%, 39%, 67.89%)"`)
-    expect(mcColor.hsb(true)).toMatchInlineSnapshot(`"hsb(0, 0%, 39%)"`)
+    expect(mcColor.hsl(true)).toMatchInlineSnapshot(`"hsl(0 0 39.21568627450981 / 0.6789)"`)
+    expect(mcColor.hsl(true)).toMatchInlineSnapshot(`"hsl(0 0 39.21568627450981 / 0.6789)"`)
+    expect(mcColor.hsb(true)).toMatchInlineSnapshot(`"hsb(0, 0%, 39.21568627450981%)"`)
   })
 
   it('magicColor history', () => {

@@ -69,11 +69,7 @@ export function hslToRgb(color: HslColor): RgbColor {
     b = x
   }
 
-  return [
-    Math.round((r + m) * 255),
-    Math.round((g + m) * 255),
-    Math.round((b + m) * 255),
-  ]
+  return [(r + m) * 255, (g + m) * 255, (b + m) * 255]
 }
 
 export function hslToHsb(color: HslColor): HsbColor {

@@ -45,7 +45,7 @@ function parseHsbToRgb(color: HsbColor): RgbColor {
   else
     rgb = [c, 0, x]
 
-  return rgb.map(value => Math.round((value + m) * 255)) as RgbColor
+  return rgb.map(v => (v + m) * 255) as RgbColor
 }
 
 export function hsbToHex(color: HsbColor) {

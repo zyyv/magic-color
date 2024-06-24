@@ -42,11 +42,7 @@ export function labToRgb(color: LabColor): RgbColor {
   const g = xyz_rgb(-0.9692660 * x + 1.8760108 * y + 0.0415560 * z)
   const b_ = xyz_rgb(0.0556434 * x - 0.2040259 * y + 1.0572252 * z)
 
-  const clamp = (c: number) => {
-    return Math.min(255, Math.max(0, Math.round(c)))
-  }
-
-  return [clamp(r), clamp(g), clamp(b_)]
+  return [r, g, b_]
 }
 
 export function labToHex(color: LabColor): HexColor {

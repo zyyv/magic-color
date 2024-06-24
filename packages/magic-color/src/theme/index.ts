@@ -2,6 +2,7 @@ import { MagicColor } from '../core'
 import collections from './collections.json'
 import { deltaE } from './utils'
 import type { BasicColorShades, ClosestColorShades, ThemeMetas, ThemeOptions } from './types'
+import { hueShades } from './shades'
 
 function findClosetShade(color: string, colors: BasicColorShades[]): ClosestColorShades {
   const normalizedColors = colors.map((meta) => {
@@ -149,7 +150,7 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
   }
   const { type, render } = { ...defaultOptions, ...options } as Required<ThemeOptions>
   // debugger
-  const metas = generate(color, BasicColors)
+  const metas = generate(color, hueShades)
   const shades = metas.shades.map(shade => render([shade.key, new MagicColor(shade.color).to(type).toString()]))
 
   return Object.fromEntries(shades) as unknown as ThemeMetas

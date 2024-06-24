@@ -5,15 +5,15 @@ import { MagicColor, isColor } from 'magic-color'
 describe('utils scoped', () => {
   const hex = '#d15b14'
   const rgbValue = [209, 91, 20]
-  const rgb = `rgb(${rgbValue.join(', ')})`
+  const rgb = `rgb(${rgbValue.join(' ')})`
 
   const hslValue = [22, 82, 45]
-  const hsl = `hsl(${hslValue.map((v, i) => i === 0 ? v : `${v}%`).join(', ')})`
+  const hsl = `hsl(${hslValue.join(' ')})`
 
   const hsbValue = [22, 90, 82]
   const hsb = `hsb(${hsbValue.map((v, i) => i === 0 ? v : `${v}%`).join(', ')})`
 
-  const isnotHex = 'rgb(255, 0, 0, 0.5)'
+  const isnotHex = 'rgb(255 0 0 / 0.5)'
   const isnotRgb = 'rgb(255, 0)'
   const isnotHsl = 'hsl(0, 100%)'
   const isnotHsb = 'hsb(0, 100%)'
@@ -77,10 +77,9 @@ describe('utils scoped', () => {
   it('in magic color', () => {
     const c = `rgba(100, 100, 100, ${opacity})`
     const mcColor = new MagicColor(c)
-    expect(mcColor.toRgb().toString(true)).toEqual('rgba(100, 100, 100, 67.89%)')
-    expect(mcColor.toHex().toString(true)).toEqual('#646464ad')
-    expect(mcColor.toHsl().toString(true)).toEqual('hsla(0, 0%, 39%, 67.89%)')
-    expect(mcColor.toHsl().toString(true)).toEqual('hsla(0, 0%, 39%, 67.89%)')
-    expect(mcColor.toHsb().toString(true)).toEqual('hsb(0, 0%, 39%)')
+    expect(mcColor.toRgb().toString(true)).toMatchInlineSnapshot(`"rgb(100 100 100 / 0.6789)"`)
+    expect(mcColor.toHex().toString(true)).toMatchInlineSnapshot(`"#646464ad"`)
+    expect(mcColor.toHsl().toString(true)).toMatchInlineSnapshot(`"hsl(0 0 39.21568627450981 / 0.6789)"`)
+    expect(mcColor.toHsl().toString(true)).toMatchInlineSnapshot(`"hsl(0 0 39.21568627450981 / 0.6789)"`)
   })
 })

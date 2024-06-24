@@ -64,7 +64,7 @@ export function hexToHsl(color: HexColor): HslColor {
     h *= 60
   }
 
-  return [Math.round(h), Math.round(s * 100), Math.round(l * 100)]
+  return [h, s * 100, l * 100]
 }
 
 export function hexToHsb(color: HexColor): HsbColor {
