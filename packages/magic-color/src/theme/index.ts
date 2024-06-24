@@ -1,65 +1,9 @@
-import type { ColorType } from '@magic-color/core'
 import { MagicColor } from '../core'
 import collections from './collections.json'
 import { deltaE } from './utils'
+import type { BasicColorShades, ClosestColorShades, ThemeMetas, ThemeOptions } from './types'
 
-export interface ThemeMetas {
-  50: string
-  100: string
-  200: string
-  300: string
-  400: string
-  500: string
-  600: string
-  700: string
-  800: string
-  900: string
-  950: string
-}
-
-interface Shade {
-  key: number
-  color: string
-}
-
-interface NormalizedShade extends Shade {
-  delta: number
-  lightnessDiff: number
-}
-
-interface BasicColorType {
-  name: string
-  id: string
-  shades: Shade[]
-}
-
-interface ClosestModel extends BasicColorType {
-  shades: NormalizedShade[]
-  closestShade: NormalizedShade
-  closestShadeLightness: NormalizedShade
-}
-
-const BasicColors: BasicColorType[] = [
-  { name: 'Red', id: 'red', shades: [{ key: 50, color: '#fef2f2' }, { key: 100, color: '#fee2e2' }, { key: 200, color: '#fecaca' }, { key: 300, color: '#fca5a5' }, { key: 400, color: '#f87171' }, { key: 500, color: '#ef4444' }, { key: 600, color: '#dc2626' }, { key: 700, color: '#b91c1c' }, { key: 800, color: '#991b1b' }, { key: 900, color: '#7f1d1d' }, { key: 950, color: '#450a0a' }] },
-  { name: 'Orange', id: 'orange', shades: [{ key: 50, color: '#fff7ed' }, { key: 100, color: '#ffedd5' }, { key: 200, color: '#fed7aa' }, { key: 300, color: '#fdba74' }, { key: 400, color: '#fb923c' }, { key: 500, color: '#f97316' }, { key: 600, color: '#ea580c' }, { key: 700, color: '#c2410c' }, { key: 800, color: '#9a3412' }, { key: 900, color: '#7c2d12' }, { key: 950, color: '#431407' }] },
-  { name: 'Amber', id: 'amber', shades: [{ key: 50, color: '#fffbeb' }, { key: 100, color: '#fef3c7' }, { key: 200, color: '#fde68a' }, { key: 300, color: '#fcd34d' }, { key: 400, color: '#fbbf24' }, { key: 500, color: '#f59e0b' }, { key: 600, color: '#d97706' }, { key: 700, color: '#b45309' }, { key: 800, color: '#92400e' }, { key: 900, color: '#78350f' }, { key: 950, color: '#451a03' }] },
-  { name: 'Yellow', id: 'yellow', shades: [{ key: 50, color: '#fefce8' }, { key: 100, color: '#fef9c3' }, { key: 200, color: '#fef08a' }, { key: 300, color: '#fde047' }, { key: 400, color: '#facc15' }, { key: 500, color: '#eab308' }, { key: 600, color: '#ca8a04' }, { key: 700, color: '#a16207' }, { key: 800, color: '#854d0e' }, { key: 900, color: '#713f12' }, { key: 950, color: '#422006' }] },
-  { name: 'Lime', id: 'lime', shades: [{ key: 50, color: '#f7fee7' }, { key: 100, color: '#ecfccb' }, { key: 200, color: '#d9f99d' }, { key: 300, color: '#bef264' }, { key: 400, color: '#a3e635' }, { key: 500, color: '#84cc16' }, { key: 600, color: '#65a30d' }, { key: 700, color: '#4d7c0f' }, { key: 800, color: '#3f6212' }, { key: 900, color: '#365314' }, { key: 950, color: '#1a2e05' }] },
-  { name: 'Green', id: 'green', shades: [{ key: 50, color: '#f0fdf4' }, { key: 100, color: '#dcfce7' }, { key: 200, color: '#bbf7d0' }, { key: 300, color: '#86efac' }, { key: 400, color: '#4ade80' }, { key: 500, color: '#22c55e' }, { key: 600, color: '#16a34a' }, { key: 700, color: '#15803d' }, { key: 800, color: '#166534' }, { key: 900, color: '#14532d' }, { key: 950, color: '#052e16' }] },
-  { name: 'Emerald', id: 'emerald', shades: [{ key: 50, color: '#ecfdf5' }, { key: 100, color: '#d1fae5' }, { key: 200, color: '#a7f3d0' }, { key: 300, color: '#6ee7b7' }, { key: 400, color: '#34d399' }, { key: 500, color: '#10b981' }, { key: 600, color: '#059669' }, { key: 700, color: '#047857' }, { key: 800, color: '#065f46' }, { key: 900, color: '#064e3b' }, { key: 950, color: '#022c22' }] },
-  { name: 'Teal', id: 'teal', shades: [{ key: 50, color: '#f0fdfa' }, { key: 100, color: '#ccfbf1' }, { key: 200, color: '#99f6e4' }, { key: 300, color: '#5eead4' }, { key: 400, color: '#2dd4bf' }, { key: 500, color: '#14b8a6' }, { key: 600, color: '#0d9488' }, { key: 700, color: '#0f766e' }, { key: 800, color: '#115e59' }, { key: 900, color: '#134e4a' }, { key: 950, color: '#042f2e' }] },
-  { name: 'Cyan', id: 'cyan', shades: [{ key: 50, color: '#ecfeff' }, { key: 100, color: '#cffafe' }, { key: 200, color: '#a5f3fc' }, { key: 300, color: '#67e8f9' }, { key: 400, color: '#22d3ee' }, { key: 500, color: '#06b6d4' }, { key: 600, color: '#0891b2' }, { key: 700, color: '#0e7490' }, { key: 800, color: '#155e75' }, { key: 900, color: '#164e63' }, { key: 950, color: '#083344' }] },
-  { name: 'Sky', id: 'sky', shades: [{ key: 50, color: '#f0f9ff' }, { key: 100, color: '#e0f2fe' }, { key: 200, color: '#bae6fd' }, { key: 300, color: '#7dd3fc' }, { key: 400, color: '#38bdf8' }, { key: 500, color: '#0ea5e9' }, { key: 600, color: '#0284c7' }, { key: 700, color: '#0369a1' }, { key: 800, color: '#075985' }, { key: 900, color: '#0c4a6e' }, { key: 950, color: '#082f49' }] },
-  { name: 'Blue', id: 'blue', shades: [{ key: 50, color: '#eff6ff' }, { key: 100, color: '#dbeafe' }, { key: 200, color: '#bfdbfe' }, { key: 300, color: '#93c5fd' }, { key: 400, color: '#60a5fa' }, { key: 500, color: '#3b82f6' }, { key: 600, color: '#2563eb' }, { key: 700, color: '#1d4ed8' }, { key: 800, color: '#1e40af' }, { key: 900, color: '#1e3a8a' }, { key: 950, color: '#172554' }] },
-  { name: 'Indigo', id: 'indigo', shades: [{ key: 50, color: '#eef2ff' }, { key: 100, color: '#e0e7ff' }, { key: 200, color: '#c7d2fe' }, { key: 300, color: '#a5b4fc' }, { key: 400, color: '#818cf8' }, { key: 500, color: '#6366f1' }, { key: 600, color: '#4f46e5' }, { key: 700, color: '#4338ca' }, { key: 800, color: '#3730a3' }, { key: 900, color: '#312e81' }, { key: 950, color: '#1e1b4b' }] },
-  { name: 'Violet', id: 'violet', shades: [{ key: 50, color: '#f5f3ff' }, { key: 100, color: '#ede9fe' }, { key: 200, color: '#ddd6fe' }, { key: 300, color: '#c4b5fd' }, { key: 400, color: '#a78bfa' }, { key: 500, color: '#8b5cf6' }, { key: 600, color: '#7c3aed' }, { key: 700, color: '#6d28d9' }, { key: 800, color: '#5b21b6' }, { key: 900, color: '#4c1d95' }, { key: 950, color: '#2e1065' }] },
-  { name: 'Purple', id: 'purple', shades: [{ key: 50, color: '#faf5ff' }, { key: 100, color: '#f3e8ff' }, { key: 200, color: '#e9d5ff' }, { key: 300, color: '#d8b4fe' }, { key: 400, color: '#c084fc' }, { key: 500, color: '#a855f7' }, { key: 600, color: '#9333ea' }, { key: 700, color: '#7e22ce' }, { key: 800, color: '#6b21a8' }, { key: 900, color: '#581c87' }, { key: 950, color: '#3b0764' }] },
-  { name: 'Fuchsia', id: 'fuchsia', shades: [{ key: 50, color: '#fdf4ff' }, { key: 100, color: '#fae8ff' }, { key: 200, color: '#f5d0fe' }, { key: 300, color: '#f0abfc' }, { key: 400, color: '#e879f9' }, { key: 500, color: '#d946ef' }, { key: 600, color: '#c026d3' }, { key: 700, color: '#a21caf' }, { key: 800, color: '#86198f' }, { key: 900, color: '#701a75' }, { key: 950, color: '#4a044e' }] },
-  { name: 'Pink', id: 'pink', shades: [{ key: 50, color: '#fdf2f8' }, { key: 100, color: '#fce7f3' }, { key: 200, color: '#fbcfe8' }, { key: 300, color: '#f9a8d4' }, { key: 400, color: '#f472b6' }, { key: 500, color: '#ec4899' }, { key: 600, color: '#db2777' }, { key: 700, color: '#be185d' }, { key: 800, color: '#9d174d' }, { key: 900, color: '#831843' }, { key: 950, color: '#500724' }] },
-  { name: 'Rose', id: 'rose', shades: [{ key: 50, color: '#fff1f2' }, { key: 100, color: '#ffe4e6' }, { key: 200, color: '#fecdd3' }, { key: 300, color: '#fda4af' }, { key: 400, color: '#fb7185' }, { key: 500, color: '#f43f5e' }, { key: 600, color: '#e11d48' }, { key: 700, color: '#be123c' }, { key: 800, color: '#9f1239' }, { key: 900, color: '#881337' }, { key: 950, color: '#4c0519' }] },
-]
-
-function findClosetShade(color: string, colors: BasicColorType[]): ClosestModel {
+function findClosetShade(color: string, colors: BasicColorShades[]): ClosestColorShades {
   const normalizedColors = colors.map((meta) => {
     const shades = meta.shades.map(shade => ({
       ...shade,
@@ -84,7 +28,7 @@ function findClosetShade(color: string, colors: BasicColorType[]): ClosestModel 
   }
 }
 
-function generate(o: string, e: BasicColorType[], apca = false) {
+function generate(o: string, e: BasicColorShades[], apca = false) {
   // 获取与输入颜色 o 最接近的阴影色和亮度
   const a = findClosetShade(o, e)
 
@@ -109,7 +53,7 @@ function generate(o: string, e: BasicColorType[], apca = false) {
 
   console.log('theme d: ', d)
 
-  const name = ve(o)
+  const name = getName(o)
 
   return {
     id: name.toLowerCase(),
@@ -152,13 +96,10 @@ function generate(o: string, e: BasicColorType[], apca = false) {
   }
 }
 
-function ve(o: string) {
-  const e = collections
-  e.forEach((t) => {
-    t.push(deltaE(o, t[0]) as any)
-  },
-  )
-  return e.reduce((t, i) => t[2] < i[2] ? t : i)[1]
+function getName(color: string): string {
+  return collections
+    .map(t => [...t, deltaE(color, t[0])])
+    .reduce((t, i) => t[2] < i[2] ? t : i)[1] as string
 }
 
 function hslComponets(c: string, type: 'h' | 's' | 'l') {
@@ -171,23 +112,6 @@ function hslComponets(c: string, type: 'h' | 's' | 'l') {
     case 'l':
       return hsl[2]
   }
-}
-
-export interface ThemeOptions {
-  /**
-   * Output color type
-   *
-   * @default same type as input
-   */
-  type?: ColorType
-
-  /**
-   * Custom render output color
-   *
-   * @param meta [name, color]
-   * @returns [CustomedName, CustomedColor]
-   */
-  render?: (meta: [keyof ThemeMetas, string]) => [string, string]
 }
 
 /**

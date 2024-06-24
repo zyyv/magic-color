@@ -1,5 +1,7 @@
 import { MagicColor } from '../core'
 
+// Credit to [chroma.js](https://github.com/gka/chroma.js)
+
 export function deltaE(a: string, b: string, Kl = 1, Kc = 1, Kh = 1) {
   // Delta E (CIE 2000)
   // see http://www.brucelindbloom.com/index.html?Eqn_DeltaE_CIE2000.html
