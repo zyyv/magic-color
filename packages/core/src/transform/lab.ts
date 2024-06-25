@@ -7,7 +7,7 @@ export function isLab(color: string): boolean {
   return labRegex.test(color)
 }
 
-export function parseLab(color: string): { value: LabColor, alpha: number } {
+export function parseLab(color: string): { values: LabColor, alpha: number } {
   const match = color.match(labRegex)
   if (!match)
     throw new Error('Invalid Lab color format.')
@@ -15,7 +15,7 @@ export function parseLab(color: string): { value: LabColor, alpha: number } {
   const lab = [Number.parseFloat(match[1]), Number.parseFloat(match[2]), Number.parseFloat(match[3])] as LabColor
   const alpha = match[4] ? Number.parseFloat(match[4]) : 1
 
-  return { value: lab, alpha }
+  return { values: lab, alpha }
 }
 
 function xyz_rgb(r: number) {

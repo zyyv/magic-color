@@ -1,21 +1,21 @@
 import type { HexColor, HsbColor, HslColor, LabColor, RgbColor } from '../types'
 
-const rgbRegex = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/
-const rgbaRegex = /^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(0?\.\d+|1)\)$/
+const rgbRegex = /^rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(0|0?\.\d+|1(?:\.0)?))?\)$/
+const newRgbRegex = /^rgb\((\d+)\s+(\d+)\s+(\d+)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
 
 export function isRgb(color: string): boolean {
-  return rgbRegex.test(color) || rgbaRegex.test(color)
+  return rgbRegex.test(color) || newRgbRegex.test(color)
 }
 
 export function parseRgb(color: string) {
-  const match = color.match(rgbRegex) || color.match(rgbaRegex)
+  const match = color.match(rgbRegex) || color.match(newRgbRegex)
   if (!match)
     throw new Error('Invalid RGB or RGBA color format.')
 
   const rgb = [match[1], match[2], match[3]].map(Number) as RgbColor
   const alpha = match[4] ? Number.parseFloat(match[4]) : 1
 
-  return { value: rgb, alpha }
+  return { values: rgb, alpha }
 }
 
 export function rgbToHex(color: RgbColor): HexColor {

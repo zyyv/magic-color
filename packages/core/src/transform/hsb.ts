@@ -11,14 +11,14 @@ export function parseHsb(color: string) {
   const match = color.match(hsbRegex)
   if (!match)
     throw new Error('Invalid HSB color format.')
-  const value = [
+  const values = [
     Number.parseInt(match[1]),
     Number.parseInt(match[2]),
     Number.parseInt(match[3]),
   ] as HsbColor
   const alpha = match[4] ? Number.parseFloat(match[4]) : 1
 
-  return { value, alpha }
+  return { values, alpha }
 }
 
 function parseHsbToRgb(color: HsbColor): RgbColor {

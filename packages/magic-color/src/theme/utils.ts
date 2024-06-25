@@ -13,8 +13,8 @@ export function deltaE(a: string, b: string, Kl = 1, Kc = 1, Kh = 1) {
   }
   const a_mc = new MagicColor(a)
   const b_mc = new MagicColor(b)
-  const [L1, a1, b1] = a_mc.toLab().value
-  const [L2, a2, b2] = b_mc.toLab().value
+  const [L1, a1, b1] = a_mc.value('lab')
+  const [L2, a2, b2] = b_mc.value('lab')
   const avgL = (L1 + L2) / 2
   const C1 = Math.sqrt(a1 ** 2 + b1 ** 2)
   const C2 = Math.sqrt(a2 ** 2 + b2 ** 2)

@@ -5,7 +5,7 @@ import { MagicColor, isColor } from 'magic-color'
 describe('utils scoped', () => {
   const hex = '#d15b14'
   const rgbValue = [209, 91, 20]
-  const rgb = `rgb(${rgbValue.join(', ')})`
+  const rgb = `rgb(${rgbValue.join(' ')})`
 
   const hslValue = [22, 82, 45]
   const hsl = `hsl(${hslValue.map((v, i) => i === 0 ? v : `${v}%`).join(', ')})`
@@ -28,7 +28,7 @@ describe('utils scoped', () => {
 
   function testClose<T extends Omit<ColorType, 'hex'>>(valueString: string, type: T, compareValue: number[]) {
     const color = new MagicColor(valueString)
-    const value = color.to(type as any).value as number[]
+    const value = color.to(type as any).value() as number[]
     return value.every((v, i) => isClose(v, compareValue[i]))
   }
 
@@ -68,8 +68,8 @@ describe('utils scoped', () => {
 
     expect(mcColor.rgb(true)).toMatchInlineSnapshot(`"rgb(100 100 100 / 0.6789)"`)
     expect(mcColor.hex(true)).toMatchInlineSnapshot(`"#646464ad"`)
-    expect(mcColor.hsl(true)).toMatchInlineSnapshot(`"hsl(0 0 39.21568627450981 / 0.6789)"`)
-    expect(mcColor.hsl(true)).toMatchInlineSnapshot(`"hsl(0 0 39.21568627450981 / 0.6789)"`)
+    expect(mcColor.hsl(true)).toMatchInlineSnapshot(`"hsl(0 0 39 / 0.6789)"`)
+    expect(mcColor.hsl(true)).toMatchInlineSnapshot(`"hsl(0 0 39 / 0.6789)"`)
     expect(mcColor.hsb(true)).toMatchInlineSnapshot(`"hsb(0, 0%, 39.21568627450981%)"`)
   })
 

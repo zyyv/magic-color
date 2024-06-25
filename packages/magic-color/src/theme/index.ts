@@ -52,19 +52,17 @@ function generate(o: string, e: BasicColorShades[], apca = false) {
   else
     d = d.toString()
 
-  console.log('theme d: ', d)
-
   const name = getName(o)
 
   return {
     id: name.toLowerCase(),
     name,
     shades: a.shades.map((shade) => {
-      const _mc = new MagicColor(shade.color).toHsl()
-      const _value = _mc.value
+      const _mc = new MagicColor(shade.color)
+      const _value = _mc.value('hsl')
 
       // 调整 色调 饱和度
-      _mc.value = [Number(d), _value[1] * k, _value[2]]
+      _mc.values = [Number(d), _value[1] * k, _value[2]]
 
       let color = _mc.hex()
 
@@ -104,7 +102,7 @@ function getName(color: string): string {
 }
 
 function hslComponets(c: string, type: 'h' | 's' | 'l') {
-  const hsl = new MagicColor(c).toHsl().value
+  const hsl = new MagicColor(c).value('hsl')
   switch (type) {
     case 'h':
       return hsl[0]
@@ -151,7 +149,7 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
   const { type, render } = { ...defaultOptions, ...options } as Required<ThemeOptions>
   // debugger
   const metas = generate(color, hueShades)
-  const shades = metas.shades.map(shade => render([shade.key, new MagicColor(shade.color).to(type).toString()]))
+  const shades = metas.shades.map(shade => render([shade.key, new MagicColor(shade.color).css(type)]))
 
   return Object.fromEntries(shades) as unknown as ThemeMetas
 }

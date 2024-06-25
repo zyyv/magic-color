@@ -1,10 +1,10 @@
-import type { ColorType, Colors, HexColor, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/core'
+import type { ColorType, ColorValue, Colors, HexColor, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/core'
 import { hexToHsb, hexToHsl, hexToLab, hexToRgb, hsbToHex, hsbToHsl, hsbToLab, hsbToRgb, hslToHex, hslToHsb, hslToLab, hslToRgb, isHex, isHsb, isHsl, isKeyword, isRgb, labToHex, labToHsb, labToHsl, labToRgb, parseHex, parseHsb, parseHsl, parseKeyword, parseLab, parseRgb, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab } from '@magic-color/core'
 import type { ColorObject } from './types'
 
-export class MagicColor<T extends ColorType> implements ColorObject<T> {
+export class MagicColor<T extends ColorType> {
   type: T
-  value: Colors[T]
+  values: Colors[T]
   alpha: Opacity
 
   cloned = false
@@ -18,12 +18,12 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     if (args.length === 1) {
       if (typeof args[0] === 'string') {
         const {
-          value,
+          values,
           type,
           alpha,
         } = resolveColorString(args[0])
 
-        this.value = value as Colors[T]
+        this.values = values as Colors[T]
         this.type = type as T
         this.alpha = alpha
       }
@@ -34,7 +34,7 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     else if ([2, 3].includes(args.length)) {
       if (typeof args[0] === 'string') {
         const {
-          value,
+          values,
           type,
           alpha,
         } = resolveColorString(args[0])
@@ -42,12 +42,12 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
         if (args[1] !== type)
           throw new Error(`Invalid color type: ${args[1]}.`)
 
-        this.value = value as Colors[T]
+        this.values = values as Colors[T]
         this.type = type as T
         this.alpha = args[2] ?? alpha
       }
       else {
-        this.value = args[0]
+        this.values = args[0]
         this.type = args[1]
         this.alpha = args[2] ?? 1
       }
@@ -57,23 +57,23 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     }
   }
 
-  toString(withAlpha = false): string {
+  private toString(withAlpha = false, round = true): string {
     switch (this.type) {
       case 'keyword':
       case 'hex':
-        return this.value + (withAlpha ? alphaToString(this.alpha, true) : '')
+        return this.values + (withAlpha ? alphaToString(this.alpha, true) : '')
 
       case 'rgb':
-        return `${this.type}(${(this.value as RgbColor).join(' ')}${withAlpha ? ` / ${this.alpha}` : ''})`
+        return `${this.type}(${(this.values as RgbColor).map(round ? Math.round : c => c).join(' ')}${withAlpha ? ` / ${this.alpha}` : ''})`
 
       case 'hsl':
-        return `${this.type}(${(this.value as HslColor).join(' ')}${withAlpha ? ` / ${this.alpha}` : ''})`
+        return `${this.type}(${(this.values as HslColor).map(round ? Math.round : c => c).join(' ')}${withAlpha ? ` / ${this.alpha}` : ''})`
 
       case 'hsb':
-        return `${this.type}(${[this.value[0], `${this.value[1]}%`, `${this.value[2]}%`].join(', ')})`
+        return `${this.type}(${[this.values[0], `${this.values[1]}%`, `${this.values[2]}%`].join(', ')})`
 
       case 'lab':
-        return `${this.type}(${(this.value as LabColor).join(' ')}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
+        return `${this.type}(${(this.values as LabColor).map(round ? Math.round : c => c).join(' ')}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
 
       default:
         throw new Error('Invalid color type.')
@@ -85,19 +85,19 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     switch (this.type) {
       case 'keyword':
       case 'hex':
-        value = hexToRgb(this.value as HexColor)
+        value = hexToRgb(this.values as HexColor)
         break
       case 'hsl':
-        value = hslToRgb(this.value as HslColor)
+        value = hslToRgb(this.values as HslColor)
         break
       case 'hsb':
-        value = hsbToRgb(this.value as HsbColor)
+        value = hsbToRgb(this.values as HsbColor)
         break
       case 'lab':
-        value = labToRgb(this.value as LabColor)
+        value = labToRgb(this.values as LabColor)
         break
       default:
-        value = this.value as RgbColor
+        value = this.values as RgbColor
     }
 
     this._push<'rgb'>(value, 'rgb', this.alpha)
@@ -109,20 +109,20 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     let value
     switch (this.type) {
       case 'rgb':
-        value = rgbToHex(this.value as RgbColor)
+        value = rgbToHex(this.values as RgbColor)
         break
       case 'hsl':
-        value = hslToHex(this.value as HslColor)
+        value = hslToHex(this.values as HslColor)
         break
       case 'hsb':
-        value = hsbToHex(this.value as HsbColor)
+        value = hsbToHex(this.values as HsbColor)
         break
       case 'lab':
-        value = labToHex(this.value as LabColor)
+        value = labToHex(this.values as LabColor)
         break
       case 'keyword':
       default:
-        value = this.value as HexColor
+        value = this.values as HexColor
     }
 
     this._push<'hex'>(value, 'hex', this.alpha)
@@ -135,19 +135,19 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     switch (this.type) {
       case 'keyword':
       case 'hex':
-        value = hexToHsl(this.value as HexColor)
+        value = hexToHsl(this.values as HexColor)
         break
       case 'rgb':
-        value = rgbToHsl(this.value as RgbColor)
+        value = rgbToHsl(this.values as RgbColor)
         break
       case 'hsb':
-        value = hsbToHsl(this.value as HsbColor)
+        value = hsbToHsl(this.values as HsbColor)
         break
       case 'lab':
-        value = labToHsl(this.value as LabColor)
+        value = labToHsl(this.values as LabColor)
         break
       default:
-        value = this.value as HslColor
+        value = this.values as HslColor
     }
 
     this._push<'hsl'>(value, 'hsl', this.alpha)
@@ -160,19 +160,19 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     switch (this.type) {
       case 'keyword':
       case 'hex':
-        value = hexToHsb(this.value as HexColor)
+        value = hexToHsb(this.values as HexColor)
         break
       case 'rgb':
-        value = rgbToHsb(this.value as RgbColor)
+        value = rgbToHsb(this.values as RgbColor)
         break
       case 'hsl':
-        value = hslToHsb(this.value as HslColor)
+        value = hslToHsb(this.values as HslColor)
         break
       case 'lab':
-        value = labToHsb(this.value as LabColor)
+        value = labToHsb(this.values as LabColor)
         break
       default:
-        value = this.value as HsbColor
+        value = this.values as HsbColor
     }
 
     this._push<'hsb'>(value, 'hsb', this.alpha)
@@ -185,19 +185,19 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     switch (this.type) {
       case 'keyword':
       case 'hex':
-        value = hexToLab(this.value as HexColor)
+        value = hexToLab(this.values as HexColor)
         break
       case 'rgb':
-        value = rgbToLab(this.value as RgbColor)
+        value = rgbToLab(this.values as RgbColor)
         break
       case 'hsl':
-        value = hslToLab(this.value as HslColor)
+        value = hslToLab(this.values as HslColor)
         break
       case 'hsb':
-        value = hsbToLab(this.value as HsbColor)
+        value = hsbToLab(this.values as HsbColor)
         break
       default:
-        value = this.value as LabColor
+        value = this.values as LabColor
     }
 
     this._push<'lab'>(value, 'lab', this.alpha)
@@ -242,10 +242,33 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     return this.clone().toLab().toString(withAlpha)
   }
 
+  value<K extends ColorType = T>(type: K = this.type as unknown as K, round = true): Colors[K] {
+    const mc = this.clone().to(type)
+    return (Array.isArray(mc.values) && round ? mc.values.map(Math.round) : mc.values) as Colors[K]
+  }
+
+  css(): string
+  css(typeOrWithAlpha: ColorType): string
+  css(typeOrWithAlpha: ColorType, withAlpha: boolean): string
+  css(typeOrWithAlpha: ColorType, withAlpha: boolean, round: boolean): string
+  css(typeOrWithAlpha: boolean): string
+  css(typeOrWithAlpha: boolean, round: boolean): string
+  css(...args: any[]) {
+    if (args.length === 0)
+      return this.toString()
+    const [typeOrWithAlpha, withAlphaOrRound, round] = args
+    if (typeof typeOrWithAlpha === 'boolean') {
+      return this.toString(typeOrWithAlpha, withAlphaOrRound ?? true)
+    }
+    else {
+      return this.clone().to(typeOrWithAlpha).toString(withAlphaOrRound ?? false, round ?? true)
+    }
+  }
+
   private _push<T extends ColorType = any>(value: Colors[T], type: ColorType, alpha: Opacity) {
     this._stack.push(new MagicColor(value, type, alpha))
     // @ts-expect-error - value is not assignable to type Colors[T]
-    this.value = value
+    this.values = value
     // @ts-expect-error - type is not assignable to type T
     this.type = type
   }
@@ -278,10 +301,28 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
   }
 
   clone(): MagicColor<T> {
-    const mc = new MagicColor(this.value, this.type, this.alpha)
+    const mc = new MagicColor(this.values, this.type, this.alpha)
     mc._stack = this._stack.slice()
     mc.cloned = true
     return mc
+  }
+
+  set(operate: string, value: unknown) {
+    const SupportTypes = ['rgb', 'hex', 'hsl', 'hsb', 'lab']
+    const [type, channel] = operate.split('.')
+    if (!type || !SupportTypes.includes(type)) {
+      throw new Error('Invalid operate type.')
+    }
+    if (!channel) {
+      const oldValueType = typeof this.values
+      const newValueType = typeof value
+      if (oldValueType !== newValueType) {
+        throw new Error('Invalid value type.')
+      }
+      if (Array.isArray(this.values) && Array.isArray(value) && this.values.length !== value.length) {
+        throw new Error('Invalid value length.')
+      }
+    }
   }
 }
 

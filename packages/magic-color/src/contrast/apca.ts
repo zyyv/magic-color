@@ -123,8 +123,8 @@ export function calcAPCA(textColor: string, bgColor: string, places = -1, round 
   const mcBg = new MagicColor(bgColor).toRgb()
   const alpha = mcText.alpha
 
-  const bgClr = mcBg.value
-  let txClr = mcText.value
+  const bgClr = mcBg.value()
+  let txClr = mcText.value()
 
   const hasAlpha = alpha !== 1
 
@@ -143,7 +143,7 @@ export function reverseAPCA(
     return false
   // abs contrast must be > 9
 
-  let knownY = color ? sRGBtoY(new MagicColor(color).toRgb().value) : 1.0
+  let knownY = color ? sRGBtoY(new MagicColor(color).value('rgb')) : 1.0
   let unknownY = knownY
   let knownExp
   let unknownExp

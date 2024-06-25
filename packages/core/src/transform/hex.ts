@@ -26,7 +26,7 @@ export function parseHex(color: HexColor) {
     alpha = Number.parseInt(match[1].substring(6, 8), 16) / 255
   }
 
-  return { value: `#${value}`, alpha }
+  return { values: `#${value}`, alpha }
 }
 
 export function hexToRgb(color: HexColor): RgbColor {
