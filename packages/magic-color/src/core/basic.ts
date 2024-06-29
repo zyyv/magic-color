@@ -291,7 +291,7 @@ export class MagicColor<T extends ColorType> {
 
     const mc = this._stack[this._stack.length - deep - 1]
     this.type = mc.type
-    this.value = mc.value
+    this.values = mc.values
     this.alpha = mc.alpha
     this._stack = this._stack.slice(0, this._stack.length - deep)
   }
@@ -313,6 +313,7 @@ export class MagicColor<T extends ColorType> {
     if (!type || !SupportTypes.includes(type)) {
       throw new Error('Invalid operate type.')
     }
+    // TODO
     if (!channel) {
       const oldValueType = typeof this.values
       const newValueType = typeof value

@@ -164,7 +164,7 @@ function Pe(o: string, e: Color[], t = false, i = false) {
   const a = be(o, e)
   console.log(a)
 
-  debugger
+  // debugger
   // 获取输入颜色的 HSL 色调
   const r = chroma(o).get('hsl.h')
   // 获取最接近阴影亮度的 HSL 色调
@@ -200,9 +200,16 @@ function Pe(o: string, e: Color[], t = false, i = false) {
     // 调整饱和度
     const u = chroma(C).get('hsl.s') * k
     C = chroma(C).set('hsl.s', u).hex()
+    if (shade.number === 600) {
+      console.log(chroma(C).get('hsl').toString())
+    }
 
     // 调整色调
     C = chroma(C).set('hsl.h', d).hex()
+    if (shade.number === 600) {
+      console.log(chroma(C).get('hsl').toString())
+    }
+    // console.log(chroma(C).get('hsl'))
 
     // 如果当前阴影是最接近的阴影亮度，将颜色设置为输入颜色
     if (a.closestShadeLightness.number === shade.number)

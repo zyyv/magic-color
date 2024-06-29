@@ -28,14 +28,14 @@ describe('utils scoped', () => {
 
   function testClose<T extends Omit<ColorType, 'hex'>>(valueString: string, type: T, compareValue: number[]) {
     const color = new MagicColor(valueString)
-    const value = color.to(type as any).value() as number[]
+    const value = color.to(type as any).value()
     return value.every((v, i) => isClose(v, compareValue[i]))
   }
 
   it('create Magic Color', () => {
     expect(new MagicColor('#d15b14').css()).toMatchInlineSnapshot(`"#d15b14"`)
     expect(new MagicColor('#d15b14', 'hex').css()).toMatchInlineSnapshot(`"#d15b14"`)
-    expect(new MagicColor('#d15b14', 'hex', 0.1).css(true)).toMatchInlineSnapshot(`"#d15b141a"`)
+    expect(new MagicColor('#d15b14', 'hex', 0.5).css(true)).toMatchInlineSnapshot(`"#d15b1480"`)
     expect(new MagicColor('rgb(209, 91, 20)').toHex().css()).toMatchInlineSnapshot(`"#d15b14"`)
     // Error test case: invalid color
     expect(() => new MagicColor('')).toThrowError('Invalid color')

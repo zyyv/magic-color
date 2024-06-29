@@ -29,48 +29,51 @@ export function hslToHex(color: HslColor): HexColor {
 
 export function hslToRgb(color: HslColor): RgbColor {
   const [h, s, l] = color
-  const sNormalized = s / 100
-  const lNormalized = l / 100
 
-  const c = (1 - Math.abs(2 * lNormalized - 1)) * sNormalized
-  const x = c * (1 - Math.abs((h / 60) % 2 - 1))
-  const m = lNormalized - c / 2
-  let r = 0
-  let g = 0
-  let b = 0
+  // Convert s and l from [0-100] range to [0-1] range
+  const sNorm = s / 100
+  const lNorm = l / 100
 
-  if (h >= 0 && h < 60) {
-    r = c
-    g = x
-    b = 0
+  let r, g, b
+
+  if (sNorm === 0) {
+    r = g = b = lNorm * 255
   }
-  else if (h >= 60 && h < 120) {
-    r = x
-    g = c
-    b = 0
-  }
-  else if (h >= 120 && h < 180) {
-    r = 0
-    g = c
-    b = x
-  }
-  else if (h >= 180 && h < 240) {
-    r = 0
-    g = x
-    b = c
-  }
-  else if (h >= 240 && h < 300) {
-    r = x
-    g = 0
-    b = c
-  }
-  else if (h >= 300 && h < 360) {
-    r = c
-    g = 0
-    b = x
+  else {
+    const t3 = [0, 0, 0]
+    const c = [0, 0, 0]
+    const t2 = lNorm < 0.5 ? lNorm * (1 + sNorm) : lNorm + sNorm - lNorm * sNorm
+    const t1 = 2 * lNorm - t2
+    const h_ = h / 360
+
+    t3[0] = h_ + 1 / 3
+    t3[1] = h_
+    t3[2] = h_ - 1 / 3
+
+    for (let i = 0; i < 3; i++) {
+      if (t3[i] < 0)
+        t3[i] += 1
+      if (t3[i] > 1)
+        t3[i] -= 1
+
+      if (6 * t3[i] < 1) {
+        c[i] = t1 + (t2 - t1) * 6 * t3[i]
+      }
+      else if (2 * t3[i] < 1) {
+        c[i] = t2
+      }
+      else if (3 * t3[i] < 2) {
+        c[i] = t1 + (t2 - t1) * ((2 / 3) - t3[i]) * 6
+      }
+      else {
+        c[i] = t1
+      }
+    }
+
+    [r, g, b] = [Math.round(c[0] * 255), Math.round(c[1] * 255), Math.round(c[2] * 255)]
   }
 
-  return [(r + m) * 255, (g + m) * 255, (b + m) * 255]
+  return [r, g, b]
 }
 
 export function hslToHsb(color: HslColor): HsbColor {

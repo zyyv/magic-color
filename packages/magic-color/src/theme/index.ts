@@ -58,17 +58,19 @@ function generate(o: string, e: BasicColorShades[], apca = false) {
     id: name.toLowerCase(),
     name,
     shades: a.shades.map((shade) => {
-      const _mc = new MagicColor(shade.color)
-      const _value = _mc.value('hsl')
+      const _mc = new MagicColor(shade.color, 'hex').toHsl()
+      const _value = _mc.value()
 
       // 调整 色调 饱和度
       _mc.values = [Number(d), _value[1] * k, _value[2]]
+      console.log({ values: _mc.values })
 
       let color = _mc.hex()
 
       // 如果当前阴影是最接近的阴影亮度，将颜色设置为输入颜色
-      if (a.closestShadeLightness.key === shade.key)
+      if (a.closestShadeLightness.key === shade.key) {
         color = new MagicColor(o).hex()
+      }
 
       // 如果 t 为 true，根据 APCA 对比度调整颜色
       if (apca) {
@@ -84,11 +86,11 @@ function generate(o: string, e: BasicColorShades[], apca = false) {
       return {
         key: shade.key.toString() as unknown as keyof ThemeMetas,
         color,
-        hsl: [
-          Math.round(hslComponets(color, 'h')) || 0,
-          Math.round(hslComponets(color, 's') * 100),
-          Math.round(hslComponets(color, 'l') * 100),
-        ],
+        // hsl: [
+        //   Math.round(hslComponets(color, 'h')) || 0,
+        //   Math.round(hslComponets(color, 's') * 100),
+        //   Math.round(hslComponets(color, 'l') * 100),
+        // ],
         // isLocked: a.closestShadeLightness.key === shade.key && !apca,
       }
     }),
@@ -147,7 +149,6 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
     render: c => c,
   }
   const { type, render } = { ...defaultOptions, ...options } as Required<ThemeOptions>
-  // debugger
   const metas = generate(color, hueShades)
   const shades = metas.shades.map(shade => render([shade.key, new MagicColor(shade.color).css(type)]))
 
