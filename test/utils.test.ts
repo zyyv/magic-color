@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ColorType } from 'magic-color'
+import type { ColorType, Colors } from 'magic-color'
 import { MagicColor, isColor } from 'magic-color'
 import { resolveArgs } from '../packages/magic-color/src/core/utils'
 
@@ -29,8 +29,8 @@ describe('utils scoped', () => {
 
   function testClose<T extends Omit<ColorType, 'hex'>>(valueString: string, type: T, compareValue: number[]) {
     const color = new MagicColor(valueString)
-    const value = color.to(type as any).value()
-    return value.every((v, i) => isClose(v, compareValue[i]))
+    const value = color.to(type as any).value() as any
+    return value.every((v: number, i: number) => isClose(v, compareValue[i]))
   }
 
   it('create Magic Color', () => {

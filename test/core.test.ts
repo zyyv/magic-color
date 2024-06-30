@@ -13,14 +13,6 @@ describe('utils scoped', () => {
   const hsbValue = [22, 90, 82]
   const hsb = `hsb(${hsbValue.map((v, i) => i === 0 ? v : `${v}%`).join(', ')})`
 
-  const isnotHex = 'rgb(255, 0, 0, 0.5)'
-  const isnotRgb = 'rgb(255, 0)'
-  const isnotHsl = 'hsl(0, 100%)'
-  const isnotHsb = 'hsb(0, 100%)'
-
-  const colors = [hex, rgb, hsl, hsb]
-  const notColors = [isnotHex, isnotRgb, isnotHsl, isnotHsb]
-
   // 是否在误差允许范围内
   function isClose(a: number, b: number, tolerance = 1) {
     return Math.abs(a - b) <= tolerance
@@ -28,14 +20,9 @@ describe('utils scoped', () => {
 
   function testClose<T extends Omit<ColorType, 'hex'>>(valueString: string, type: T, compareValue: number[]) {
     const color = new MagicColor(valueString)
-    const value = color.to(type as any).value() as number[]
-    return value.every((v, i) => isClose(v, compareValue[i]))
+    const value = color.to(type as any).value() as any
+    return value.every((v: number, i: number) => isClose(v, compareValue[i]))
   }
-
-  it('isColor', () => {
-    expect(colors.every(isColor)).toEqual(true)
-    expect(notColors.every(isColor)).toEqual(false)
-  })
 
   it('basic convert', () => {
     // rgb to others test case
