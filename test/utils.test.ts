@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ColorType, Colors } from 'magic-color'
+import type { ColorType } from 'magic-color'
 import { MagicColor, isColor } from 'magic-color'
 import { resolveArgs } from '../packages/magic-color/src/core/utils'
 

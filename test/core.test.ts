@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ColorType } from 'magic-color'
-import { MagicColor, isColor } from 'magic-color'
+import { MagicColor } from 'magic-color'
 
 describe('utils scoped', () => {
   const hex = '#d15b14'
