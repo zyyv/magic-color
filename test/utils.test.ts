@@ -1,19 +1,20 @@
 import { describe, expect, it } from 'vitest'
 import type { ColorType } from 'magic-color'
 import { MagicColor, isColor } from 'magic-color'
+import { resolveArgs } from '../packages/magic-color/src/core/utils'
 
 describe('utils scoped', () => {
   const hex = '#d15b14'
   const rgbValue = [209, 91, 20]
-  const rgb = `rgb(${rgbValue.join(', ')})`
+  const rgb = `rgb(${rgbValue.join(' ')})`
 
   const hslValue = [22, 82, 45]
-  const hsl = `hsl(${hslValue.map((v, i) => i === 0 ? v : `${v}%`).join(', ')})`
+  const hsl = `hsl(${hslValue.join(' ')})`
 
   const hsbValue = [22, 90, 82]
   const hsb = `hsb(${hsbValue.map((v, i) => i === 0 ? v : `${v}%`).join(', ')})`
 
-  const isnotHex = 'rgb(255, 0, 0, 0.5)'
+  const isnotHex = 'rgb(255 0 0 / 0.5)'
   const isnotRgb = 'rgb(255, 0)'
   const isnotHsl = 'hsl(0, 100%)'
   const isnotHsb = 'hsb(0, 100%)'
@@ -28,15 +29,15 @@ describe('utils scoped', () => {
 
   function testClose<T extends Omit<ColorType, 'hex'>>(valueString: string, type: T, compareValue: number[]) {
     const color = new MagicColor(valueString)
-    const value = color.to(type as any).value as number[]
-    return value.every((v, i) => isClose(v, compareValue[i]))
+    const value = color.to(type as any).value() as any
+    return value.every((v: number, i: number) => isClose(v, compareValue[i]))
   }
 
   it('create Magic Color', () => {
-    expect(new MagicColor('#d15b14').toString()).toMatchInlineSnapshot(`"#d15b14"`)
-    expect(new MagicColor('#d15b14', 'hex').toString()).toMatchInlineSnapshot(`"#d15b14"`)
-    expect(new MagicColor('#d15b14', 'hex', 0.1).toString(true)).toMatchInlineSnapshot(`"#d15b141a"`)
-    expect(new MagicColor('rgb(209, 91, 20)').toHex().toString()).toMatchInlineSnapshot(`"#d15b14"`)
+    expect(new MagicColor('#d15b14').css()).toMatchInlineSnapshot(`"#d15b14"`)
+    expect(new MagicColor('#d15b14', 'hex').css()).toMatchInlineSnapshot(`"#d15b14"`)
+    expect(new MagicColor('#d15b14', 'hex', 0.5).css(true)).toMatchInlineSnapshot(`"#d15b1480"`)
+    expect(new MagicColor('rgb(209, 91, 20)').toHex().css()).toMatchInlineSnapshot(`"#d15b14"`)
     // Error test case: invalid color
     expect(() => new MagicColor('')).toThrowError('Invalid color')
     // Error test case: different type
@@ -50,12 +51,13 @@ describe('utils scoped', () => {
 
   it('simple convert', () => {
     // rgb to others test case
-    expect(new MagicColor(rgb).toHex().toString()).toEqual(hex)
+    expect(new MagicColor(rgb).toHex().value()).toMatchInlineSnapshot(`"#d15b14"`)
+    expect(new MagicColor(rgb).toHex().css()).toEqual(hex)
     expect(testClose(rgb, 'hsb', hsbValue)).toEqual(true)
     expect(testClose(rgb, 'hsl', hslValue)).toEqual(true)
 
     // hex to others test case
-    expect(new MagicColor(hex).toRgb().toString()).toEqual(rgb)
+    expect(new MagicColor(hex).toRgb().css()).toEqual(rgb)
     expect(testClose(hex, 'hsb', hsbValue)).toEqual(true)
     expect(testClose(hex, 'hsl', hslValue)).toEqual(true)
 
@@ -77,10 +79,30 @@ describe('utils scoped', () => {
   it('in magic color', () => {
     const c = `rgba(100, 100, 100, ${opacity})`
     const mcColor = new MagicColor(c)
-    expect(mcColor.toRgb().toString(true)).toEqual('rgba(100, 100, 100, 67.89%)')
-    expect(mcColor.toHex().toString(true)).toEqual('#646464ad')
-    expect(mcColor.toHsl().toString(true)).toEqual('hsla(0, 0%, 39%, 67.89%)')
-    expect(mcColor.toHsl().toString(true)).toEqual('hsla(0, 0%, 39%, 67.89%)')
-    expect(mcColor.toHsb().toString(true)).toEqual('hsb(0, 0%, 39%)')
+    expect(mcColor.toRgb().css(true)).toMatchInlineSnapshot(`"rgb(100 100 100 / 0.6789)"`)
+    expect(mcColor.toHex().css(true)).toMatchInlineSnapshot(`"#646464ad"`)
+    expect(mcColor.toHsl().css(true)).toMatchInlineSnapshot(`"hsl(0 0 39 / 0.6789)"`)
+    expect(mcColor.toHsl().css(true)).toMatchInlineSnapshot(`"hsl(0 0 39 / 0.6789)"`)
   })
+})
+
+it('resolveArgs', () => {
+  const testCases = [
+    { args: [255, 0, 0, 1], expected: [[255, 0, 0], 'rgb', 1] },
+    { args: [255, 0, 0, 'rgb'], expected: [[255, 0, 0], 'rgb', 1] },
+    { args: [[255, 0, 0], 'rgb', 0.5], expected: [[255, 0, 0], 'rgb', 0.5] },
+    { args: [{ r: 255, g: 0, b: 0 }, 'rgb', 1], expected: [[255, 0, 0], 'rgb', 1] },
+    { args: [{ h: 100, s: 50, l: 50 }, 'hsl', 1], expected: [[100, 50, 50], 'hsl', 1] },
+    { args: [{ h: 100, s: 50, l: 50 }], expected: [[100, 50, 50], 'hsl', 1] },
+    { args: [255, 0, 0, 'rgb', 1], expected: [[255, 0, 0], 'rgb', 1] },
+    { args: ['rgba(255,0,0,0.5)', 'rgb'], expected: [[255, 0, 0], 'rgb', 0.5] },
+  ]
+
+  const args = testCases.map(({ args }) => args)
+  const expected = testCases.map(({ expected }) => expected)
+
+  expect(args.filter((i, idx) => {
+    const result = resolveArgs(...i)
+    return JSON.stringify(result) !== JSON.stringify(expected[idx])
+  })).toMatchInlineSnapshot(`[]`)
 })

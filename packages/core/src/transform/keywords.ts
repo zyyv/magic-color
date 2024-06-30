@@ -16,12 +16,11 @@ export function parseKeyword(color: string) {
 
   c = (unoColors as any)[color]
   if (c) {
-    if (isObject(c)) {
+    if (isObject(c))
       hex = c.DEFAULT
-    }
-    else {
+
+    else
       hex = c
-    }
 
     return parseHex(hex as HexColor)
   }
@@ -33,7 +32,6 @@ export function parseKeyword(color: string) {
   }
 
   c = (w3cx11 as any)[color]
-  if (c) {
+  if (c)
     return parseHex(c)
-  }
 }

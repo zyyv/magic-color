@@ -11,10 +11,8 @@
   "dependencies": {
     "@magic-color/core": "workspace:*",
     "@magic-color/vue": "workspace:*",
-    "@types/chroma-js": "^2.4.4",
     "@vueuse/core": "^10.10.1",
     "chart.js": "^4.4.3",
-    "chroma-js": "^2.4.2",
     "magic-color": "workspace:*",
     "vue": "^3.4.27"
   },

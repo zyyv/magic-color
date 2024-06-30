@@ -81,12 +81,12 @@ export default /* @__PURE__ */ defineComponent({
     function getBarBgColor() {
       switch (props.type) {
         case 'alpha': {
-          const rgb = new MagicColor(props.color, 'hex', model.value).toRgb().value
+          const rgb = new MagicColor(props.color, 'hex', model.value).value('rgb')
           const c = rgb.map(i => i + Math.round((255 - i) * (1 - model.value))) as RgbColor
-          return new MagicColor(c, 'rgb', model.value).toString()
+          return new MagicColor(c, 'rgb', model.value).css()
         }
         case 'hue':
-          return new MagicColor([Math.round(model.value * 360), 100, 100], 'hsb', 1).toHex().toString()
+          return new MagicColor([Math.round(model.value * 360), 100, 100], 'hsb', 1).hex()
         default:
           return props.barColor
       }

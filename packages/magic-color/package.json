@@ -42,6 +42,10 @@
     "dev": "unbuild --stub"
   },
   "dependencies": {
-    "@magic-color/core": "workspace:*"
+    "@magic-color/core": "workspace:*",
+    "chroma-js": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/chroma-js": "^2.4.4"
   }
 }

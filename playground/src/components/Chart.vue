@@ -12,7 +12,7 @@ const chartRef = ref<HTMLCanvasElement | null>(null)
 let chart: Chart | null = null
 
 function getData(colors: ReturnType<typeof theme>, type: 'h' | 's' | 'l') {
-  return Object.values(colors).map(c => new MagicColor(c).toHsl().value[type === 'h' ? 0 : type === 's' ? 1 : 2])
+  return Object.values(colors).map(c => new MagicColor(c).value('hsl')[type === 'h' ? 0 : type === 's' ? 1 : 2])
 }
 
 const defaultConfig = {

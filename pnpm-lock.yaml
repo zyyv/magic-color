@@ -88,6 +88,13 @@ importers:
       '@magic-color/core':
         specifier: workspace:*
         version: link:../core
+      chroma-js:
+        specifier: ^2.4.2
+        version: 2.4.2
+    devDependencies:
+      '@types/chroma-js':
+        specifier: ^2.4.4
+        version: 2.4.4
 
   packages/vue:
     dependencies:
@@ -107,18 +114,12 @@ importers:
       '@magic-color/vue':
         specifier: workspace:*
         version: link:../packages/vue
-      '@types/chroma-js':
-        specifier: ^2.4.4
-        version: 2.4.4
       '@vueuse/core':
         specifier: ^10.10.1
         version: 10.10.1(vue@3.4.27(typescript@5.4.5))
       chart.js:
         specifier: ^4.4.3
         version: 4.4.3
-      chroma-js:
-        specifier: ^2.4.2
-        version: 2.4.2
       magic-color:
         specifier: workspace:*
         version: link:../packages/magic-color
