@@ -1,5 +1,5 @@
 import { computed, defineComponent, h, ref, useModel } from 'vue'
-import type { ColorType, ColorValue, HexColor, HsbColor, HslColor, RgbColor } from 'magic-color'
+import type { ColorType, ColorValue, HexColor, HsbColor } from 'magic-color'
 import { MagicColor } from 'magic-color'
 import PalettePanel from './PalettePanel'
 import PalettePreview from './PalettePreview'
@@ -21,22 +21,7 @@ export default /* @__PURE__ */ defineComponent({
     const mcHsbColor = computed({
       get: () => new MagicColor(color.value).value('hsb'),
       set: (v) => {
-        switch (type.value) {
-          case 'hex':
-            color.value = new MagicColor(v, 'hsb').hex()
-            break
-          case 'rgb':
-            color.value = new MagicColor(v, 'hsb').rgb()
-            break
-          case 'hsl':
-            color.value = new MagicColor(v, 'hsb').hsl()
-            break
-          case 'hsb':
-            color.value = new MagicColor(v, 'hsb').css()
-            break
-          default:
-            break
-        }
+        color.value = new MagicColor(v, 'hsb').css(type.value)
       },
     })
 
@@ -54,7 +39,7 @@ export default /* @__PURE__ */ defineComponent({
     const displayBgColor = computed(() => {
       const mcColor = new MagicColor(color.value)
       mcColor.alpha = alpha.value
-      return mcColor.rgb(true)
+      return mcColor.css('rgb')
     })
 
     const colorValue = computed({

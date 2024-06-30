@@ -1,4 +1,4 @@
-import { guessType } from './core'
+import { guessType } from './core/utils'
 
 export function isColor(color: string): boolean {
   return guessType(color) !== undefined

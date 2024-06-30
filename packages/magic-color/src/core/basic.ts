@@ -1,8 +1,10 @@
-import type { ColorType, ColorValue, Colors, HexColor, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/core'
-import { hexToHsb, hexToHsl, hexToLab, hexToRgb, hsbToHex, hsbToHsl, hsbToLab, hsbToRgb, hslToHex, hslToHsb, hslToLab, hslToRgb, isHex, isHsb, isHsl, isKeyword, isRgb, labToHex, labToHsb, labToHsl, labToRgb, parseHex, parseHsb, parseHsl, parseKeyword, parseLab, parseRgb, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab } from '@magic-color/core'
+import type { ColorType, Colors, HexColor, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/core'
+import { hexToHsb, hexToHsl, hexToLab, hexToRgb, hsbToHex, hsbToHsl, hsbToLab, hsbToRgb, hslToHex, hslToHsb, hslToLab, hslToRgb, labToHex, labToHsb, labToHsl, labToRgb, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab } from '@magic-color/core'
+import { getColorName } from '../theme'
 import type { ColorObject } from './types'
+import { SupportTypes, alphaToString, resolveArgs } from './utils'
 
-export class MagicColor<T extends ColorType> {
+export class MagicColor<T extends ColorType> implements ColorObject<T> {
   type: T
   values: Colors[T]
   alpha: Opacity
@@ -15,42 +17,12 @@ export class MagicColor<T extends ColorType> {
   constructor(value: Colors[T], type: T)
   constructor(value: Colors[T], type: T, alpha: Opacity)
   constructor(...args: any[]) {
-    if (args.length === 1) {
-      if (typeof args[0] === 'string') {
-        const {
-          values,
-          type,
-          alpha,
-        } = resolveColorString(args[0])
-
-        this.values = values as Colors[T]
-        this.type = type as T
-        this.alpha = alpha
-      }
-      else {
-        throw new TypeError('Invalid color type.')
-      }
-    }
-    else if ([2, 3].includes(args.length)) {
-      if (typeof args[0] === 'string') {
-        const {
-          values,
-          type,
-          alpha,
-        } = resolveColorString(args[0])
-
-        if (args[1] !== type)
-          throw new Error(`Invalid color type: ${args[1]}.`)
-
-        this.values = values as Colors[T]
-        this.type = type as T
-        this.alpha = args[2] ?? alpha
-      }
-      else {
-        this.values = args[0]
-        this.type = args[1]
-        this.alpha = args[2] ?? 1
-      }
+    const result = resolveArgs<T>(...args)
+    if (result) {
+      const [values, type, alpha] = result
+      this.values = values
+      this.type = type
+      this.alpha = alpha
     }
     else {
       throw new Error('Invalid color type.')
@@ -78,6 +50,10 @@ export class MagicColor<T extends ColorType> {
       default:
         throw new Error('Invalid color type.')
     }
+  }
+
+  get name() {
+    return getColorName(this.css('hex'))
   }
 
   toRgb(): MagicColor<'rgb'> {
@@ -222,24 +198,24 @@ export class MagicColor<T extends ColorType> {
     }
   }
 
-  hex(withAlpha = false) {
-    return this.clone().toHex().toString(withAlpha)
+  hex(): string {
+    return this.value('hex')
   }
 
-  rgb(withAlpha = false) {
-    return this.clone().toRgb().toString(withAlpha)
+  rgb(round = true): RgbColor {
+    return this.value('rgb', round)
   }
 
-  hsl(withAlpha = false) {
-    return this.clone().toHsl().toString(withAlpha)
+  hsl(round = true): HslColor {
+    return this.value('hsl', round)
   }
 
-  hsb(withAlpha = false) {
-    return this.clone().toHsb().toString(withAlpha)
+  hsb(round = true): HsbColor {
+    return this.value('hsb', round)
   }
 
-  lab(withAlpha = false) {
-    return this.clone().toLab().toString(withAlpha)
+  lab(round = true): LabColor {
+    return this.value('lab', round)
   }
 
   value<K extends ColorType = T>(type: K = this.type as unknown as K, round = true): Colors[K] {
@@ -307,8 +283,8 @@ export class MagicColor<T extends ColorType> {
     return mc
   }
 
+  // TODO
   set(operate: string, value: unknown) {
-    const SupportTypes = ['rgb', 'hex', 'hsl', 'hsb', 'lab']
     const [type, channel] = operate.split('.')
     if (!type || !SupportTypes.includes(type)) {
       throw new Error('Invalid operate type.')
@@ -327,46 +303,10 @@ export class MagicColor<T extends ColorType> {
   }
 }
 
-export function alphaToString(alpha: Opacity, toHex = false): string {
-  return toHex
-    ? Math.round(alpha * 255).toString(16).padStart(2, '0')
-    : `${Math.round(alpha * 10000) / 100}%`
-}
-
-function resolveColorString(color: string) {
-  const type = guessType(color)
-  if (!type)
-    throw new Error(`Invalid color: ${color}.`)
-
-  const parseMap = {
-    rgb: parseRgb,
-    hex: parseHex,
-    hsl: parseHsl,
-    hsb: parseHsb,
-    keyword: parseKeyword,
-    lab: parseLab,
-  }
-
-  return {
-    ...parseMap[type](color),
-    type,
-  } as ColorObject<ColorType>
-}
-
-export function guessType(color: string): ColorType | undefined {
-  if (!color)
-    return
-
-  const map = {
-    rgb: isRgb,
-    hex: isHex,
-    hsl: isHsl,
-    hsb: isHsb,
-    keyword: isKeyword,
-  }
-
-  for (const [type, test] of Object.entries(map)) {
-    if (test(color))
-      return type as ColorType
-  }
+export function mc<T extends ColorType>(value: string): MagicColor<T>
+export function mc<T extends ColorType>(value: Colors[T], type: T): MagicColor<T>
+export function mc<T extends ColorType>(value: Colors[T], type: T, alpha: Opacity): MagicColor<T>
+export function mc<T extends ColorType>(...args: any): MagicColor<T> {
+  // @ts-expect-error allow the type to be inferred
+  return new MagicColor(...args) as MagicColor<T>
 }

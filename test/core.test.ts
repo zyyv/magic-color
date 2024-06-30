@@ -44,7 +44,7 @@ describe('utils scoped', () => {
     expect(testClose(rgb, 'hsl', hslValue)).toEqual(true)
 
     // hex to others test case
-    expect(new MagicColor(hex).rgb()).toEqual(rgb)
+    expect(new MagicColor(hex).css('rgb')).toEqual(rgb)
     expect(testClose(hex, 'hsb', hsbValue)).toEqual(true)
     expect(testClose(hex, 'hsl', hslValue)).toEqual(true)
 
@@ -66,18 +66,42 @@ describe('utils scoped', () => {
     const c = `rgba(100, 100, 100, ${opacity})`
     const mcColor = new MagicColor(c)
 
-    expect(mcColor.rgb(true)).toMatchInlineSnapshot(`"rgb(100 100 100 / 0.6789)"`)
-    expect(mcColor.hex(true)).toMatchInlineSnapshot(`"#646464ad"`)
-    expect(mcColor.hsl(true)).toMatchInlineSnapshot(`"hsl(0 0 39 / 0.6789)"`)
-    expect(mcColor.hsl(true)).toMatchInlineSnapshot(`"hsl(0 0 39 / 0.6789)"`)
-    expect(mcColor.hsb(true)).toMatchInlineSnapshot(`"hsb(0, 0%, 39.21568627450981%)"`)
+    expect(mcColor.rgb(true)).toMatchInlineSnapshot(`
+      [
+        100,
+        100,
+        100,
+      ]
+    `)
+    expect(mcColor.hex()).toMatchInlineSnapshot(`"#646464"`)
+    expect(mcColor.hsl(true)).toMatchInlineSnapshot(`
+      [
+        0,
+        0,
+        39,
+      ]
+    `)
+    expect(mcColor.hsl(true)).toMatchInlineSnapshot(`
+      [
+        0,
+        0,
+        39,
+      ]
+    `)
+    expect(mcColor.hsb(true)).toMatchInlineSnapshot(`
+      [
+        0,
+        0,
+        39,
+      ]
+    `)
   })
 
   it('magicColor history', () => {
     const hexString = '#808080'
     const color = new MagicColor(hexString, 'hex', 1)
 
-    expect(color.history).toMatchInlineSnapshot(`[]`)
+    expect(color.history).toEqual([])
 
     color.toHsb()
     color.toRgb()

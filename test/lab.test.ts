@@ -101,8 +101,8 @@ it('magic for rgb and lab', () => {
   expect(mc.toLab().value()).toEqual(lab)
   expect(mc.toLab().css()).toEqual(`lab(50 20 30)`)
   expect(mc.toLab().value('rgb')).toEqual(rgb)
-  expect(mc.lab()).toEqual('lab(50 20 30)')
-  expect(mc.lab(true)).toEqual('lab(50 20 30 / 100%)')
+  expect(mc.css('lab')).toEqual('lab(50 20 30)')
+  expect(mc.css(true)).toEqual('lab(50 20 30 / 100%)')
 
   const mc2 = new MagicColor(lab, 'lab')
   expect(mc2.toRgb().value()).toEqual(rgb)

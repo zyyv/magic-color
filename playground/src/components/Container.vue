@@ -3,7 +3,6 @@ import { theme } from 'magic-color'
 import ThemeColors from './ThemeColors.vue'
 import Chart from './Chart.vue'
 import RatioTable from './RatioTable.vue'
-import Chroma from './Chroma.vue'
 
 const color = defineModel<string>('color')
 const alpha = defineModel<number>('alpha')
@@ -21,7 +20,6 @@ const colors = computed(() => {
 <template>
   <div>
     <ThemeColors :colors />
-    <Chroma :color="color!" />
     <div mt-8 fc gap-8>
       <div>
         <Chart :colors />

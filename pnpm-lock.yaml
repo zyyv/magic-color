@@ -88,6 +88,13 @@ importers:
       '@magic-color/core':
         specifier: workspace:*
         version: link:../core
+      chroma-js:
+        specifier: ^2.4.2
+        version: 2.4.2
+    devDependencies:
+      '@types/chroma-js':
+        specifier: ^2.4.4
+        version: 2.4.4
 
   packages/vue:
     dependencies:

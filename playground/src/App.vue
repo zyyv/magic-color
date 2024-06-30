@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { randomColor } from 'magic-color'
+import { mc, randomColor } from 'magic-color'
 import Container from './components/Container.vue'
 
 const color = ref(import.meta.env.DEV ? '#30db9d' : randomColor())
 // const color = ref(import.meta.env.DEV ? '#529e82' : randomColor())
 const alpha = ref(1)
+
+// @ts-expect-error mc in window
+window.mc = mc
 </script>
 
 <template>

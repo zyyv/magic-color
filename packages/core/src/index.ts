@@ -10,3 +10,5 @@ export * from './transform/lab'
 export * from './colors/uno'
 export * from './colors/colorbrewer'
 export * from './colors/w3cx11'
+
+export * from './utils'

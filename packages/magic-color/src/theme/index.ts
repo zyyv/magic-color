@@ -1,6 +1,6 @@
+import chroma from 'chroma-js'
 import { MagicColor } from '../core'
 import collections from './collections.json'
-import { deltaE } from './utils'
 import type { BasicColorShades, ClosestColorShades, ThemeMetas, ThemeOptions } from './types'
 import { hueShades } from './shades'
 
@@ -8,71 +8,63 @@ function findClosetShade(color: string, colors: BasicColorShades[]): ClosestColo
   const normalizedColors = colors.map((meta) => {
     const shades = meta.shades.map(shade => ({
       ...shade,
-      delta: deltaE(color, shade.color), // 计算两个颜色之间的色差 deltaE
-      lightnessDiff: Math.abs(hslComponets(shade.color, 'l') - hslComponets(color, 'l')) / 100,
+      delta: chroma.deltaE(color, shade.color),
+      lightnessDiff: Math.abs(chroma(shade.color).get('hsl.l') - chroma(color).get('hsl.l')),
     }))
 
     return {
       ...meta,
       shades,
-      closestShade: shades.reduce((p, n) => p.delta < n.delta ? p : n), // 每个颜色集合中与目标颜色最接近的颜色
+      closestShade: shades.reduce((p, n) => p.delta < n.delta ? p : n),
     }
   })
 
-  // 找到与目标颜色最接近的颜色集合
   const colorModel = normalizedColors.reduce((i, a) => i.closestShade.delta < a.closestShade.delta ? i : a)
 
   return {
     ...colorModel,
-    // 找到与目标颜色最接近的颜色集合中与目标颜色亮度最接近的颜色
     closestShadeLightness: colorModel.shades.reduce((i, a) => i.lightnessDiff < a.lightnessDiff ? i : a),
   }
 }
 
-function generate(o: string, e: BasicColorShades[], apca = false) {
-  // 获取与输入颜色 o 最接近的阴影色和亮度
-  const a = findClosetShade(o, e)
+export function getColorName(color: string): string {
+  return collections
+    .map(t => [...t, chroma.deltaE(color, t[0])])
+    .reduce((t, i) => t[2] < i[2] ? t : i)[1] as string
+}
 
-  // 获取输入颜色的 HSL 色调
-  const r = hslComponets(o, 'h')
-  // 获取最接近阴影亮度的 HSL 色调
-  const l = hslComponets(a.closestShadeLightness.color, 'h')
+function generate(color: string, colorShades: BasicColorShades[], apca = false) {
+  const closedShade = findClosetShade(color, colorShades)
 
-  // 计算色调差异
-  let d: any = r - (l || 0)
+  const _h = chroma(color).get('hsl.h')
+  const _close_h = chroma(closedShade.closestShadeLightness.color).get('hsl.h')
 
-  // 计算饱和度比例
-  const k = hslComponets(o, 's') / hslComponets(a.closestShadeLightness.color, 's')
+  let d: string | number = _h - (_close_h || 0)
 
-  // 调整色调差异的表示形式
+  const k = chroma(color).get('hsl.s') / chroma(closedShade.closestShadeLightness.color).get('hsl.s')
+
   if (d === 0)
-    d = l.toString()
+    d = _close_h.toString()
   else if (d > 0)
     d = `+${d}`
   else
     d = d.toString()
 
-  const name = getName(o)
+  const name = getColorName(color)
 
   return {
     id: name.toLowerCase(),
     name,
-    shades: a.shades.map((shade) => {
-      const _mc = new MagicColor(shade.color, 'hex').toHsl()
-      const _value = _mc.value()
+    shades: closedShade.shades.map((shade) => {
+      let _color = shade.color
 
-      // 调整 色调 饱和度
-      _mc.values = [Number(d), _value[1] * k, _value[2]]
-      console.log({ values: _mc.values })
+      const u = chroma(_color).get('hsl.s') * k
+      _color = chroma(_color).set('hsl.s', u).hex()
+      _color = chroma(_color).set('hsl.h', d).hex()
 
-      let color = _mc.hex()
+      if (closedShade.closestShadeLightness.key === shade.key)
+        _color = chroma(color).hex()
 
-      // 如果当前阴影是最接近的阴影亮度，将颜色设置为输入颜色
-      if (a.closestShadeLightness.key === shade.key) {
-        color = new MagicColor(o).hex()
-      }
-
-      // 如果 t 为 true，根据 APCA 对比度调整颜色
       if (apca) {
         // if (shade.number < 500) {
         //     let b = i.find(v => v.number == shade.number).apcaOnBlack;
@@ -85,33 +77,14 @@ function generate(o: string, e: BasicColorShades[], apca = false) {
 
       return {
         key: shade.key.toString() as unknown as keyof ThemeMetas,
-        color,
-        // hsl: [
-        //   Math.round(hslComponets(color, 'h')) || 0,
-        //   Math.round(hslComponets(color, 's') * 100),
-        //   Math.round(hslComponets(color, 'l') * 100),
-        // ],
-        // isLocked: a.closestShadeLightness.key === shade.key && !apca,
+        color: _color,
+        hsl: [
+          Math.round(chroma(_color).get('hsl.h')) || 0,
+          Math.round(chroma(_color).get('hsl.s') * 100),
+          Math.round(chroma(_color).get('hsl.l') * 100),
+        ],
       }
     }),
-  }
-}
-
-function getName(color: string): string {
-  return collections
-    .map(t => [...t, deltaE(color, t[0])])
-    .reduce((t, i) => t[2] < i[2] ? t : i)[1] as string
-}
-
-function hslComponets(c: string, type: 'h' | 's' | 'l') {
-  const hsl = new MagicColor(c).value('hsl')
-  switch (type) {
-    case 'h':
-      return hsl[0]
-    case 's':
-      return hsl[1]
-    case 'l':
-      return hsl[2]
   }
 }
 

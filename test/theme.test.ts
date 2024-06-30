@@ -7,17 +7,17 @@ describe('theme colors', () => {
   it('simple theme', () => {
     expect(theme(testColor)).toMatchInlineSnapshot(`
       {
-        "100": "#ffe8e5",
-        "200": "#00d9d5",
-        "300": "#01b8b0",
-        "400": "#009083",
-        "50": "#00f5f4",
-        "500": "#9955FF",
-        "600": "#f74531",
-        "700": "#e3301c",
-        "800": "#bd2919",
-        "900": "#9c2417",
-        "950": "#6a150b",
+        "100": "#eee8ff",
+        "200": "#dfd4ff",
+        "300": "#c9b1ff",
+        "400": "#b085ff",
+        "50": "#f6f2ff",
+        "500": "#9955ff",
+        "600": "#8c30f7",
+        "700": "#7e1ee3",
+        "800": "#6918bf",
+        "900": "#57169c",
+        "950": "#360b6a",
       }
     `)
   })
@@ -25,22 +25,22 @@ describe('theme colors', () => {
   it('theme to other type', () => {
     expect(theme(testColor, { type: 'rgb' })).toMatchInlineSnapshot(`
       {
-        "100": "rgb(255 232 229)",
-        "200": "rgb(0 217 213)",
-        "300": "rgb(1 184 176)",
-        "400": "rgb(0 144 131)",
-        "50": "rgb(0 245 244)",
+        "100": "rgb(238 232 255)",
+        "200": "rgb(223 212 255)",
+        "300": "rgb(201 177 255)",
+        "400": "rgb(176 133 255)",
+        "50": "rgb(246 242 255)",
         "500": "rgb(153 85 255)",
-        "600": "rgb(247 69 49)",
-        "700": "rgb(227 48 28)",
-        "800": "rgb(189 41 25)",
-        "900": "rgb(156 36 23)",
-        "950": "rgb(106 21 11)",
+        "600": "rgb(140 48 247)",
+        "700": "rgb(126 30 227)",
+        "800": "rgb(105 24 191)",
+        "900": "rgb(87 22 156)",
+        "950": "rgb(54 11 106)",
       }
     `)
   })
 
-  it.skip('theme with render', () => {
+  it('theme with render', () => {
     expect(theme(testColor, {
       type: 'rgb',
       render: (meta) => {
@@ -51,17 +51,17 @@ describe('theme colors', () => {
       },
     })).toMatchInlineSnapshot(`
       {
-        "--color-primary-100": "153 85 255",
-        "--color-primary-200": "153 85 255",
-        "--color-primary-300": "153 85 255",
-        "--color-primary-400": "153 85 255",
-        "--color-primary-50": "153 85 255",
+        "--color-primary-100": "238 232 255",
+        "--color-primary-200": "223 212 255",
+        "--color-primary-300": "201 177 255",
+        "--color-primary-400": "176 133 255",
+        "--color-primary-50": "246 242 255",
         "--color-primary-500": "153 85 255",
-        "--color-primary-600": "153 85 255",
-        "--color-primary-700": "153 85 255",
-        "--color-primary-800": "153 85 255",
-        "--color-primary-900": "153 85 255",
-        "--color-primary-950": "153 85 255",
+        "--color-primary-600": "140 48 247",
+        "--color-primary-700": "126 30 227",
+        "--color-primary-800": "105 24 191",
+        "--color-primary-900": "87 22 156",
+        "--color-primary-950": "54 11 106",
       }
     `)
   })

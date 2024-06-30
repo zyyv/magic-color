@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { ColorType } from 'magic-color'
 import { MagicColor, isColor } from 'magic-color'
+import { resolveArgs } from '../packages/magic-color/src/core/utils'
 
 describe('utils scoped', () => {
   const hex = '#d15b14'
@@ -83,4 +84,25 @@ describe('utils scoped', () => {
     expect(mcColor.toHsl().css(true)).toMatchInlineSnapshot(`"hsl(0 0 39 / 0.6789)"`)
     expect(mcColor.toHsl().css(true)).toMatchInlineSnapshot(`"hsl(0 0 39 / 0.6789)"`)
   })
+})
+
+it('resolveArgs', () => {
+  const testCases = [
+    { args: [255, 0, 0, 1], expected: [[255, 0, 0], 'rgb', 1] },
+    { args: [255, 0, 0, 'rgb'], expected: [[255, 0, 0], 'rgb', 1] },
+    { args: [[255, 0, 0], 'rgb', 0.5], expected: [[255, 0, 0], 'rgb', 0.5] },
+    { args: [{ r: 255, g: 0, b: 0 }, 'rgb', 1], expected: [[255, 0, 0], 'rgb', 1] },
+    { args: [{ h: 100, s: 50, l: 50 }, 'hsl', 1], expected: [[100, 50, 50], 'hsl', 1] },
+    { args: [{ h: 100, s: 50, l: 50 }], expected: [[100, 50, 50], 'hsl', 1] },
+    { args: [255, 0, 0, 'rgb', 1], expected: [[255, 0, 0], 'rgb', 1] },
+    { args: ['rgba(255,0,0,0.5)', 'rgb'], expected: [[255, 0, 0], 'rgb', 0.5] },
+  ]
+
+  const args = testCases.map(({ args }) => args)
+  const expected = testCases.map(({ expected }) => expected)
+
+  expect(args.filter((i, idx) => {
+    const result = resolveArgs(...i)
+    return JSON.stringify(result) !== JSON.stringify(expected[idx])
+  })).toMatchInlineSnapshot(`[]`)
 })
