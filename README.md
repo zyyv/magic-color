@@ -50,50 +50,66 @@ A lot of color tool functions for you to use, providing easy conversion, generat
 ### basic
 
 ```ts
-import { Magicolor } from 'magic-color'
+import { Magicolor, mc } from 'magic-color'
 
-const mc = new Magicolor('#ffffff') // auto parse color
-const mc = new Magicolor('#ffffff', 'hex') // specify color type
-const mc = new Magicolor('#ffffff', 'hex', 1) // specify opacity
+// mc is an alias of Magicolor, but more static methods are mounted on mc, making it more powerful 💪.
+
+const color = new Magicolor('#ffffff') // auto parse color
+const color = mc('#ffffff')
+const color = mc([255, 255, 255]) // default parse as RGB
+const color = mc({ r: 255, g: 255, b: 255 })
+
+const color = mc('#ffffff', 'hex') // specify color type
+const color = mc('#ffffff', 'hex', 1) // specify opacity
 ```
 
 `Magicolor` will automatically infer the input color type and the opacity.
 
-Now support color types: `RGB`, `HEX`, `HSL`, `HSB`, `Keyword`.
+**Currently Magicolor supports the following types: `RGB`, `HEX`, `HSL`, `HSB`, `LAB`, `Keyword`.**
 
 You can convert between supported types.
 
 ```ts
-mc.toRgb() // RGB value: [255, 255, 255]
-mc.toHex() // HEX value: '#ffffff'
-mc.toHsl() // HSL value: [0, 0, 100]
-mc.toHsb() // HSB value: [0, 0, 100]
+color.toRgb() // RGB value: [255, 255, 255]
+color.toHex() // HEX value: '#ffffff'
+color.toHsl() // HSL value: [0, 0, 100]
+color.toHsb() // HSB value: [0, 0, 100]
 
 // or you can use the `to` method
-mc.to('your transformed type')
+color.to('your transformed type')
 ```
 
-If you want to output a color string, you can use the `toString` method, and you can choose whether you need opacity.
+Get any type value of the color.
 
 ```ts
-mc.toString() // '#ffffff'
+color.value() // current type value. If type is rgb: [255, 255, 255]
+color.value('hex') // HEX value: '#ffffff'
+color.value('hsl') // HSL value: [0, 0, 100]
+color.value('hsb') // HSB value: [0, 0, 100]
+```
+
+If you want to output a color string, you can use the `css` method, and you can choose whether you need opacity.
+
+```ts
+color.css() // '#ffffff'
 // with opacity
-mc.toString(true) // '#ffffffff'
-mc.toRgb().toString(true) // 'rgba(255, 255, 255, 100%)'
+color.css(true) // '#ffffffff'
+color.css('rgb') // 'rgb(255 255 255)'
+color.css('rgb', true) // 'rgb(255 255 255 / 100%)'
 ```
 
 Refer to the [type documentation](https://github.com/zyyv/magic-color/blob/main/src/core/types.ts) for more information.
 
 And more...
 
-### theme
+### mc.theme
 
 Well, you can use it to create a theme color.
 
 ```ts
-import { theme } from 'magic-color'
+import { mc } from 'magic-color'
 
-theme('#9955ff')
+mc.theme('#9955ff')
 
 // Will output:
 // {
@@ -133,9 +149,9 @@ export interface ThemeOptions {
 ```
 
 ```ts
-import { theme } from 'magic-color'
+import { mc } from 'magic-color'
 
-theme('#9955ff', {
+mc.theme('#9955ff', {
   type: 'rgb',
   render: (meta) => {
     return [
