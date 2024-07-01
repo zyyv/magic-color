@@ -1,5 +1,5 @@
 import type { RgbColor } from '@magic-color/core'
-import { MagicColor } from '../core/basic'
+import { Magicolor } from '../core/basic'
 import { SA98G } from './constant'
 
 /**
@@ -20,8 +20,8 @@ import { SA98G } from './constant'
  * ```
  */
 export function calcWCAG(c1: string, c2: string): number {
-  const _c1 = new MagicColor(c1).value('rgb')
-  const _c2 = new MagicColor(c2).value('rgb')
+  const _c1 = new Magicolor(c1).value('rgb')
+  const _c2 = new Magicolor(c2).value('rgb')
 
   const luminance1 = calcuRelativeLuminance(_c1)
   const luminance2 = calcuRelativeLuminance(_c2)

@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { MagicColor, type theme } from 'magic-color'
+import { Magicolor, type theme } from 'magic-color'
 import Chart from 'chart.js/auto'
 import { ref } from 'vue'
 
@@ -12,7 +12,7 @@ const chartRef = ref<HTMLCanvasElement | null>(null)
 let chart: Chart | null = null
 
 function getData(colors: ReturnType<typeof theme>, type: 'h' | 's' | 'l') {
-  return Object.values(colors).map(c => new MagicColor(c).value('hsl')[type === 'h' ? 0 : type === 's' ? 1 : 2])
+  return Object.values(colors).map(c => new Magicolor(c).value('hsl')[type === 'h' ? 0 : type === 's' ? 1 : 2])
 }
 
 const defaultConfig = {

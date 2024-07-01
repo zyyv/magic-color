@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, ref, useModel } from 'vue'
 import type { ColorType, ColorValue, HexColor, HsbColor } from 'magic-color'
-import { MagicColor } from 'magic-color'
+import { Magicolor } from 'magic-color'
 import PalettePanel from './PalettePanel'
 import PalettePreview from './PalettePreview'
 import PaletteControls from './PaletteControls'
@@ -16,12 +16,12 @@ export default /* @__PURE__ */ defineComponent({
     const color = useModel(props, 'color')
     const alpha = useModel(props, 'alpha')
 
-    const type = ref<ColorType>(new MagicColor(color.value).type)
+    const type = ref<ColorType>(new Magicolor(color.value).type)
 
     const mcHsbColor = computed({
-      get: () => new MagicColor(color.value).value('hsb'),
+      get: () => new Magicolor(color.value).value('hsb'),
       set: (v) => {
-        color.value = new MagicColor(v, 'hsb').css(type.value)
+        color.value = new Magicolor(v, 'hsb').css(type.value)
       },
     })
 
@@ -34,20 +34,20 @@ export default /* @__PURE__ */ defineComponent({
       },
     })
 
-    const controlColor = computed(() => new MagicColor(color.value).hex())
+    const controlColor = computed(() => new Magicolor(color.value).hex())
 
     const displayBgColor = computed(() => {
-      const mcColor = new MagicColor(color.value)
+      const mcColor = new Magicolor(color.value)
       mcColor.alpha = alpha.value
       return mcColor.css('rgb')
     })
 
     const colorValue = computed({
       get: () => {
-        return new MagicColor(color.value).value(type.value)
+        return new Magicolor(color.value).value(type.value)
       },
       set: (v: ColorValue) => {
-        color.value = new MagicColor(v as HexColor, type.value).css()
+        color.value = new Magicolor(v as HexColor, type.value).css()
       },
     })
 

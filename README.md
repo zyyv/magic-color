@@ -50,14 +50,14 @@ A lot of color tool functions for you to use, providing easy conversion, generat
 ### basic
 
 ```ts
-import { MagicColor } from 'magic-color'
+import { Magicolor } from 'magic-color'
 
-const mc = new MagicColor('#ffffff') // auto parse color
-const mc = new MagicColor('#ffffff', 'hex') // specify color type
-const mc = new MagicColor('#ffffff', 'hex', 1) // specify opacity
+const mc = new Magicolor('#ffffff') // auto parse color
+const mc = new Magicolor('#ffffff', 'hex') // specify color type
+const mc = new Magicolor('#ffffff', 'hex', 1) // specify opacity
 ```
 
-`MagicColor` will automatically infer the input color type and the opacity.
+`Magicolor` will automatically infer the input color type and the opacity.
 
 Now support color types: `RGB`, `HEX`, `HSL`, `HSB`, `Keyword`.
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ColorType } from 'magic-color'
-import { MagicColor } from 'magic-color'
+import { Magicolor } from 'magic-color'
 
 describe('utils scoped', () => {
   const hex = '#d15b14'
@@ -19,19 +19,19 @@ describe('utils scoped', () => {
   }
 
   function testClose<T extends Omit<ColorType, 'hex'>>(valueString: string, type: T, compareValue: number[]) {
-    const color = new MagicColor(valueString)
+    const color = new Magicolor(valueString)
     const value = color.to(type as any).value() as any
     return value.every((v: number, i: number) => isClose(v, compareValue[i]))
   }
 
   it('basic convert', () => {
     // rgb to others test case
-    expect(new MagicColor(rgb).hex()).toEqual(hex)
+    expect(new Magicolor(rgb).hex()).toEqual(hex)
     expect(testClose(rgb, 'hsb', hsbValue)).toEqual(true)
     expect(testClose(rgb, 'hsl', hslValue)).toEqual(true)
 
     // hex to others test case
-    expect(new MagicColor(hex).css('rgb')).toEqual(rgb)
+    expect(new Magicolor(hex).css('rgb')).toEqual(rgb)
     expect(testClose(hex, 'hsb', hsbValue)).toEqual(true)
     expect(testClose(hex, 'hsl', hslValue)).toEqual(true)
 
@@ -51,7 +51,7 @@ describe('utils scoped', () => {
   it('color with opacity', () => {
     const opacity = 0.6789
     const c = `rgba(100, 100, 100, ${opacity})`
-    const mcColor = new MagicColor(c)
+    const mcColor = new Magicolor(c)
 
     expect(mcColor.rgb(true)).toMatchInlineSnapshot(`
       [
@@ -86,7 +86,7 @@ describe('utils scoped', () => {
 
   it('magicColor history', () => {
     const hexString = '#808080'
-    const color = new MagicColor(hexString, 'hex', 1)
+    const color = new Magicolor(hexString, 'hex', 1)
 
     expect(color.history).toEqual([])
 

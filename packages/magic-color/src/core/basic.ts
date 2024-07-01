@@ -6,14 +6,14 @@ import { calcAPCA, calcWCAG, reverseAPCA } from '../contrast'
 import type { ColorObject } from './types'
 import { SupportTypes, alphaToString, guessType, resolveArgs } from './utils'
 
-export class MagicColor<T extends ColorType> implements ColorObject<T> {
+export class Magicolor<T extends ColorType> implements ColorObject<T> {
   type: T
   values: Colors[T]
   alpha: Opacity
 
   cloned = false
 
-  private _stack: MagicColor<any>[] = []
+  private _stack: Magicolor<any>[] = []
 
   constructor(value: Colors[T] | Record<string, number>, type?: T, alpha?: Opacity)
   constructor(v1: number, v2: number, v3: number, type?: T, alpha?: Opacity)
@@ -57,7 +57,7 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     return getColorName(this.css('hex'))
   }
 
-  toRgb(): MagicColor<'rgb'> {
+  toRgb(): Magicolor<'rgb'> {
     let value
     switch (this.type) {
       case 'keyword':
@@ -79,10 +79,10 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
 
     this._push<'rgb'>(value, 'rgb', this.alpha)
 
-    return this as MagicColor<'rgb'>
+    return this as Magicolor<'rgb'>
   }
 
-  toHex(): MagicColor<'hex'> {
+  toHex(): Magicolor<'hex'> {
     let value
     switch (this.type) {
       case 'rgb':
@@ -104,10 +104,10 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
 
     this._push<'hex'>(value, 'hex', this.alpha)
 
-    return this as MagicColor<'hex'>
+    return this as Magicolor<'hex'>
   }
 
-  toHsl(): MagicColor<'hsl'> {
+  toHsl(): Magicolor<'hsl'> {
     let value
     switch (this.type) {
       case 'keyword':
@@ -129,10 +129,10 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
 
     this._push<'hsl'>(value, 'hsl', this.alpha)
 
-    return this as MagicColor<'hsl'>
+    return this as Magicolor<'hsl'>
   }
 
-  toHsb(): MagicColor<'hsb'> {
+  toHsb(): Magicolor<'hsb'> {
     let value
     switch (this.type) {
       case 'keyword':
@@ -154,10 +154,10 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
 
     this._push<'hsb'>(value, 'hsb', this.alpha)
 
-    return this as MagicColor<'hsb'>
+    return this as Magicolor<'hsb'>
   }
 
-  toLab(): MagicColor<'lab'> {
+  toLab(): Magicolor<'lab'> {
     let value
     switch (this.type) {
       case 'keyword':
@@ -179,7 +179,7 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
 
     this._push<'lab'>(value, 'lab', this.alpha)
 
-    return this as MagicColor<'lab'>
+    return this as Magicolor<'lab'>
   }
 
   to(type: ColorType) {
@@ -243,22 +243,22 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
   }
 
   private _push<T extends ColorType = any>(value: Colors[T], type: ColorType, alpha: Opacity) {
-    this._stack.push(new MagicColor(value, type, alpha))
+    this._stack.push(new Magicolor(value, type, alpha))
     // @ts-expect-error - value is not assignable to type Colors[T]
     this.values = value
     // @ts-expect-error - type is not assignable to type T
     this.type = type
   }
 
-  get history(): MagicColor<any>[] {
+  get history(): Magicolor<any>[] {
     return this._stack
   }
 
-  get last(): MagicColor<any> {
+  get last(): Magicolor<any> {
     return this._stack[this._stack.length - 1]
   }
 
-  get first(): MagicColor<any> {
+  get first(): Magicolor<any> {
     return this._stack[0]
   }
 
@@ -277,8 +277,8 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
     this._stack = []
   }
 
-  clone(): MagicColor<T> {
-    const mc = new MagicColor(this.values, this.type, this.alpha)
+  clone(): Magicolor<T> {
+    const mc = new Magicolor(this.values, this.type, this.alpha)
     mc._stack = this._stack.slice()
     mc.cloned = true
     return mc
@@ -304,11 +304,11 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
   }
 }
 
-export function mc<T extends ColorType>(value: Colors[T] | Record<string, number>, type?: T, alpha?: Opacity): MagicColor<T>
-export function mc<T extends ColorType = 'rgb'>(v1: number, v2: number, v3: number, type?: T, alpha?: Opacity): MagicColor<T>
-export function mc<T extends ColorType>(...args: any): MagicColor<T> {
+export function mc<T extends ColorType>(value: Colors[T] | Record<string, number>, type?: T, alpha?: Opacity): Magicolor<T>
+export function mc<T extends ColorType = 'rgb'>(v1: number, v2: number, v3: number, type?: T, alpha?: Opacity): Magicolor<T>
+export function mc<T extends ColorType>(...args: any): Magicolor<T> {
   // @ts-expect-error allow the type to be inferred
-  return new MagicColor(...args) as MagicColor<T>
+  return new Magicolor(...args) as Magicolor<T>
 }
 
 mc.valid = (color: string) => {

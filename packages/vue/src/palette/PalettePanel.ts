@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, onMounted, ref, watch } from 'vue'
 import type { HsbColor } from 'magic-color'
-import { MagicColor } from 'magic-color'
+import { Magicolor } from 'magic-color'
 import { useControlBlock } from './hook'
 
 export default /* #__PURE__ */ defineComponent({
@@ -44,7 +44,7 @@ export default /* #__PURE__ */ defineComponent({
       borderRadius: '50%',
       border: '2px solid white',
       boxShadow: 'rgba(0, 0, 0, 0.2) 0px 0px 0px 0.6px',
-      backgroundColor: new MagicColor(props.color, 'hsb').hex(),
+      backgroundColor: new Magicolor(props.color, 'hsb').hex(),
       cursor: 'grab',
       userSelect: 'none',
     }))
@@ -52,7 +52,7 @@ export default /* #__PURE__ */ defineComponent({
     function drawBackground(ctx: CanvasRenderingContext2D) {
       const bgGradient: CanvasGradient = ctx.createLinearGradient(0, 0, props.width, 0)
       bgGradient.addColorStop(0, '#fff')
-      bgGradient.addColorStop(1, new MagicColor([props.color[0], 100, 100], 'hsb').hex())
+      bgGradient.addColorStop(1, new Magicolor([props.color[0], 100, 100], 'hsb').hex())
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, props.width, props.height)
 

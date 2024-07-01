@@ -4,7 +4,7 @@
  */
 
 import type { RgbColor } from '@magic-color/core'
-import { MagicColor } from '../core'
+import { Magicolor } from '../core'
 import { SA98G } from './constant'
 
 function APCAcontrast(txtY: number, bgY: number, places = -1) {
@@ -119,8 +119,8 @@ function alphaBlend(rgbaFG = [0, 0, 0, 1.0], rgbBG = [0, 0, 0], round = true) {
 }
 
 export function calcAPCA(textColor: string, bgColor: string, places = -1, round = true) {
-  const mcText = new MagicColor(textColor).toRgb()
-  const mcBg = new MagicColor(bgColor).toRgb()
+  const mcText = new Magicolor(textColor).toRgb()
+  const mcBg = new Magicolor(bgColor).toRgb()
   const alpha = mcText.alpha
 
   const bgClr = mcBg.value()
@@ -143,7 +143,7 @@ export function reverseAPCA(
     return false
   // abs contrast must be > 9
 
-  let knownY = color ? sRGBtoY(new MagicColor(color).value('rgb')) : 1.0
+  let knownY = color ? sRGBtoY(new Magicolor(color).value('rgb')) : 1.0
   let unknownY = knownY
   let knownExp
   let unknownExp

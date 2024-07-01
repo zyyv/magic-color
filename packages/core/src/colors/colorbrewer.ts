@@ -1,5 +1,5 @@
 /**
- * MagicColor includes colors basiclly from chroma.js, really from colorbrewer2.org.
+ * Magicolor includes colors basiclly from chroma.js, really from colorbrewer2.org.
  *
  * @Credit to [@gka](https://github.com/gka/chroma.js)
  *

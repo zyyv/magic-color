@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { MagicColor, type RgbColor } from 'magic-color'
+import { Magicolor, type RgbColor } from 'magic-color'
 import { computed, defineModel, onMounted, ref, watch, withDefaults } from 'vue'
 import { useControlBlock } from '../../packages/vue/src/palette/hook'
 
@@ -43,12 +43,12 @@ const wrapperStyle = ref<any>({
 
 function getCurrentBgColor() {
   if (type === 'alpha') {
-    const rgb = new MagicColor(props.color, 'hex', model.value).toRgb().value
+    const rgb = new Magicolor(props.color, 'hex', model.value).toRgb().value
     const c = rgb.map(i => i + Math.round((255 - i) * (1 - model.value))) as RgbColor
-    return new MagicColor(c, 'rgb', model.value).toString()
+    return new Magicolor(c, 'rgb', model.value).toString()
   }
   else {
-    return new MagicColor([Math.round(model.value * 360), 100, 100], 'hsb', 1).hex()
+    return new Magicolor([Math.round(model.value * 360), 100, 100], 'hsb', 1).hex()
   }
 }
 

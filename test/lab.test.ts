@@ -1,7 +1,7 @@
 import { expect, it } from 'vitest'
 import type { LabColor, RgbColor } from '@magic-color/core'
 import { isLab, labToRgb, rgbToLab } from '@magic-color/core'
-import { MagicColor } from 'magic-color'
+import { Magicolor } from 'magic-color'
 
 it('isLabColor', () => {
   expect(isLab('lab(50 20 30)')).toBe(true) // true
@@ -97,14 +97,14 @@ it('magic for rgb and lab', () => {
   const rgb = [164, 105, 69] as RgbColor
   const lab = [50, 20, 30] as LabColor
 
-  const mc = new MagicColor(rgb, 'rgb')
+  const mc = new Magicolor(rgb, 'rgb')
   expect(mc.toLab().value()).toEqual(lab)
   expect(mc.toLab().css()).toEqual(`lab(50 20 30)`)
   expect(mc.toLab().value('rgb')).toEqual(rgb)
   expect(mc.css('lab')).toEqual('lab(50 20 30)')
   expect(mc.css(true)).toEqual('lab(50 20 30 / 100%)')
 
-  const mc2 = new MagicColor(lab, 'lab')
+  const mc2 = new Magicolor(lab, 'lab')
   expect(mc2.toRgb().value()).toEqual(rgb)
   expect(mc2.toRgb().css()).toEqual(`rgb(164 105 69)`)
   expect(mc2.toRgb().value('lab')).toEqual(lab)

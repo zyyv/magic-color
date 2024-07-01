@@ -1,5 +1,5 @@
 import chroma from 'chroma-js'
-import { MagicColor } from '../core'
+import { Magicolor } from '../core'
 import collections from './collections.json'
 import type { BasicColorShades, ClosestColorShades, ThemeMetas, ThemeOptions } from './types'
 import { hueShades } from './shades'
@@ -115,7 +115,7 @@ function generate(color: string, colorShades: BasicColorShades[], apca = false) 
  * @returns ThemeMetas
  */
 export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
-  const mc = new MagicColor(color)
+  const mc = new Magicolor(color)
   const defaultOptions: ThemeOptions = {
     type: mc.type,
     // @ts-expect-error - render is rightable
@@ -123,7 +123,7 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
   }
   const { type, render } = { ...defaultOptions, ...options } as Required<ThemeOptions>
   const metas = generate(color, hueShades)
-  const shades = metas.shades.map(shade => render([shade.key, new MagicColor(shade.color).css(type)]))
+  const shades = metas.shades.map(shade => render([shade.key, new Magicolor(shade.color).css(type)]))
 
   return Object.fromEntries(shades) as unknown as ThemeMetas
 }
