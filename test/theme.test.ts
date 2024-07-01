@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { mc } from 'magic-color'
+import type { ThemeMetas } from '../packages/magic-color/src/theme/types'
 
 describe('theme colors', () => {
   const testColor = '#9955FF'
@@ -43,7 +44,7 @@ describe('theme colors', () => {
   it('theme with render', () => {
     expect(mc.theme(testColor, {
       type: 'rgb',
-      render: (meta) => {
+      render: (meta: [keyof ThemeMetas, string]) => {
         return [
           `--color-primary-${meta[0]}`,
           meta[1].replace(/rgb\((.*)\)/, '$1').replace(/,/g, ''),
