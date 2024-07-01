@@ -2,7 +2,7 @@ import type { ColorType, Colors, HexColor, HsbColor, HslColor, LabColor, Opacity
 import { hexToHsb, hexToHsl, hexToLab, hexToRgb, hsbToHex, hsbToHsl, hsbToLab, hsbToRgb, hslToHex, hslToHsb, hslToLab, hslToRgb, labToHex, labToHsb, labToHsl, labToRgb, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab } from '@magic-color/core'
 import { getColorName, theme } from '../theme'
 import { hash } from '../hash'
-import { calcAPCA, calcWCAG, reverseAPCA } from '../contrast'
+import { calcAPCA, calcWCAG, getReadableTextColor, isWarmColor, reverseAPCA } from '../contrast'
 import type { ColorObject } from './types'
 import { SupportTypes, alphaToString, guessType, resolveArgs } from './utils'
 
@@ -326,3 +326,5 @@ mc.getColorName = getColorName
 mc.wcag = calcWCAG
 mc.apca = calcAPCA
 mc.apcaReverse = reverseAPCA
+mc.readable = getReadableTextColor
+mc.warm = isWarmColor

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { calcAPCA, calcWCAG } from 'magic-color'
+import { mc } from 'magic-color'
 import { computed } from 'vue'
 
 const props = withDefaults(defineProps<{
@@ -16,10 +16,10 @@ const props = withDefaults(defineProps<{
 
 const calcRatio = computed(() => {
   if (props.type === 'WCAG')
-    return calcWCAG(props.backgroundColor, props.color)
+    return mc.wcag(props.backgroundColor, props.color)
 
   else if (props.type === 'APCA')
-    return Number.parseFloat((calcAPCA(props.backgroundColor, props.color) as number).toFixed(1))
+    return Number.parseFloat((mc.apca(props.backgroundColor, props.color) as number).toFixed(1))
 
   return 'N/A'
 })

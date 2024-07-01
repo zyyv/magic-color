@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { theme } from 'magic-color'
+import { mc } from 'magic-color'
 import ThemeColors from './ThemeColors.vue'
 import Chart from './Chart.vue'
 import RatioTable from './RatioTable.vue'
@@ -9,7 +9,7 @@ const alpha = defineModel<number>('alpha')
 
 const colors = computed(() => {
   try {
-    return theme(color.value!)
+    return mc.theme(color.value!)
   }
   catch (e) {
     return {} as any

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { theme } from 'magic-color'
-import { getReadableTextColor } from 'magic-color'
+import type { ThemeMetas } from 'magic-color'
+import { mc } from 'magic-color'
 
 defineProps<{
   k: string
   v: string
-  colors: ReturnType<typeof theme>
+  colors: ThemeMetas
 }>()
 
 const { copy, copied } = useClipboard()
@@ -21,7 +21,7 @@ const { copy, copied } = useClipboard()
     cursor-pointer
     :style="{
       backgroundColor: v,
-      color: getReadableTextColor({
+      color: mc.readable({
         bgColor: v,
         textColor: colors[100],
         fallbackTextColor: colors[900],
