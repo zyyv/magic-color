@@ -13,9 +13,8 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
 
   private _stack: MagicColor<any>[] = []
 
-  constructor(value: string)
-  constructor(value: Colors[T], type: T)
-  constructor(value: Colors[T], type: T, alpha: Opacity)
+  constructor(value: Colors[T] | Record<string, number>, type?: T, alpha?: Opacity)
+  constructor(v1: number, v2: number, v3: number, type?: T, alpha?: Opacity)
   constructor(...args: any[]) {
     const result = resolveArgs<T>(...args)
     if (result) {
@@ -303,9 +302,8 @@ export class MagicColor<T extends ColorType> implements ColorObject<T> {
   }
 }
 
-export function mc<T extends ColorType>(value: string): MagicColor<T>
-export function mc<T extends ColorType>(value: Colors[T], type: T): MagicColor<T>
-export function mc<T extends ColorType>(value: Colors[T], type: T, alpha: Opacity): MagicColor<T>
+export function mc<T extends ColorType>(value: Colors[T] | Record<string, number>, type?: T, alpha?: Opacity): MagicColor<T>
+export function mc<T extends ColorType = 'rgb'>(v1: number, v2: number, v3: number, type?: T, alpha?: Opacity): MagicColor<T>
 export function mc<T extends ColorType>(...args: any): MagicColor<T> {
   // @ts-expect-error allow the type to be inferred
   return new MagicColor(...args) as MagicColor<T>
