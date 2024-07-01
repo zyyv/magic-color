@@ -1,26 +1,26 @@
 import { describe, expect, it } from 'vitest'
-import { calcAPCA, calcWCAG, reverseAPCA } from 'magic-color'
+import { mc } from 'magic-color'
 
 const c1 = '#123123'
 const c2 = '#797989'
 
 describe('contrast ratio for WCAG', () => {
   it('wCAG', () => {
-    expect(calcWCAG('#000', '#fff')).toBe(21)
-    expect(calcWCAG('#fff', '#000')).toBe(21)
-    expect(calcWCAG('#000', '#000')).toBe(1)
-    expect(calcWCAG('#fff', '#fff')).toBe(1)
-    expect(calcWCAG(c1, c2)).toMatchInlineSnapshot(`3.3`)
+    expect(mc.wcag('#000', '#fff')).toBe(21)
+    expect(mc.wcag('#fff', '#000')).toBe(21)
+    expect(mc.wcag('#000', '#000')).toBe(1)
+    expect(mc.wcag('#fff', '#fff')).toBe(1)
+    expect(mc.wcag(c1, c2)).toMatchInlineSnapshot(`3.3`)
   })
 })
 
 describe('contrast ratio for APCA', () => {
   it('aPCA', () => {
-    expect(calcAPCA('#000', '#fff')).toMatchInlineSnapshot(`106.04067321268862`)
-    expect(calcAPCA('#fff', '#000')).toMatchInlineSnapshot(`-107.88473318309848`)
-    expect(calcAPCA('#000', '#000')).toMatchInlineSnapshot(`0`)
-    expect(calcAPCA('#fff', '#fff')).toMatchInlineSnapshot(`0`)
-    expect(calcAPCA('#89889867', '#fff')).toMatchInlineSnapshot(`25.345168601044676`)
+    expect(mc.apca('#000', '#fff')).toMatchInlineSnapshot(`106.04067321268862`)
+    expect(mc.apca('#fff', '#000')).toMatchInlineSnapshot(`-107.88473318309848`)
+    expect(mc.apca('#000', '#000')).toMatchInlineSnapshot(`0`)
+    expect(mc.apca('#fff', '#fff')).toMatchInlineSnapshot(`0`)
+    expect(mc.apca('#89889867', '#fff')).toMatchInlineSnapshot(`25.345168601044676`)
   })
 
   it('reverseAPCA', () => {
@@ -28,7 +28,7 @@ describe('contrast ratio for APCA', () => {
     const color4rev = '#a4a4a4'
     const contrasts = [-60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60]
 
-    expect(color.map(c => reverseAPCA(10, c, 'text'))).toMatchInlineSnapshot(`
+    expect(color.map(c => mc.apcaReverse(10, c, 'text'))).toMatchInlineSnapshot(`
       [
         "#404040",
         "#a0a0a0",
@@ -43,7 +43,7 @@ describe('contrast ratio for APCA', () => {
       ]
     `)
 
-    expect(contrasts.map(c => reverseAPCA(c, color4rev, 'background'))).toMatchInlineSnapshot(`
+    expect(contrasts.map(c => mc.apcaReverse(c, color4rev, 'background'))).toMatchInlineSnapshot(`
       [
         false,
         "#f9f9f9",

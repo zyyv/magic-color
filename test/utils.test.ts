@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { ColorType } from 'magic-color'
-import { MagicColor, isColor } from 'magic-color'
+import { mc } from 'magic-color'
 import { resolveArgs } from '../packages/magic-color/src/core/utils'
 
 describe('utils scoped', () => {
@@ -28,36 +28,36 @@ describe('utils scoped', () => {
   }
 
   function testClose<T extends Omit<ColorType, 'hex'>>(valueString: string, type: T, compareValue: number[]) {
-    const color = new MagicColor(valueString)
+    const color = mc(valueString)
     const value = color.to(type as any).value() as any
     return value.every((v: number, i: number) => isClose(v, compareValue[i]))
   }
 
   it('create Magic Color', () => {
-    expect(new MagicColor('#d15b14').css()).toMatchInlineSnapshot(`"#d15b14"`)
-    expect(new MagicColor('#d15b14', 'hex').css()).toMatchInlineSnapshot(`"#d15b14"`)
-    expect(new MagicColor('#d15b14', 'hex', 0.5).css(true)).toMatchInlineSnapshot(`"#d15b1480"`)
-    expect(new MagicColor('rgb(209, 91, 20)').toHex().css()).toMatchInlineSnapshot(`"#d15b14"`)
+    expect(mc('#d15b14').css()).toMatchInlineSnapshot(`"#d15b14"`)
+    expect(mc('#d15b14', 'hex').css()).toMatchInlineSnapshot(`"#d15b14"`)
+    expect(mc('#d15b14', 'hex', 0.5).css(true)).toMatchInlineSnapshot(`"#d15b1480"`)
+    expect(mc('rgb(209, 91, 20)').toHex().css()).toMatchInlineSnapshot(`"#d15b14"`)
     // Error test case: invalid color
-    expect(() => new MagicColor('')).toThrowError('Invalid color')
+    expect(() => mc('')).toThrowError('Invalid color')
     // Error test case: different type
-    expect(() => new MagicColor('rgb(122,122,122)', 'hex')).toThrowError('Invalid color type: hex.')
+    expect(() => mc('rgb(122,122,122)', 'hex')).toThrowError('Invalid color type: hex.')
   })
 
   it('isColor', () => {
-    expect(colors.every(isColor)).toEqual(true)
-    expect(notColors.every(isColor)).toEqual(false)
+    expect(colors.every(mc.valid)).toEqual(true)
+    expect(notColors.every(mc.valid)).toEqual(false)
   })
 
   it('simple convert', () => {
     // rgb to others test case
-    expect(new MagicColor(rgb).toHex().value()).toMatchInlineSnapshot(`"#d15b14"`)
-    expect(new MagicColor(rgb).toHex().css()).toEqual(hex)
+    expect(mc(rgb).toHex().value()).toMatchInlineSnapshot(`"#d15b14"`)
+    expect(mc(rgb).toHex().css()).toEqual(hex)
     expect(testClose(rgb, 'hsb', hsbValue)).toEqual(true)
     expect(testClose(rgb, 'hsl', hslValue)).toEqual(true)
 
     // hex to others test case
-    expect(new MagicColor(hex).toRgb().css()).toEqual(rgb)
+    expect(mc(hex).toRgb().css()).toEqual(rgb)
     expect(testClose(hex, 'hsb', hsbValue)).toEqual(true)
     expect(testClose(hex, 'hsl', hslValue)).toEqual(true)
 
@@ -78,7 +78,7 @@ describe('utils scoped', () => {
 
   it('in magic color', () => {
     const c = `rgba(100, 100, 100, ${opacity})`
-    const mcColor = new MagicColor(c)
+    const mcColor = mc(c)
     expect(mcColor.toRgb().css(true)).toMatchInlineSnapshot(`"rgb(100 100 100 / 0.6789)"`)
     expect(mcColor.toHex().css(true)).toMatchInlineSnapshot(`"#646464ad"`)
     expect(mcColor.toHsl().css(true)).toMatchInlineSnapshot(`"hsl(0 0 39 / 0.6789)"`)

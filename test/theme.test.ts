@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { theme } from 'magic-color'
+import { mc } from 'magic-color'
 
 describe('theme colors', () => {
   const testColor = '#9955FF'
 
   it('simple theme', () => {
-    expect(theme(testColor)).toMatchInlineSnapshot(`
+    expect(mc.theme(testColor)).toMatchInlineSnapshot(`
       {
         "100": "#eee8ff",
         "200": "#dfd4ff",
@@ -23,7 +23,7 @@ describe('theme colors', () => {
   })
 
   it('theme to other type', () => {
-    expect(theme(testColor, { type: 'rgb' })).toMatchInlineSnapshot(`
+    expect(mc.theme(testColor, { type: 'rgb' })).toMatchInlineSnapshot(`
       {
         "100": "rgb(238 232 255)",
         "200": "rgb(223 212 255)",
@@ -41,7 +41,7 @@ describe('theme colors', () => {
   })
 
   it('theme with render', () => {
-    expect(theme(testColor, {
+    expect(mc.theme(testColor, {
       type: 'rgb',
       render: (meta) => {
         return [
