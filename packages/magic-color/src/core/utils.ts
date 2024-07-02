@@ -91,7 +91,7 @@ export function resolveArgs<T extends ColorType = 'rgb'>(...args: any[]): [Color
      * ```
      */
     else if (isArray(anyValue)) {
-      return [anyValue, type, 1]
+      return [anyValue as Colors[T], type, 1]
     }
     else if (isString(anyValue)) {
       const { values, type: _type, alpha } = resolveColorString(anyValue)
