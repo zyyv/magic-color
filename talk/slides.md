@@ -572,10 +572,10 @@ console.log(ratio)
 <v-click>
 
 ```ts {monaco-run}
-import { getReadableTextColor } from 'magic-color'
+import { mc } from 'magic-color'
 
 const bgColor = '#010205' // #D5100C
-const color = getReadableTextColor(bgColor)
+const color = mc.readable(bgColor)
 
 console.log(color)
 ```
