@@ -1,10 +1,9 @@
 import type { ColorType, Colors, HexColor, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/core'
 import { hexToHsb, hexToHsl, hexToLab, hexToRgb, hsbToHex, hsbToHsl, hsbToLab, hsbToRgb, hslToHex, hslToHsb, hslToLab, hslToRgb, labToHex, labToHsb, labToHsl, labToRgb, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab } from '@magic-color/core'
-import { getColorName, theme } from '../theme'
-import { hash } from '../hash'
-import { calcAPCA, calcWCAG, getReadableTextColor, isWarmColor, reverseAPCA } from '../contrast'
+import { getColorName } from '../theme'
+
 import type { ColorObject } from './types'
-import { SupportTypes, alphaToString, guessType, resolveArgs } from './utils'
+import { SupportTypes, alphaToString, resolveArgs } from './utils'
 
 export class Magicolor<T extends ColorType> implements ColorObject<T> {
   type: T
@@ -310,21 +309,3 @@ export function mc<T extends ColorType>(...args: any): Magicolor<T> {
   // @ts-expect-error allow the type to be inferred
   return new Magicolor(...args) as Magicolor<T>
 }
-
-mc.valid = (color: string) => {
-  return guessType(color) !== undefined
-}
-
-mc.random = (type: ColorType = 'hex') => {
-  const color = `#${Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0')}`
-  return mc(color, 'hex').css(type)
-}
-
-mc.hash = hash
-mc.theme = theme
-mc.getColorName = getColorName
-mc.wcag = calcWCAG
-mc.apca = calcAPCA
-mc.apcaReverse = reverseAPCA
-mc.readable = getReadableTextColor
-mc.warm = isWarmColor
