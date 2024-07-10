@@ -309,16 +309,16 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 export interface MagicolorInstance {
   <T extends ColorType>(value: Colors[T] | Record<string, number>, type?: T, alpha?: Opacity): Magicolor<T>
   <T extends ColorType = 'rgb'>(v1: number, v2: number, v3: number, type?: T, alpha?: Opacity): Magicolor<T>
-  valid?: typeof valid
-  random?: typeof random
-  hash?: typeof hash
-  theme?: typeof theme
-  getColorName?: typeof getColorName
-  wcag?: typeof calcWCAG
-  apca?: typeof calcAPCA
-  apcaReverse?: typeof reverseAPCA
-  readable?: typeof getReadableTextColor
-  warm?: typeof isWarmColor
+  valid: typeof valid
+  random: typeof random
+  hash: typeof hash
+  theme: typeof theme
+  getColorName: typeof getColorName
+  wcag: typeof calcWCAG
+  apca: typeof calcAPCA
+  apcaReverse: typeof reverseAPCA
+  readable: typeof getReadableTextColor
+  warm: typeof isWarmColor
 }
 
 export const mc: MagicolorInstance = <T extends ColorType>(...args: any[]): Magicolor<T> => {
