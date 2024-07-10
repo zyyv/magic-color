@@ -127,3 +127,5 @@ export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
 
   return Object.fromEntries(shades) as unknown as ThemeMetas
 }
+
+export * from './types'

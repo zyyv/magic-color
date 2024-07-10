@@ -155,3 +155,7 @@ export function resolveArgs<T extends ColorType = 'rgb'>(...args: any[]): [Color
     return [_values, _type, _alpha]
   }
 }
+
+export function valid(color: string) {
+  return guessType(color) !== undefined
+}
