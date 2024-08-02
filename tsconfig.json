@@ -22,7 +22,7 @@
   "exclude": [
     "**/dist/**",
     "**/node_modules/**",
-    "eslint.config.js",
+    "eslint.config.mjs",
     "talk-examples/**",
     "**/public/**"
   ]

@@ -7,8 +7,8 @@
   "scripts": {
     "dev": "pnpm -r -F=\"./packages/*\" --parallel run dev",
     "build": "pnpm -r -F=\"./packages/*\" run build",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint --cache .",
+    "lint:fix": "pnpm lint --fix",
     "prepublishOnly": "nr sync-docs && nr build",
     "release": "nr lint:fix && bumpp -r",
     "test": "vitest",

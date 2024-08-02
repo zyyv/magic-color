@@ -12,6 +12,7 @@ temp
 *.local
 .vite-inspect
 .remote-assets
+.eslintcache
 components.d.ts
 talk-example/*/**
 playground/public

@@ -11,7 +11,7 @@ const colors = computed(() => {
   try {
     return mc.theme(color.value!)
   }
-  catch (e) {
+  catch {
     return {} as any
   }
 })
