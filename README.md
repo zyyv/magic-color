@@ -109,6 +109,7 @@ Well, you can use it to create a theme color.
 ```ts
 import { mc } from 'magic-color'
 
+mc.theme() // A random theme color
 mc.theme('#9955ff')
 
 // Will output:

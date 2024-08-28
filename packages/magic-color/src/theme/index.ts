@@ -1,5 +1,6 @@
 import chroma from 'chroma-js'
 import { mc } from '../core'
+import { random } from '../utils'
 import collections from './collections.json'
 import type { BasicColorShades, ClosestColorShades, ThemeMetas, ThemeOptions } from './types'
 import { hueShades } from './shades'
@@ -110,11 +111,11 @@ function generate(color: string, colorShades: BasicColorShades[], apca = false) 
   }
  * ```
  *
- * @param color theme color
+ * @param color string color, if not provided, a random color will be generated
  * @param options ThemeOptions
  * @returns ThemeMetas
  */
-export function theme(color: string, options: ThemeOptions = {}): ThemeMetas {
+export function theme(color: string = random(), options: ThemeOptions = {}): ThemeMetas {
   const _mc = mc(color)
   const defaultOptions: ThemeOptions = {
     type: _mc.type,
