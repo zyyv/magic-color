@@ -10,13 +10,13 @@
   },
   "dependencies": {
     "@magic-color/vue": "workspace:*",
-    "@slidev/cli": "0.49.23",
-    "@slidev/client": "0.49.23",
+    "@slidev/cli": "catalog:",
+    "@slidev/client": "catalog:",
     "@slidev/theme-default": "latest",
     "@slidev/theme-seriph": "latest",
-    "@vueuse/core": "^10.11.0",
-    "@vueuse/shared": "^10.11.0",
+    "@vueuse/core": "catalog:",
+    "@vueuse/shared": "catalog:",
     "magic-color": "workspace:*",
-    "vue": "^3.4.35"
+    "vue": "catalog:"
   }
 }

@@ -45,6 +45,6 @@
     "magic-color": "workspace:*"
   },
   "devDependencies": {
-    "vue": "^3.4.35"
+    "vue": "catalog:"
   }
 }

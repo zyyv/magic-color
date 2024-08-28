@@ -43,9 +43,9 @@
   },
   "dependencies": {
     "@magic-color/core": "workspace:*",
-    "chroma-js": "^2.6.0"
+    "chroma-js": "catalog:"
   },
   "devDependencies": {
-    "@types/chroma-js": "^2.4.4"
+    "@types/chroma-js": "catalog:"
   }
 }
