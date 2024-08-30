@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "es2018",
     "lib": ["ESNext", "DOM"],
     "module": "ESNext",
     "moduleResolution": "node",
@@ -16,6 +16,7 @@
     "strict": true,
     "strictNullChecks": true,
     "esModuleInterop": true,
+    "isolatedModules": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
   },
