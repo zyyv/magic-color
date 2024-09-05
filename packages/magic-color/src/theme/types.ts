@@ -15,13 +15,17 @@ export interface ThemeMetas {
 }
 
 interface Shade {
-  key: number
+  key: keyof ThemeMetas
   color: string
 }
 
 interface NormalizedShade extends Shade {
   delta: number
   lightnessDiff: number
+}
+
+interface HslShade extends Shade {
+  hsl: [number, number, number]
 }
 
 export interface BasicColorShades {
@@ -51,4 +55,8 @@ export interface ThemeOptions {
    * @returns [CustomedName, CustomedColor]
    */
   render?: (meta: [keyof ThemeMetas, string]) => [string, string]
+}
+
+export interface GenerateMeta extends BasicColorShades {
+  shades: HslShade[]
 }

@@ -2,8 +2,10 @@ import chroma from 'chroma-js'
 import { mc } from '../core'
 import { random } from '../utils'
 import collections from './collections.json'
-import type { BasicColorShades, ClosestColorShades, ThemeMetas, ThemeOptions } from './types'
+import type { BasicColorShades, ClosestColorShades, GenerateMeta, ThemeMetas, ThemeOptions } from './types'
 import { hueShades } from './shades'
+
+const cache = new Map<string, GenerateMeta>()
 
 function findClosetShade(color: string, colors: BasicColorShades[]): ClosestColorShades {
   const normalizedColors = colors.map((meta) => {
@@ -34,7 +36,7 @@ export function getColorName(color: string): string {
     .reduce((t, i) => t[2] < i[2] ? t : i)[1] as string
 }
 
-function generate(color: string, colorShades: BasicColorShades[], apca = false) {
+function generate(color: string, colorShades: BasicColorShades[], apca = false): GenerateMeta {
   const closedShade = findClosetShade(color, colorShades)
 
   const _h = chroma(color).get('hsl.h')
@@ -123,8 +125,18 @@ export function theme(color: string = random(), options: ThemeOptions = {}): The
     render: c => c,
   }
   const { type, render } = { ...defaultOptions, ...options } as Required<ThemeOptions>
-  const metas = generate(_mc.css('hex'), hueShades)
-  const shades = metas.shades.map(shade => render([shade.key, mc(shade.color).css(type)]))
+
+  let metas
+  const key = _mc.css('hex')
+  if (cache.has(key)) {
+    metas = cache.get(key)
+  }
+  else {
+    metas = generate(key, hueShades)
+    cache.set(key, metas)
+  }
+
+  const shades = metas!.shades.map(shade => render([shade.key, mc(shade.color).css(type)]))
 
   return Object.fromEntries(shades) as unknown as ThemeMetas
 }
