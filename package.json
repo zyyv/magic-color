@@ -20,7 +20,8 @@
     "talk": "pnpm -C talk dev",
     "talk:build": "pnpm -C talk build",
     "deploy": "rimraf dist && nr build && nr talk:build && nr play:build",
-    "sync-docs": "esno scripts/sync-docs.ts"
+    "sync-docs": "esno scripts/sync-docs.ts",
+    "taze": "taze minor -wIr && pnpm -r --parallel run update-post"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
@@ -40,6 +41,7 @@
     "pnpm": "catalog:",
     "rimraf": "catalog:",
     "simple-git-hooks": "catalog:",
+    "taze": "catalog:",
     "typescript": "catalog:",
     "unbuild": "catalog:",
     "unocss": "catalog:",
