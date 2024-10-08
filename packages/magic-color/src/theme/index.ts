@@ -1,8 +1,8 @@
+import type { BasicColorShades, ClosestColorShades, GenerateMeta, ThemeMetas, ThemeOptions } from './types'
 import chroma from 'chroma-js'
 import { mc } from '../core'
 import { random } from '../utils'
 import collections from './collections.json'
-import type { BasicColorShades, ClosestColorShades, GenerateMeta, ThemeMetas, ThemeOptions } from './types'
 import { hueShades } from './shades'
 
 const cache = new Map<string, GenerateMeta>()

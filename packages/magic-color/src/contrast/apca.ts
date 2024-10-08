@@ -63,7 +63,7 @@ function APCAcontrast(txtY: number, bgY: number, places = -1) {
   if (bgY > txtY) { // For normal polarity, black text on white (BoW)
     // Calculate the SAPC contrast value and scale
     SAPC = (bgY ** SA98G.normBG
-    - txtY ** SA98G.normTXT) * SA98G.scaleBoW
+      - txtY ** SA98G.normTXT) * SA98G.scaleBoW
 
     // Low Contrast smooth rollout to prevent polarity reversal
     // and also a low-clip for very low contrasts
@@ -74,7 +74,7 @@ function APCAcontrast(txtY: number, bgY: number, places = -1) {
     polCat = 'WoB'
 
     SAPC = (bgY ** SA98G.revBG
-    - txtY ** SA98G.revTXT) * SA98G.scaleWoB
+      - txtY ** SA98G.revTXT) * SA98G.scaleWoB
 
     outputContrast = (SAPC > -SA98G.loClip) ? 0.0 : SAPC + SA98G.loWoBoffset
   }

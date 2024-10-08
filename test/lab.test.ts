@@ -1,7 +1,7 @@
-import { expect, it } from 'vitest'
 import type { LabColor, RgbColor } from '@magic-color/core'
 import { isLab, labToRgb, rgbToLab } from '@magic-color/core'
 import { Magicolor } from 'magic-color'
+import { expect, it } from 'vitest'
 
 it('isLabColor', () => {
   expect(isLab('lab(50 20 30)')).toBe(true) // true

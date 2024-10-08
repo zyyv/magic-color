@@ -1,10 +1,10 @@
-import { computed, defineComponent, h, ref, useModel } from 'vue'
 import type { ColorType, ColorValue, HexColor, HsbColor } from 'magic-color'
 import { mc } from 'magic-color'
-import PalettePanel from './PalettePanel'
-import PalettePreview from './PalettePreview'
+import { computed, defineComponent, h, ref, useModel } from 'vue'
 import PaletteControls from './PaletteControls'
 import PaletteInput from './PaletteInput'
+import PalettePanel from './PalettePanel'
+import PalettePreview from './PalettePreview'
 
 export default /* @__PURE__ */ defineComponent({
   props: {

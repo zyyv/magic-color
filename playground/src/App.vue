@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { mc } from 'magic-color'
+import { ref } from 'vue'
 import Container from './components/Container.vue'
 
 const color = ref(import.meta.env.DEV ? '#30db9d' : mc.random())

@@ -1,7 +1,7 @@
 import type { HexColor } from '../types'
 
-import { unoColors } from '../colors/uno'
 import { colorbrewer } from '../colors/colorbrewer'
+import { unoColors } from '../colors/uno'
 import { w3cx11 } from '../colors/w3cx11'
 import { isObject } from '../utils'
 import { parseHex } from './hex'

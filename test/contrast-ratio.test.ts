@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
 import { mc } from 'magic-color'
+import { describe, expect, it } from 'vitest'
 
 const c1 = '#123123'
 const c2 = '#797989'

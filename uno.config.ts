@@ -1,9 +1,9 @@
 import type { Preset, RuleContext } from 'unocss'
-import { defineConfig, transformerDirectives } from 'unocss'
 import type { UsefulTheme } from 'unocss-preset-useful'
-import { presetUseful } from 'unocss-preset-useful'
 import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders'
 import { parseColor } from '@unocss/preset-mini'
+import { defineConfig, transformerDirectives } from 'unocss'
+import { presetUseful } from 'unocss-preset-useful'
 import { r } from './alias'
 
 export default defineConfig({

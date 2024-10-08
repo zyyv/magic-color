@@ -184,6 +184,10 @@ mc.theme('#9955ff', {
 - [chroma.js](https://github.com/gka/chroma.js)
 - [theme-colors](https://github.com/unjs/theme-colors)
 
+## Activity
+
+![Alt](https://repobeats.axiom.co/api/embed/4790016be5d90b8e99352bc13495e584f092c0be.svg "Repobeats analytics image")
+
 ## license
 
 [MIT](./LICENSE)

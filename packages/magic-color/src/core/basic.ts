@@ -1,11 +1,11 @@
-import type { ColorType, Colors, HexColor, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/core'
-import { hexToHsb, hexToHsl, hexToLab, hexToRgb, hsbToHex, hsbToHsl, hsbToLab, hsbToRgb, hslToHex, hslToHsb, hslToLab, hslToRgb, labToHex, labToHsb, labToHsl, labToRgb, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab } from '@magic-color/core'
-import { getColorName, theme } from '../theme'
-import { hash } from '../hash'
-import { calcAPCA, calcWCAG, getReadableTextColor, isWarmColor, reverseAPCA } from '../contrast'
-import { random } from '../utils'
-import { SupportTypes, alphaToString, resolveArgs, valid } from './utils'
+import type { Colors, ColorType, HexColor, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/core'
 import type { ColorObject } from './types'
+import { hexToHsb, hexToHsl, hexToLab, hexToRgb, hsbToHex, hsbToHsl, hsbToLab, hsbToRgb, hslToHex, hslToHsb, hslToLab, hslToRgb, labToHex, labToHsb, labToHsl, labToRgb, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab } from '@magic-color/core'
+import { calcAPCA, calcWCAG, getReadableTextColor, isWarmColor, reverseAPCA } from '../contrast'
+import { hash } from '../hash'
+import { getColorName, theme } from '../theme'
+import { random } from '../utils'
+import { alphaToString, resolveArgs, SupportTypes, valid } from './utils'
 
 export class Magicolor<T extends ColorType> implements ColorObject<T> {
   type: T

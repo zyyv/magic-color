@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { type RgbColor, mc } from 'magic-color'
+import { mc, type RgbColor } from 'magic-color'
 import { computed, defineModel, onMounted, ref, watch, withDefaults } from 'vue'
 import { useControlBlock } from '../../packages/vue/src/palette/hook'
 

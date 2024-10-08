@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
 import { mc } from 'magic-color'
+import { describe, expect, it } from 'vitest'
 
 describe('hash colors', () => {
   it('hash output', () => {

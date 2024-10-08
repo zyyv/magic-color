@@ -5,38 +5,38 @@ packages:
   - packages/*
   - examples/*
 catalog:
-  '@antfu/eslint-config': ^3.7.1
+  '@antfu/eslint-config': ^3.7.3
   '@antfu/ni': ^0.23.0
   '@iconify-json/akar-icons': ^1.2.0
   '@iconify-json/carbon': ^1.2.1
-  '@iconify-json/fluent-emoji': ^1.2.0
-  '@iconify-json/logos': ^1.2.0
+  '@iconify-json/fluent-emoji': ^1.2.1
+  '@iconify-json/logos': ^1.2.2
   '@iconify/utils': ^2.1.33
   '@slidev/cli': 0.49.23
   '@slidev/client': 0.49.23
   '@types/chroma-js': ^2.4.4
-  '@types/node': ^22.7.0
-  '@unocss/preset-mini': ^0.62.4
+  '@types/node': ^22.7.5
+  '@unocss/preset-mini': ^0.63.3
   '@vitejs/plugin-vue': ^5.1.4
   '@vueuse/core': ^11.1.0
   '@vueuse/shared': ^11.1.0
-  bumpp: ^9.5.2
+  bumpp: ^9.6.1
   chart.js: ^4.4.4
   chroma-js: ^3.1.1
-  eslint: ^9.11.1
-  esno: ^4.7.0
+  eslint: ^9.12.0
+  esno: ^4.8.0
   lint-staged: ^15.2.10
-  pnpm: ^9.11.0
+  pnpm: ^9.12.1
   rimraf: ^6.0.1
   simple-git-hooks: ^2.11.1
-  taze: ^0.16.9
+  taze: ^0.17.2
   typescript: ^5.6.2
   unbuild: ^2.0.0
-  unocss: ^0.62.4
-  unocss-preset-useful: ^0.5.2
+  unocss: ^0.63.3
+  unocss-preset-useful: ^0.6.0
   unplugin-auto-import: ^0.18.3
   unplugin-vue-components: ^0.27.4
   vite: ^5.4.8
-  vitest: ^2.1.1
-  vue: ^3.5.8
+  vitest: ^2.1.2
+  vue: ^3.5.11
   vue-tsc: ^2.1.6

@@ -1,6 +1,6 @@
 <script lang='ts' setup>
-import { Magicolor, type theme } from 'magic-color'
 import Chart from 'chart.js/auto'
+import { Magicolor, type theme } from 'magic-color'
 import { ref } from 'vue'
 
 const props = defineProps<{

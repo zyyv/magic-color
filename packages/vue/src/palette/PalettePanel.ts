@@ -1,6 +1,6 @@
-import { computed, defineComponent, h, onMounted, ref, watch } from 'vue'
 import type { HsbColor } from 'magic-color'
 import { Magicolor } from 'magic-color'
+import { computed, defineComponent, h, onMounted, ref, watch } from 'vue'
 import { useControlBlock } from './hook'
 
 export default /* #__PURE__ */ defineComponent({

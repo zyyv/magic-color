@@ -1,6 +1,6 @@
 <script lang='ts' setup>
-import { computed, ref } from 'vue'
 import { Magicolor } from 'magic-color'
+import { computed, ref } from 'vue'
 
 const h = ref(0)
 const s = ref(1)

@@ -1,7 +1,7 @@
-export * from '@magic-color/core'
+export * from './contrast'
 
 export * from './core'
+export * from './hash'
 export * from './theme'
 export * from './utils'
-export * from './hash'
-export * from './contrast'
+export * from '@magic-color/core'

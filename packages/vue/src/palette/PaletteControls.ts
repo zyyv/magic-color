@@ -1,6 +1,6 @@
-import { type PropType, computed, defineComponent, h, onMounted, ref, useModel, watch } from 'vue'
 import type { RgbColor } from 'magic-color'
 import { Magicolor } from 'magic-color'
+import { computed, defineComponent, h, onMounted, type PropType, ref, useModel, watch } from 'vue'
 import { useControlBlock } from './hook'
 
 export default /* @__PURE__ */ defineComponent({

@@ -1,8 +1,8 @@
 <script lang='ts' setup>
 import { mc } from 'magic-color'
-import ThemeColors from './ThemeColors.vue'
 import Chart from './Chart.vue'
 import RatioTable from './RatioTable.vue'
+import ThemeColors from './ThemeColors.vue'
 
 const color = defineModel<string>('color')
 const alpha = defineModel<number>('alpha')

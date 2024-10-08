@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest'
 import type { ColorType } from 'magic-color'
 import { mc } from 'magic-color'
+import { describe, expect, it } from 'vitest'
 import { resolveArgs } from '../packages/magic-color/src/core/utils'
 
 describe('utils scoped', () => {

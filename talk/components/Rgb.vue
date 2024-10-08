@@ -1,6 +1,6 @@
 <script lang='ts' setup>
-import { computed, ref } from 'vue'
 import { Magicolor } from 'magic-color'
+import { computed, ref } from 'vue'
 
 const { hex } = defineProps<{ hex?: boolean }>()
 

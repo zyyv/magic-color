@@ -1,5 +1,5 @@
-import { createApp } from 'vue'
 import { PalettePlugin } from '@magic-color/vue'
+import { createApp } from 'vue'
 
 import App from './App.vue'
 import 'uno.css'

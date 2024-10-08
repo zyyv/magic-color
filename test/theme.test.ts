@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest'
-import { mc } from 'magic-color'
 import type { ThemeMetas } from '../packages/magic-color/src/theme/types'
+import { mc } from 'magic-color'
+import { describe, expect, it } from 'vitest'
 
 describe('theme colors', () => {
   const testColor = '#9955FF'
