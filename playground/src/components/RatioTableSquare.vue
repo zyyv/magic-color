@@ -59,7 +59,11 @@ const text = computed(() => {
   --uno: fcc w-12 h-12 text-size-12px rd;
 }
 
-.placeholder {
+.dark .placeholder {
   background-image: linear-gradient(45deg, rgb(255 255 255/6%) 26%, rgb(255 255 255/3%) 0, rgb(255 255 255/3%) 50%, rgb(255 255 255/6%) 0, rgb(255 255 255/6%) 75%, rgb(255 255 255/3%) 0, rgb(255 255 255/3%));
+}
+
+.placeholder{
+  background-image: linear-gradient(45deg, rgb(0 0 0/6%) 26%, rgb(0 0 0/3%) 0, rgb(0 0 0/3%) 50%, rgb(0 0 0/6%) 0, rgb(0 0 0/6%) 75%, rgb(0 0 0/3%) 0, rgb(0 0 0/3%));
 }
 </style>
