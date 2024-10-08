@@ -32,26 +32,26 @@ watch(type, () => ratio.value = options.value[0].value)
   <section my-8 w-700px>
     <section c-white>
       <div fcc mb-4 pr>
-        <ul b="~ #3c3c3c" p1 rd pa top-0 left-0 fcc gap-2>
+        <ul b="~ #ccc dark:#3c3c3c" p1 rd pa top-0 left-0 fcc gap-2>
           <li
             v-for="c in contrasts" :key="c"
             text-sm px-2 cursor-pointer rd-sm
-            :class="type === c ? 'bg-purple/10 text-purple' : 'text-#999'"
+            :class="type === c ? 'bg-purple/10 text-purple' : 'text-#666 dark:text-#999'"
             @click="type = c"
           >
             {{ c }}
           </li>
         </ul>
-        <h2 w-fit text-xl text-transparent bg-clip-text bg-gradient-to-r from-purple to-yellow>
+        <h2 fcc gap-1 w-fit text-xl text-transparent bg-clip-text bg-gradient-to-r from-purple to-yellow>
           Ratio
           <i class="c-yellow/90" i-carbon-table-alias />
           Table
         </h2>
-        <ul b="~ #3c3c3c" p1 rd pa top-0 right-0 fcc gap-2>
+        <ul b="~ #ccc dark:#3c3c3c" p1 rd pa top-0 right-0 fcc gap-2>
           <li
             v-for="opt in options" :key="opt.value"
             text-sm px-2 cursor-pointer rd-sm
-            :class="ratio === opt.value ? 'bg-yellow/10 text-yellow' : 'text-#999'"
+            :class="ratio === opt.value ? 'bg-yellow/10 text-yellow' : 'text-#666 dark:text-#999'"
             @click="ratio = opt.value"
           >
             {{ opt.label }}
@@ -70,20 +70,24 @@ watch(type, () => ratio.value = options.value[0].value)
               </div>
             </th>
             <th>
-              <div>White</div>
+              <div text-primary:60>
+                White
+              </div>
             </th>
-            <th v-for="(_, k) in colors" :key="k" p0>
+            <th v-for="(_, k) in colors" :key="k" p0 text-primary:60>
               <div>{{ k }}</div>
             </th>
             <th>
-              <div>Black</div>
+              <div text-primary:60>
+                Black
+              </div>
             </th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td fw-bold text-sm>
-              <div>
+              <div text-primary:60>
                 White
               </div>
             </td>
@@ -100,7 +104,7 @@ watch(type, () => ratio.value = options.value[0].value)
 
           <tr v-for="(_, k) in colors" :key="k">
             <td fw-bold text-sm>
-              <div>
+              <div text-primary:60>
                 {{ k }}
               </div>
             </td>
@@ -117,7 +121,7 @@ watch(type, () => ratio.value = options.value[0].value)
 
           <tr>
             <td fw-bold text-sm>
-              <div>
+              <div text-primary:60>
                 Black
               </div>
             </td>

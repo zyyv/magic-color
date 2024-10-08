@@ -1,4 +1,5 @@
 <script lang='ts' setup>
+import type { ColorType, ThemeMetas } from 'magic-color'
 import { mc } from 'magic-color'
 import Chart from './Chart.vue'
 import RatioTable from './RatioTable.vue'
@@ -6,8 +7,8 @@ import ThemeColors from './ThemeColors.vue'
 
 const color = defineModel<string>('color')
 const alpha = defineModel<number>('alpha')
-
-const colors = computed(() => {
+const type = defineModel<ColorType>('type', { default: 'hex' })
+const colors = computed<ThemeMetas>(() => {
   try {
     return mc.theme(color.value!)
   }
@@ -15,17 +16,41 @@ const colors = computed(() => {
     return {} as any
   }
 })
+
+const panels = [
+  { label: 'Chart', component: Chart, icon: 'i-carbon-chart-line-smooth' },
+  { label: 'Contrast', component: RatioTable, icon: 'i-carbon-brightness-contrast' },
+  { label: 'Export', component: Chart, icon: 'i-carbon-download' },
+]
+const panel = ref('Chart')
+const cp = computed(() => panels.find(p => p.label === panel.value)!.component)
+
+provide('type', type)
+provide('colors', colors)
 </script>
 
 <template>
   <div>
-    <ThemeColors :colors />
+    <ThemeColors />
+
     <div mt-8 fc gap-8>
       <div>
-        <Chart :colors />
-        <RatioTable :colors />
+        <div fc mb-8>
+          <ul b="~ #ccc dark:#3c3c3c" p1 rd fcc gap-2>
+            <li
+              v-for="p in panels" :key="p.label"
+              text-sm px-2 cursor-pointer rd-sm
+              :class="panel === p.label ? 'bg-orange/10 text-orange' : 'text-#666 dark:text-#999'"
+              @click="panel = p.label"
+            >
+              <div :class="p.icon" icon-btn />
+              {{ p.label }}
+            </li>
+          </ul>
+        </div>
+        <component :is="cp" :colors="colors" />
       </div>
-      <Palette v-model:color="color" v-model:alpha="alpha" ps top-15 shadow />
+      <Palette v-model:color="color" v-model:alpha="alpha" v-model:type="type" ps top-15 shadow />
     </div>
   </div>
 </template>

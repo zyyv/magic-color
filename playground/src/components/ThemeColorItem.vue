@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import type { ThemeMetas } from 'magic-color'
+import type { ColorType } from 'magic-color'
 import { mc } from 'magic-color'
 
-defineProps<{
+const props = defineProps<{
   k: string
   v: string
-  colors: ThemeMetas
+  color: string
 }>()
 
 const { copy, copied } = useClipboard()
+const type = inject<Ref<ColorType>>('type')!
+const value = computed(() => {
+  return mc(props.v).to(type.value).css().toUpperCase()
+})
 </script>
 
 <template>
@@ -21,16 +25,12 @@ const { copy, copied } = useClipboard()
     cursor-pointer
     :style="{
       backgroundColor: v,
-      color: mc.readable({
-        bgColor: v,
-        textColor: colors[100],
-        fallbackTextColor: colors[900],
-      }),
+      color,
     }"
-    @click="copy(v.toUpperCase())"
+    @click="copy(value)"
   >
     <span>{{ k }}</span>
-    <span>{{ v.toUpperCase() }}</span>
+    <span>{{ value }}</span>
     <i pa top-2 right-2 op-0 group-hover-op-100 trans :class="copied ? 'i-carbon-checkmark' : 'i-carbon-bring-forward'" />
   </div>
 </template>

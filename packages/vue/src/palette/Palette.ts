@@ -1,6 +1,6 @@
 import type { ColorType, ColorValue, HexColor, HsbColor } from 'magic-color'
 import { mc } from 'magic-color'
-import { computed, defineComponent, h, ref, useModel } from 'vue'
+import { computed, defineComponent, h, useModel } from 'vue'
 import PaletteControls from './PaletteControls'
 import PaletteInput from './PaletteInput'
 import PalettePanel from './PalettePanel'
@@ -10,13 +10,13 @@ export default /* @__PURE__ */ defineComponent({
   props: {
     color: { type: String, default: '#ff0000' },
     alpha: { type: Number, default: 1 },
+    type: { type: String as () => ColorType, default: 'hex' },
   },
-  emits: ['update:color', 'update:alpha'],
+  emits: ['update:color', 'update:alpha', 'update:type'],
   setup(props) {
     const color = useModel(props, 'color')
     const alpha = useModel(props, 'alpha')
-
-    const type = ref<ColorType>(mc(color.value).type)
+    const type = useModel(props, 'type')
 
     const mcHsbColor = computed({
       get: () => mc(color.value).value('hsb'),
