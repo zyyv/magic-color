@@ -26,6 +26,15 @@
   z-index: 1;
 }
 
+html.dark .shiki,
+html.dark .shiki span {
+  color: var(--shiki-dark);
+}
+html:not(.dark) .shiki,
+html:not(.dark) .shiki span {
+  color: var(--shiki-light);
+}
+
 html, body {
   --uno: text bg;
 }

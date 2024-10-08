@@ -2,6 +2,7 @@
 import type { ColorType, ThemeMetas } from 'magic-color'
 import { mc } from 'magic-color'
 import Chart from './Chart.vue'
+import Exports from './Exports.vue'
 import RatioTable from './RatioTable.vue'
 import ThemeColors from './ThemeColors.vue'
 
@@ -16,17 +17,20 @@ const colors = computed<ThemeMetas>(() => {
     return {} as any
   }
 })
+const colorName = computed(() => mc.names(color.value!))
 
 const panels = [
   { label: 'Chart', component: Chart, icon: 'i-carbon-chart-line-smooth' },
   { label: 'Contrast', component: RatioTable, icon: 'i-carbon-brightness-contrast' },
-  { label: 'Export', component: Chart, icon: 'i-carbon-download' },
+  { label: 'Export', component: Exports, icon: 'i-carbon-download' },
 ]
 const panel = ref('Chart')
 const cp = computed(() => panels.find(p => p.label === panel.value)!.component)
 
 provide('type', type)
+provide('color', color)
 provide('colors', colors)
+provide('colorName', colorName)
 </script>
 
 <template>

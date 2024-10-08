@@ -13,7 +13,7 @@ export interface MagicolorInstance {
   random: typeof random
   hash: typeof hash
   theme: typeof theme
-  getColorName: typeof getColorName
+  names: typeof getColorName
   wcag: typeof calcWCAG
   apca: typeof calcAPCA
   apcaReverse: typeof reverseAPCA
@@ -30,7 +30,7 @@ mc.valid = valid
 mc.random = random
 mc.hash = hash
 mc.theme = theme
-mc.getColorName = getColorName
+mc.names = getColorName
 mc.wcag = calcWCAG
 mc.apca = calcAPCA
 mc.apcaReverse = reverseAPCA

@@ -19,7 +19,10 @@
   },
   "devDependencies": {
     "@iconify-json/carbon": "catalog:",
+    "@types/prettier": "catalog:",
     "@vitejs/plugin-vue": "catalog:",
+    "prettier": "catalog:",
+    "shiki": "catalog:",
     "typescript": "catalog:",
     "unocss": "catalog:",
     "unocss-preset-useful": "catalog:",
