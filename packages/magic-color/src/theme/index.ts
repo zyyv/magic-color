@@ -1,6 +1,6 @@
 import type { BasicColorShades, ClosestColorShades, GenerateMeta, ThemeMetas, ThemeOptions } from './types'
 import chroma from 'chroma-js'
-import { mc } from '../core'
+import { Magicolor } from '../core/basic'
 import { random } from '../utils'
 import collections from './collections.json'
 import { hueShades } from './shades'
@@ -118,7 +118,7 @@ function generate(color: string, colorShades: BasicColorShades[], apca = false):
  * @returns ThemeMetas
  */
 export function theme(color: string = random(), options: ThemeOptions = {}): ThemeMetas {
-  const _mc = mc(color)
+  const _mc = new Magicolor(color)
   const defaultOptions: ThemeOptions = {
     type: _mc.type,
     // @ts-expect-error - render is rightable
@@ -136,7 +136,7 @@ export function theme(color: string = random(), options: ThemeOptions = {}): The
     cache.set(key, metas)
   }
 
-  const shades = metas!.shades.map(shade => render([shade.key, mc(shade.color).css(type)]))
+  const shades = metas!.shades.map(shade => render([shade.key, new Magicolor(shade.color).css(type)]))
 
   return Object.fromEntries(shades) as unknown as ThemeMetas
 }

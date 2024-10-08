@@ -1,4 +1,4 @@
-import { Magicolor } from '../core'
+import { Magicolor } from '../core/basic'
 
 export * from './apca'
 export * from './wcag'

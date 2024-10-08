@@ -1,2 +1,3 @@
-export { Magicolor, mc } from './basic'
+export * from './basic'
+export * from './mc'
 export * from './types'
