@@ -2,7 +2,8 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "types": [
-      "./shims"
+      "./shims",
+      "vite/client"
     ]
   },
   "include": ["**/*.ts", "**/*.d.ts", "**/*.vue"],

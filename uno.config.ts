@@ -2,7 +2,7 @@ import type { Preset, RuleContext } from 'unocss'
 import type { UsefulTheme } from 'unocss-preset-useful'
 import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders'
 import { parseColor } from '@unocss/preset-mini'
-import { defineConfig, transformerDirectives } from 'unocss'
+import { defineConfig } from 'unocss'
 import { presetUseful } from 'unocss-preset-useful'
 import { r } from './alias'
 
@@ -35,6 +35,11 @@ export default defineConfig({
   ],
   theme: {
     colors: {
+      primary: {
+        DEFAULT: 'rgba(var(--c-text),%alpha)',
+        text: 'rgba(var(--c-text),%alpha)',
+        bg: 'rgba(var(--c-bg),%alpha)',
+      },
       context: 'rgba(var(--c-context),%alpha)',
       unocss: {
         DEFAULT: '#818181',
@@ -61,6 +66,8 @@ export default defineConfig({
     },
   },
   shortcuts: {
+    'text': 'text-primary-text',
+    'bg': 'bg-primary-bg',
     'grad-color': 'text-$vp-c-brand',
     'linear-text': 'text-transparent bg-clip-text bg-gradient-to-r',
     'grad-p-r': 'linear-text from-purple to-red',
@@ -99,12 +106,10 @@ export default defineConfig({
         },
       },
       webFonts: {
-        provider: 'google',
         fonts: {
-          mono: ['Fira Code', 'Fira Mono:400,700'],
-          sans: ['DM Sans'],
+          mono: 'Fira Mono:400,700',
+          sans: 'DM Sans',
         },
-        inlineImports: false,
       },
       icons: {
         extraProperties: {
@@ -132,8 +137,8 @@ export default defineConfig({
           },
         },
       },
+      directives: true,
     }) as Preset<UsefulTheme>,
   ],
   separators: ['_', '-', ':'],
-  transformers: [transformerDirectives()],
 })

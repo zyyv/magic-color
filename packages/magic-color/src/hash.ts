@@ -9,7 +9,7 @@
  */
 
 import type { ColorType } from '@magic-color/core'
-import { mc } from './core'
+import { Magicolor } from './core/basic'
 
 export function hash(inputString: string, type: ColorType = 'hex'): string {
   let sum = 0
@@ -21,5 +21,5 @@ export function hash(inputString: string, type: ColorType = 'hex'): string {
   const g = Math.floor(Number.parseFloat(`0.${Math.sin(sum + 2).toString().substring(6)}`) * 256)
   const b = Math.floor(Number.parseFloat(`0.${Math.sin(sum + 3).toString().substring(6)}`) * 256)
 
-  return mc([r, g, b], 'rgb').css(type)
+  return new Magicolor([r, g, b], 'rgb').css(type)
 }

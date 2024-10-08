@@ -1,10 +1,10 @@
 <script lang='ts' setup>
-import { hash } from 'magic-color'
+import { hash, mc } from 'magic-color'
 
 const hashInput = ref('')
-const hashValue = computed(() => {
+const hashMc = computed(() => {
   if (hashInput.value)
-    return hash(hashInput.value)
+    return mc(hash(hashInput.value))
   return null
 })
 </script>
@@ -18,32 +18,32 @@ const hashValue = computed(() => {
       >
       <p
         text-sm
-        :class="hashValue?.hex ? '' : 'font-mono text-transparent bg-clip-text bg-gradient-to-r from-red to-purple'"
-        :style="{ color: hashValue?.hex }"
+        :class="hashMc ? '' : 'font-mono text-transparent bg-clip-text bg-gradient-to-r from-red to-purple'"
+        :style="{ color: hashMc?.hex() }"
       >
-        {{ hashValue?.hex ?? '👈 Hash' }}
+        {{ hashMc?.hex() ?? '👈 Hash' }}
       </p>
     </div>
     <div c-white fbc text-sm lh-20px>
       <PaletteControls
-        disable type="normal" :model-value="(hashValue?.r ?? 0) / 255" bar-color="transparent"
+        disable type="normal" :model-value="(hashMc?.toRgb().value()[0] ?? 0) / 255" bar-color="transparent"
         wrapper-color="#f87171dd"
       />
-      <span text-red>{{ hashValue?.r || 'Red' }}</span>
+      <span text-red>{{ hashMc?.toRgb().value()[0] || 'Red' }}</span>
     </div>
     <div c-white fbc text-sm lh-20px>
       <PaletteControls
-        disable type="normal" :model-value="(hashValue?.g ?? 0) / 255" bar-color="transparent"
+        disable type="normal" :model-value="(hashMc?.toRgb().value()[1] ?? 0) / 255" bar-color="transparent"
         wrapper-color="#4ade80dd"
       />
-      <span text-green>{{ hashValue?.g || 'Green' }}</span>
+      <span text-green>{{ hashMc?.toRgb().value()[1] || 'Green' }}</span>
     </div>
     <div c-white fbc text-sm lh-20px>
       <PaletteControls
-        disable type="normal" :model-value="(hashValue?.b ?? 0) / 255" bar-color="transparent"
+        disable type="normal" :model-value="(hashMc?.toRgb().value()[2] ?? 0) / 255" bar-color="transparent"
         wrapper-color="#60a5fadd"
       />
-      <span text-blue>{{ hashValue?.b || 'Blue' }}</span>
+      <span text-blue>{{ hashMc?.toRgb().value()[2] || 'Blue' }}</span>
     </div>
   </div>
 </template>
