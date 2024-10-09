@@ -13,6 +13,7 @@ export const shiki = computedAsync<HighlighterCore>(async (onCancel) => {
       () => import('shiki/langs/css.mjs'),
       () => import('shiki/langs/javascript.mjs'),
       () => import('shiki/langs/json.mjs'),
+      () => import('shiki/langs/scss.mjs'),
     ],
   })
 
