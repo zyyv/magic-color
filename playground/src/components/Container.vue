@@ -2,6 +2,7 @@
 import type { ColorType, ThemeMetas } from 'magic-color'
 import { mc } from 'magic-color'
 import Chart from './Chart.vue'
+import Demo from './Demo.vue'
 import Exports from './Exports.vue'
 import RatioTable from './RatioTable.vue'
 import ThemeColors from './ThemeColors.vue'
@@ -23,6 +24,8 @@ const panels = [
   { label: 'Chart', component: Chart, icon: 'i-carbon-chart-line-smooth' },
   { label: 'Contrast', component: RatioTable, icon: 'i-carbon-brightness-contrast' },
   { label: 'Export', component: Exports, icon: 'i-carbon-download' },
+  { label: 'Demo', component: Demo, icon: 'i-carbon-demo' },
+
 ]
 const panel = ref('Chart')
 const cp = computed(() => panels.find(p => p.label === panel.value)!.component)
