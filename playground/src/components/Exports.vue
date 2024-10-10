@@ -6,6 +6,7 @@ import { mc } from 'magic-color'
 const colorName = inject<ComputedRef<string>>('colorName')!
 const colors = inject<ComputedRef<ThemeMetas>>('colors')!
 
+const copyCode = ref<string>()
 const exportType = ref(mc.supports[1]) // 'hex'
 const lang = ref('UnoCSS')
 const langs = reactive<{
@@ -58,6 +59,7 @@ const highlightCode = computedAsync(async () => {
   const colorsValue = Object.fromEntries(Object.entries(colors.value).map(([k, v]) => [k, mc(v).css(exportType.value as unknown as ColorType)]))
   const formater = await currentLang.formater
   const formatted = (await prettierCode(formater(colorsValue as unknown as ThemeMetas, key), currentLang.parser)).trim()
+  copyCode.value = formatted
   return highlight(formatted, currentLang.lang)
 })
 
@@ -67,6 +69,8 @@ function handleLangChange(e: Event) {
 function handleExportTypeChange(e: Event) {
   exportType.value = (e.target as HTMLInputElement).value as BuiltInParserName
 }
+
+const { copy, copied } = useClipboard()
 </script>
 
 <template>
@@ -130,8 +134,9 @@ function handleExportTypeChange(e: Event) {
         cursor-pointer
         bg-gray:30 rd
         p="x1 y0.5"
+        @click="copyCode && copy(copyCode)"
       >
-        <i i-carbon-bring-forward />
+        <i :class="copied ? 'i-carbon-checkmark' : 'i-carbon-bring-forward'" />
         Copy Code
       </div>
       <div b="~ dashed dark:#3c3c3c #ccc" p2 rd v-html="highlightCode" />
