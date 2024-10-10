@@ -1,61 +1,77 @@
 <script lang='ts' setup>
-import type { ThemeMetas } from 'magic-color'
+import type { ColorType, ThemeMetas } from 'magic-color'
 import type { BuiltInParserName } from 'prettier'
+import { mc } from 'magic-color'
 
 const colorName = inject<ComputedRef<string>>('colorName')!
 const colors = inject<ComputedRef<ThemeMetas>>('colors')!
 
+const exportType = ref(mc.supports[1]) // 'hex'
 const lang = ref('UnoCSS')
 const langs = reactive<{
   icon: string
   name: string
   parser: BuiltInParserName
   lang: string
+  formater: Promise<(code: ThemeMetas, key: string) => string>
 }[]>([
-  {
-    icon: 'i-logos-unocss',
-    name: 'UnoCSS',
-    parser: 'babel',
-    lang: 'javascript',
-  },
-  {
-    icon: 'i-logos-tailwindcss-icon',
-    name: 'Tailwind',
-    parser: 'babel',
-    lang: 'javascript',
-  },
-  {
-    icon: 'i-logos-sass',
-    name: 'Sass',
-    parser: 'scss',
-    lang: 'scss',
-  },
-  {
-    name: 'JSON',
-    icon: 'i-logos-json',
-    parser: 'json',
-    lang: 'json',
-  },
-])
+      {
+        icon: 'i-logos-unocss',
+        name: 'UnoCSS',
+        parser: 'babel',
+        lang: 'javascript',
+        formater: import('../utils/format').then(m => m.formatToUnoCSS),
+      },
+      {
+        icon: 'i-logos-tailwindcss-icon',
+        name: 'Tailwind',
+        parser: 'babel',
+        lang: 'javascript',
+        formater: import('../utils/format').then(m => m.formatToTailwindCSS),
+      },
+      {
+        icon: 'i-logos-css-3',
+        name: 'CSS',
+        parser: 'css',
+        lang: 'css',
+        formater: import('../utils/format').then(m => m.formatToCSS),
+      },
+      {
+        icon: 'i-logos-sass',
+        name: 'Sass',
+        parser: 'scss',
+        lang: 'scss',
+        formater: import('../utils/format').then(m => m.formatToSass),
+      },
+      {
+        name: 'JSON',
+        icon: 'i-logos-json',
+        parser: 'json',
+        lang: 'json',
+        formater: import('../utils/format').then(m => m.formatToJson),
+      },
+    ])
 
 const highlightCode = computedAsync(async () => {
   const key = colorName.value.toLowerCase().replace(/\s+/g, '-')
   const currentLang = langs.find(l => l.name === lang.value)!
-
-  // TODO: Add support for other languages
-  const c = JSON.stringify({ [key]: colors.value }, null, 2)
-  const formatted = (await prettierCode(c, currentLang.parser)).trim()
+  const colorsValue = Object.fromEntries(Object.entries(colors.value).map(([k, v]) => [k, mc(v).css(exportType.value as unknown as ColorType)]))
+  const formater = await currentLang.formater
+  const formatted = (await prettierCode(formater(colorsValue as unknown as ThemeMetas, key), currentLang.parser)).trim()
   return highlight(formatted, currentLang.lang)
 })
 
 function handleLangChange(e: Event) {
   lang.value = (e.target as HTMLInputElement).value
 }
+function handleExportTypeChange(e: Event) {
+  exportType.value = (e.target as HTMLInputElement).value as BuiltInParserName
+}
 </script>
 
 <template>
   <div w-700px pr>
-    <div fsc gap-2 mb-8>
+    <div fsc gap-2 mb-4>
       <div text-sm>
         Export as:
       </div>
@@ -71,11 +87,35 @@ function handleLangChange(e: Event) {
               class="peer h-4 w-4 cursor-pointer appearance-none rounded-full border border-slate-300:50 checked:border-purple:30 transition-all"
               @change="handleLangChange"
             >
-            <span class="absolute bg-purple w-2.5 h-2.5 rounded-full opacity-0 peer-checked:opacity-100 transition-opacity duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            <span class="absolute bg-purple size-0 rounded-full peer-checked:size-2.2 transition-all duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
           </label>
           <label class="ml-1 text-primary:80 cursor-pointer text-sm" :for="item.name" fcc gap-1>
             <i :class="item.icon" text-xs />
             {{ item.name }}
+          </label>
+        </div>
+      </div>
+    </div>
+    <div fsc gap-2 mb-8>
+      <div text-sm>
+        Type as:
+      </div>
+      <div fcc gap-3>
+        <div v-for="type in mc.supports" :key="type" class="inline-flex items-center">
+          <label class="relative flex items-center cursor-pointer" :for="type">
+            <input
+              :id="type"
+              :value="type"
+              name="exportType"
+              type="radio"
+              :checked="exportType === type"
+              class="peer h-4 w-4 cursor-pointer appearance-none rounded-full border border-slate-300:50 checked:border-purple:30 transition-all"
+              @change="handleExportTypeChange"
+            >
+            <span class="absolute bg-yellow size-0 rounded-full peer-checked:size-2.2 transition-all duration-200 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+          </label>
+          <label class="ml-1 text-primary:80 cursor-pointer text-sm" :for="type" fcc gap-1>
+            {{ type.toUpperCase() }}
           </label>
         </div>
       </div>
@@ -94,7 +134,7 @@ function handleLangChange(e: Event) {
         <i i-carbon-bring-forward />
         Copy Code
       </div>
-      <div v-html="highlightCode" />
+      <div b="~ dashed dark:#3c3c3c #ccc" p2 rd v-html="highlightCode" />
     </div>
   </div>
 </template>

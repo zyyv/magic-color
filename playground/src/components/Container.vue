@@ -18,7 +18,7 @@ const colors = computed<ThemeMetas>(() => {
     return {} as any
   }
 })
-const colorName = computed(() => mc.names(color.value!))
+const colorName = computed(() => mc.nameOf(color.value!))
 
 const panels = [
   { label: 'Chart', component: Chart, icon: 'i-carbon-chart-line-smooth' },
@@ -55,7 +55,9 @@ provide('colorName', colorName)
             </li>
           </ul>
         </div>
-        <component :is="cp" :colors="colors" />
+        <KeepAlive>
+          <component :is="cp" :colors="colors" />
+        </KeepAlive>
       </div>
       <Palette v-model:color="color" v-model:alpha="alpha" v-model:type="type" ps top-15 shadow />
     </div>

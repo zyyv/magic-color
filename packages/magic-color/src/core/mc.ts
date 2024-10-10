@@ -4,7 +4,7 @@ import { hash } from '../hash'
 import { getColorName, theme } from '../theme'
 import { random } from '../utils'
 import { Magicolor } from './basic'
-import { valid } from './utils'
+import { SupportTypes, valid } from './utils'
 
 export interface MagicolorInstance {
   <T extends ColorType>(value: Colors[T] | Record<string, number>, type?: T, alpha?: Opacity): Magicolor<T>
@@ -13,12 +13,13 @@ export interface MagicolorInstance {
   random: typeof random
   hash: typeof hash
   theme: typeof theme
-  names: typeof getColorName
+  nameOf: typeof getColorName
   wcag: typeof calcWCAG
   apca: typeof calcAPCA
   apcaReverse: typeof reverseAPCA
   readable: typeof getReadableTextColor
   warm: typeof isWarmColor
+  supports: typeof SupportTypes
 }
 
 export const mc: MagicolorInstance = <T extends ColorType>(...args: any[]): Magicolor<T> => {
@@ -30,9 +31,10 @@ mc.valid = valid
 mc.random = random
 mc.hash = hash
 mc.theme = theme
-mc.names = getColorName
+mc.nameOf = getColorName
 mc.wcag = calcWCAG
 mc.apca = calcAPCA
 mc.apcaReverse = reverseAPCA
 mc.readable = getReadableTextColor
 mc.warm = isWarmColor
+mc.supports = SupportTypes
