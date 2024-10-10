@@ -1,17 +1,18 @@
 <script lang='ts' setup>
+import type { ThemeMetas } from 'magic-color'
 import Chart from 'chart.js/auto'
-import { Magicolor, type theme } from 'magic-color'
+import { Magicolor } from 'magic-color'
 import { ref } from 'vue'
 
 const props = defineProps<{
-  colors: ReturnType<typeof theme>
+  colors: ThemeMetas
 }>()
 
 const chartRef = ref<HTMLCanvasElement | null>(null)
 
 let chart: Chart | null = null
 
-function getData(colors: ReturnType<typeof theme>, type: 'h' | 's' | 'l') {
+function getData(colors: ThemeMetas, type: 'h' | 's' | 'l') {
   return Object.values(colors).map(c => new Magicolor(c).value('hsl')[type === 'h' ? 0 : type === 's' ? 1 : 2])
 }
 

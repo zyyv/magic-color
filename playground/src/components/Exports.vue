@@ -3,8 +3,11 @@ import type { ColorType, ThemeMetas } from 'magic-color'
 import type { BuiltInParserName } from 'prettier'
 import { mc } from 'magic-color'
 
+const props = defineProps<{
+  colors: ThemeMetas
+}>()
+
 const colorName = inject<ComputedRef<string>>('colorName')!
-const colors = inject<ComputedRef<ThemeMetas>>('colors')!
 
 const copyCode = ref<string>()
 const exportType = ref(mc.supports[1]) // 'hex'
@@ -56,11 +59,11 @@ const langs = reactive<{
 const highlightCode = computedAsync(async () => {
   const key = colorName.value.toLowerCase().replace(/\s+/g, '-')
   const currentLang = langs.find(l => l.name === lang.value)!
-  const colorsValue = Object.fromEntries(Object.entries(colors.value).map(([k, v]) => [k, mc(v).css(exportType.value as unknown as ColorType)]))
+  const colorsValue = Object.fromEntries(Object.entries(props.colors).map(([k, v]) => [k, mc(v).css(exportType.value as unknown as ColorType)]))
   const formater = await currentLang.formater
-  const formatted = (await prettierCode(formater(colorsValue as unknown as ThemeMetas, key), currentLang.parser)).trim()
-  copyCode.value = formatted
-  return highlight(formatted, currentLang.lang)
+  const prettifyCode = (await prettierCode(formater(colorsValue as unknown as ThemeMetas, key), currentLang.parser)).trim()
+  copyCode.value = prettifyCode
+  return highlight(prettifyCode, currentLang.lang)
 })
 
 function handleLangChange(e: Event) {

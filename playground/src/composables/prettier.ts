@@ -9,7 +9,11 @@ export async function prettierCode(code: string, parser: BuiltInParserName) {
       singleQuote: true,
     })
   }
-  catch {
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  catch (e: any) {
+    // Why nor work? and throw a error
+    // console.log(e)
+
     return code
   }
 }
