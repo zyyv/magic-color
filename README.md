@@ -35,34 +35,32 @@ Watch my <a href="https://color.zyob.top/talk" target='_blank'>Talk</a> to learn
 
 <ul>
 <li>
-<span style="margin-right:4px;">💫</span>
+<span>💫 </span>
 Support `multi-color model` conversion.
 </li>
 <li>
-<span style="margin-right:4px;">📦</span>
+<span>📦 </span>
 Built-in color related components.
 </li>
 <li>
-<span style="margin-right:4px;">🚀</span>
+<span>🚀 </span>
 Provides utility toolset functions
 </li>
 <li>
-<span style="margin-right:4px;">🦄</span>
+<span>🦄 </span>
 Theme color generator and fully customizable.
 </li>
 <li>
-<span style="margin-right:4px;">🥳</span>
+<span>🥳 </span>
 <code>esm</code> only & 0 dependencies.
 </li>
 <li>
-<div style="display:flex;align-items:center;">
-<div style="display:flex;align-items:center;margin-right:4px;">
+<span>
 <img src='https://onu.zyob.top/logo.svg' width='18' />
-</div>
+</span>
 <span>
 Provide powerful for <a href="https://onu.zyob.top" target="_blank">Onu UI</a>.
 </span>
-</div>
 </li>
 </ul>
 
