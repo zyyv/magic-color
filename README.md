@@ -55,10 +55,14 @@ Theme color generator and fully customizable.
 <code>esm</code> only & 0 dependencies.
 </li>
 <li>
-<span style="margin-right:4px;">
-<img src='https://onu.zyob.top/logo.svg' width='16' />
-</span>
+<div style="display:flex;align-items:center;">
+<div style="display:flex;align-items:center;margin-right:4px;">
+<img src='https://onu.zyob.top/logo.svg' width='18' />
+</div>
+<span>
 Provide powerful for <a href="https://onu.zyob.top" target="_blank">Onu UI</a>.
+</span>
+</div>
 </li>
 </ul>
 
