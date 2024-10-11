@@ -5,9 +5,8 @@ import { mc } from 'magic-color'
 
 const props = defineProps<{
   colors: ThemeMetas
+  name: string
 }>()
-
-const colorName = inject<ComputedRef<string>>('colorName')!
 
 const copyCode = ref<string>()
 const exportType = ref(mc.supports[1]) // 'hex'
@@ -24,40 +23,40 @@ const langs = reactive<{
         name: 'UnoCSS',
         parser: 'babel',
         lang: 'javascript',
-        formater: import('../utils/format').then(m => m.formatToUnoCSS),
+        formater: import('../../utils/format').then(m => m.formatToUnoCSS),
       },
       {
         icon: 'i-logos-tailwindcss-icon',
         name: 'Tailwind',
         parser: 'babel',
         lang: 'javascript',
-        formater: import('../utils/format').then(m => m.formatToTailwindCSS),
+        formater: import('../../utils/format').then(m => m.formatToTailwindCSS),
       },
       {
         icon: 'i-logos-css-3',
         name: 'CSS',
         parser: 'css',
         lang: 'css',
-        formater: import('../utils/format').then(m => m.formatToCSS),
+        formater: import('../../utils/format').then(m => m.formatToCSS),
       },
       {
         icon: 'i-logos-sass',
         name: 'Sass',
         parser: 'scss',
         lang: 'scss',
-        formater: import('../utils/format').then(m => m.formatToSass),
+        formater: import('../../utils/format').then(m => m.formatToSass),
       },
       {
         name: 'JSON',
         icon: 'i-logos-json',
         parser: 'json',
         lang: 'json',
-        formater: import('../utils/format').then(m => m.formatToJson),
+        formater: import('../../utils/format').then(m => m.formatToJson),
       },
     ])
 
 const highlightCode = computedAsync(async () => {
-  const key = colorName.value.toLowerCase().replace(/\s+/g, '-')
+  const key = props.name.toLowerCase().replace(/\s+/g, '-')
   const currentLang = langs.find(l => l.name === lang.value)!
   const colorsValue = Object.fromEntries(Object.entries(props.colors).map(([k, v]) => [k, mc(v).css(exportType.value as unknown as ColorType)]))
   const formater = await currentLang.formater

@@ -6,12 +6,12 @@ const props = defineProps<{
   k: string
   v: string
   color: string
+  type: ColorType
 }>()
 
 const { copy, copied } = useClipboard()
-const type = inject<Ref<ColorType>>('type')!
 const value = computed(() => {
-  return mc(props.v).to(type.value).css().toUpperCase()
+  return mc(props.v).to(props.type).css().toUpperCase()
 })
 </script>
 

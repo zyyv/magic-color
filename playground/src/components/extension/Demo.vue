@@ -1,6 +1,6 @@
 <script lang='ts' setup>
 import type { ThemeMetas } from 'magic-color'
-import Buttons from './demos/Buttons.vue'
+import Buttons from '../demos/Buttons.vue'
 
 const props = defineProps<{
   colors: ThemeMetas

@@ -1,16 +1,21 @@
 <script setup lang="ts">
-import type { ThemeMetas } from 'magic-color'
+import type { ColorType, ThemeMetas } from 'magic-color'
 import { mc } from 'magic-color'
 import ThemeColorItem from './ThemeColorItem.vue'
 
-const name = inject<ComputedRef<string>>('colorName')!
-const colors = inject<ComputedRef<ThemeMetas>>('colors')!
+const props = withDefaults(defineProps<{
+  name: string
+  colors: ThemeMetas
+  type?: ColorType
+}>(), {
+  type: 'hex',
+})
 
 function getReadable(v: string) {
   return mc.readable({
     bgColor: v,
-    textColor: colors.value[100],
-    fallbackTextColor: colors.value[900],
+    textColor: props.colors[100],
+    fallbackTextColor: props.colors[900],
   })
 }
 </script>
@@ -23,7 +28,7 @@ function getReadable(v: string) {
       </p>
       <ul fcc gap-1>
         <li v-for="(v, k) in colors" :key="k">
-          <ThemeColorItem :k="k as unknown as string" :v="v" :color="getReadable(v)" />
+          <ThemeColorItem :k="k as unknown as string" :v="v" :color="getReadable(v)" :type />
         </li>
       </ul>
     </div>
