@@ -8,7 +8,7 @@
     </h1>
 
     <div pa right-10 fcc gap-2>
-      <button i-carbon-switch-layer-2 icon-btn @click="togglePanel()" />
+      <button i-carbon-switch-layer-2 icon-btn title="Built-In Colors" @click="togglePanel()" />
       <button
         i-carbon-light
         dark:i-carbon-moon

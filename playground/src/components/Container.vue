@@ -2,7 +2,7 @@
 import type { ColorType, ThemeMetas } from 'magic-color'
 import { mc } from 'magic-color'
 import BuiltInColors from './BuiltInColors.vue'
-import Extension from './extension/index.vue'
+import ThemeColors from './ThemeColors.vue'
 
 const color = ref(import.meta.env.DEV ? '#529e82' : mc.random())
 const alpha = ref(1)
@@ -21,8 +21,10 @@ const name = computed(() => mc.nameOf(color.value!))
 <template>
   <div>
     <BuiltInColors v-if="showPanel" />
-    <Extension v-else :colors :name :type>
-      <Palette v-model:color="color" v-model:alpha="alpha" v-model:type="type" ps top-15 shadow />
-    </Extension>
+    <ThemeColors v-else :name :colors :type ext>
+      <template #ext>
+        <Palette v-model:color="color" v-model:alpha="alpha" v-model:type="type" ps top-15 shadow />
+      </template>
+    </ThemeColors>
   </div>
 </template>

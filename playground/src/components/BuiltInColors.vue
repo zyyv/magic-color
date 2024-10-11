@@ -16,7 +16,7 @@ const colorMap = Object.fromEntries(
 <template>
   <div space-y-4>
     <div v-for="(colors, name) in colorMap" :key="name">
-      <ThemeColors :name="name as string" :colors="colors as any" type="hex" />
+      <ThemeColors show-arrow :name="name as string" :colors="colors as any" type="hex" />
     </div>
   </div>
 </template>
