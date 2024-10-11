@@ -33,11 +33,34 @@ Watch my <a href="https://color.zyob.top/talk" target='_blank'>Talk</a> to learn
 
 ## Features
 
-- 💫 Support `multi-color model` conversion.
-- 📦 Built-in color related components.
-- 🚀 Provides utility toolset functions
-- 🦄 Theme color generator and fully customizable.
-- 🥳 `esm` only & 0 dependencies.
+<ul>
+<li>
+<span style="margin-right:4px;">💫</span>
+Support `multi-color model` conversion.
+</li>
+<li>
+<span style="margin-right:4px;">📦</span>
+Built-in color related components.
+</li>
+<li>
+<span style="margin-right:4px;">🚀</span>
+Provides utility toolset functions
+</li>
+<li>
+<span style="margin-right:4px;">🦄</span>
+Theme color generator and fully customizable.
+</li>
+<li>
+<span style="margin-right:4px;">🥳</span>
+<code>esm</code> only & 0 dependencies.
+</li>
+<li>
+<span style="margin-right:4px;">
+<img src='https://onu.zyob.top/logo.svg' width='16' />
+</span>
+Provide powerful for <a href="https://onu.zyob.top" target="_blank">Onu UI</a>.
+</li>
+</ul>
 
 ## Usage
 
