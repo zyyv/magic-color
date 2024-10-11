@@ -70,7 +70,7 @@ export function hslToRgb(color: HslColor): RgbColor {
       }
     }
 
-    [r, g, b] = [Math.round(c[0] * 255), Math.round(c[1] * 255), Math.round(c[2] * 255)]
+    [r, g, b] = [c[0] * 255, c[1] * 255, c[2] * 255]
   }
 
   return [r, g, b]

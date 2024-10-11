@@ -1,6 +1,6 @@
 import type { BasicColorShades, ClosestColorShades, GenerateMeta, ThemeMetas, ThemeOptions } from './types'
-import chroma from 'chroma-js'
 import { Magicolor } from '../core/basic'
+import { deltaE } from '../delta-e'
 import { random } from '../utils'
 import collections from './collections.json'
 import { hueShades } from './shades'
@@ -11,8 +11,8 @@ function findClosetShade(color: string, colors: BasicColorShades[]): ClosestColo
   const normalizedColors = colors.map((meta) => {
     const shades = meta.shades.map(shade => ({
       ...shade,
-      delta: chroma.deltaE(color, shade.color),
-      lightnessDiff: Math.abs(chroma(shade.color).get('hsl.l') - chroma(color).get('hsl.l')),
+      delta: deltaE(color, shade.color),
+      lightnessDiff: Math.abs((new Magicolor(shade.color).get('hsl.l') / 100) - (new Magicolor(color).get('hsl.l') / 100)),
     }))
 
     return {
@@ -32,19 +32,19 @@ function findClosetShade(color: string, colors: BasicColorShades[]): ClosestColo
 
 export function getColorName(color: string): string {
   return collections
-    .map(t => [...t, chroma.deltaE(color, t[0])])
+    .map(t => [...t, deltaE(color, t[0])])
     .reduce((t, i) => t[2] < i[2] ? t : i)[1] as string
 }
 
 function generate(color: string, colorShades: BasicColorShades[], apca = false): GenerateMeta {
   const closedShade = findClosetShade(color, colorShades)
 
-  const _h = chroma(color).get('hsl.h')
-  const _close_h = chroma(closedShade.closestShadeLightness.color).get('hsl.h')
+  const _h = new Magicolor(color).get('hsl.h')
+  const _close_h = new Magicolor(closedShade.closestShadeLightness.color).get('hsl.h')
 
   let d: string | number = _h - (_close_h || 0)
 
-  const k = chroma(color).get('hsl.s') / chroma(closedShade.closestShadeLightness.color).get('hsl.s')
+  const k = (new Magicolor(color).value('hsl', false)[1] / 100) / (new Magicolor(closedShade.closestShadeLightness.color).value('hsl', false)[1] / 100)
 
   if (d === 0)
     d = _close_h.toString()
@@ -61,12 +61,12 @@ function generate(color: string, colorShades: BasicColorShades[], apca = false):
     shades: closedShade.shades.map((shade) => {
       let _color = shade.color
 
-      const u = chroma(_color).get('hsl.s') * k
-      _color = chroma(_color).set('hsl.s', u).hex()
-      _color = chroma(_color).set('hsl.h', d).hex()
+      const u = new Magicolor(_color).get('hsl.s') / 100 * k
+      _color = new Magicolor(_color).set('hsl.s', u * 100 > 100 ? 100 : u * 100).hex()
+      _color = new Magicolor(_color).set('hsl.h', d).hex()
 
       if (closedShade.closestShadeLightness.key === shade.key)
-        _color = chroma(color).hex()
+        _color = new Magicolor(color).hex()
 
       if (apca) {
         // if (shade.number < 500) {
@@ -82,9 +82,9 @@ function generate(color: string, colorShades: BasicColorShades[], apca = false):
         key: shade.key.toString() as unknown as keyof ThemeMetas,
         color: _color,
         hsl: [
-          Math.round(chroma(_color).get('hsl.h')) || 0,
-          Math.round(chroma(_color).get('hsl.s') * 100),
-          Math.round(chroma(_color).get('hsl.l') * 100),
+          Math.round(new Magicolor(_color).get('hsl.h')) || 0,
+          Math.round(new Magicolor(_color).get('hsl.s')),
+          Math.round(new Magicolor(_color).get('hsl.l')),
         ],
       }
     }),

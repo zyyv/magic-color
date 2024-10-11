@@ -9,11 +9,11 @@ describe('theme colors', () => {
     expect(mc.theme(testColor)).toMatchInlineSnapshot(`
       {
         "100": "#eee8ff",
-        "200": "#dfd4ff",
-        "300": "#c9b1ff",
-        "400": "#b085ff",
-        "50": "#f6f2ff",
-        "500": "#9955ff",
+        "200": "#e0d5ff",
+        "300": "#cab3ff",
+        "400": "#b086ff",
+        "50": "#f6f3ff",
+        "500": "#9955FF",
         "600": "#8c30f7",
         "700": "#7e1ee3",
         "800": "#6918bf",
@@ -27,10 +27,10 @@ describe('theme colors', () => {
     expect(mc.theme(testColor, { type: 'rgb' })).toMatchInlineSnapshot(`
       {
         "100": "rgb(238 232 255)",
-        "200": "rgb(223 212 255)",
-        "300": "rgb(201 177 255)",
-        "400": "rgb(176 133 255)",
-        "50": "rgb(246 242 255)",
+        "200": "rgb(224 213 255)",
+        "300": "rgb(202 179 255)",
+        "400": "rgb(176 134 255)",
+        "50": "rgb(246 243 255)",
         "500": "rgb(153 85 255)",
         "600": "rgb(140 48 247)",
         "700": "rgb(126 30 227)",
@@ -53,10 +53,10 @@ describe('theme colors', () => {
     })).toMatchInlineSnapshot(`
       {
         "--color-primary-100": "238 232 255",
-        "--color-primary-200": "223 212 255",
-        "--color-primary-300": "201 177 255",
-        "--color-primary-400": "176 133 255",
-        "--color-primary-50": "246 242 255",
+        "--color-primary-200": "224 213 255",
+        "--color-primary-300": "202 179 255",
+        "--color-primary-400": "176 134 255",
+        "--color-primary-50": "246 243 255",
         "--color-primary-500": "153 85 255",
         "--color-primary-600": "140 48 247",
         "--color-primary-700": "126 30 227",

@@ -1,5 +1,6 @@
 import type { Colors, ColorType, Opacity } from '@magic-color/core'
 import { calcAPCA, calcWCAG, getReadableTextColor, isWarmColor, reverseAPCA } from '../contrast'
+import { deltaE } from '../delta-e'
 import { hash } from '../hash'
 import { getColorName, theme } from '../theme'
 import { random } from '../utils'
@@ -20,6 +21,7 @@ export interface MagicolorInstance {
   readable: typeof getReadableTextColor
   warm: typeof isWarmColor
   supports: typeof SupportTypes
+  deltaE: typeof deltaE
 }
 
 export const mc: MagicolorInstance = <T extends ColorType>(...args: any[]): Magicolor<T> => {
@@ -38,3 +40,4 @@ mc.apcaReverse = reverseAPCA
 mc.readable = getReadableTextColor
 mc.warm = isWarmColor
 mc.supports = SupportTypes
+mc.deltaE = deltaE

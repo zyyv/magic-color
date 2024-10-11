@@ -282,22 +282,79 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
     return mc
   }
 
-  // TODO
-  set(operate: string, value: unknown) {
-    const [type, channel] = operate.split('.')
+  set<T extends ColorType>(operate: string, value: unknown) {
+    const [type, channel] = operate.split('.') as [ColorType?, string?]
     if (!type || !SupportTypes.includes(type)) {
       throw new Error('Invalid operate type.')
     }
-    // TODO
     if (!channel) {
-      const oldValueType = typeof this.values
-      const newValueType = typeof value
-      if (oldValueType !== newValueType) {
-        throw new Error('Invalid value type.')
+      throw new Error('Invalid channel.')
+    }
+
+    const typeValue = this.value(type, false)
+
+    if (Array.isArray(typeValue)) {
+      const index = type.indexOf(channel)
+      if (index === -1) {
+        throw new Error('Invalid channel.')
       }
-      if (Array.isArray(this.values) && Array.isArray(value) && this.values.length !== value.length) {
-        throw new Error('Invalid value length.')
+
+      if (typeof value === 'string' && /^[+\-*/]/.test(value)) {
+        const operator = value[0]
+        const operand = Number.parseFloat(value.slice(1))
+        switch (operator) {
+          case '+':
+            typeValue[index] += operand
+            break
+          case '-':
+            typeValue[index] -= operand
+            break
+          case '*':
+            typeValue[index] *= operand
+            break
+          case '/':
+            typeValue[index] /= operand
+            break
+          default:
+            throw new Error('Invalid operator.')
+        }
       }
+      else {
+        typeValue[index] = value as any
+      }
+    }
+    else {
+      throw new TypeError('Invalid operate type.')
+    }
+
+    // @ts-expect-error - type is not assignable to type T
+    this.type = type as T
+    // @ts-expect-error - value is not assignable to type Colors[T]
+    this.values = typeValue as Colors[T]
+
+    return this
+  }
+
+  get(operate: string): number {
+    const [type, channel] = operate.split('.') as [ColorType?, string?]
+    if (!type || !SupportTypes.includes(type)) {
+      throw new Error('Invalid operate type.')
+    }
+    if (!channel) {
+      throw new Error('Invalid channel.')
+    }
+
+    const typeValue = this.value(type, false)
+
+    if (Array.isArray(typeValue)) {
+      const index = type.indexOf(channel)
+      if (index === -1) {
+        throw new Error('Invalid channel.')
+      }
+      return typeValue[index]
+    }
+    else {
+      throw new TypeError('Invalid operate type.')
     }
   }
 }

@@ -42,10 +42,6 @@
     "dev": "unbuild --stub"
   },
   "dependencies": {
-    "@magic-color/core": "workspace:*",
-    "chroma-js": "catalog:"
-  },
-  "devDependencies": {
-    "@types/chroma-js": "catalog:"
+    "@magic-color/core": "workspace:*"
   }
 }

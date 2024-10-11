@@ -9,5 +9,5 @@ window.mc = mc
 
 <template>
   <Header />
-  <Container font-sans mt-8 />
+  <Container font-sans my-8 />
 </template>

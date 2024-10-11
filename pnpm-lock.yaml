@@ -33,9 +33,6 @@ catalogs:
     '@slidev/client':
       specifier: 0.49.23
       version: 0.49.23
-    '@types/chroma-js':
-      specifier: ^2.4.4
-      version: 2.4.4
     '@types/node':
       specifier: ^22.7.5
       version: 22.7.5
@@ -60,9 +57,6 @@ catalogs:
     chart.js:
       specifier: ^4.4.4
       version: 4.4.4
-    chroma-js:
-      specifier: ^3.1.1
-      version: 3.1.1
     eslint:
       specifier: ^9.12.0
       version: 9.12.0
@@ -208,13 +202,6 @@ importers:
       '@magic-color/core':
         specifier: workspace:*
         version: link:../core
-      chroma-js:
-        specifier: 'catalog:'
-        version: 3.1.1
-    devDependencies:
-      '@types/chroma-js':
-        specifier: 'catalog:'
-        version: 2.4.4
 
   packages/vue:
     dependencies:
@@ -1501,9 +1488,6 @@ packages:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
     engines: {node: '>=10.13.0'}
 
-  '@types/chroma-js@2.4.4':
-    resolution: {integrity: sha512-/DTccpHTaKomqussrn+ciEvfW4k6NAHzNzs/sts1TCqg333qNxOhy8TNIoQCmbGG3Tl8KdEhkGAssb1n3mTXiQ==}
-
   '@types/d3-scale-chromatic@3.0.3':
     resolution: {integrity: sha512-laXM4+1o5ImZv3RpFAsTRn3TEkzqkytiOY0Dz0sq5cnd1dtNlk6sHLon4OvqaiJb28T0S/TdsBI3Sjsy+keJrw==}
 
@@ -2189,9 +2173,6 @@ packages:
   chownr@2.0.0:
     resolution: {integrity: sha512-bIomtDF5KGpdogkLd9VspvFzk9KfpyyGlS8YFVZl7TGPBHL5snIOnxeshwVgPteQ9b4Eydl+pVbIyE1DcvCWgQ==}
     engines: {node: '>=10'}
-
-  chroma-js@3.1.1:
-    resolution: {integrity: sha512-CGr6w73Gi86142RWqZ1RjED/CyduYw2vMTikQZUvr2jGIihnZlMo/Kzm9rYHWDP2pJc6eebwc8CkX0iteBon+A==}
 
   ci-info@4.0.0:
     resolution: {integrity: sha512-TdHqgGf9odd8SXNuxtUBVx8Nv+qZOejE6qyqiy5NtbYYQOeFa6zmHkxlPzmaLxWWHsU6nJmB7AETdVPi+2NBUg==}
@@ -6467,8 +6448,6 @@ snapshots:
 
   '@trysound/sax@0.2.0': {}
 
-  '@types/chroma-js@2.4.4': {}
-
   '@types/d3-scale-chromatic@3.0.3': {}
 
   '@types/d3-scale@4.0.8':
@@ -7479,8 +7458,6 @@ snapshots:
       fsevents: 2.3.3
 
   chownr@2.0.0: {}
-
-  chroma-js@3.1.1: {}
 
   ci-info@4.0.0: {}
 
