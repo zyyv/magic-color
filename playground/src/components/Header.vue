@@ -1,27 +1,29 @@
 <template>
-  <header fcc py-4 pr>
-    <h1 text-4xl fw-600 text-transparent bg-clip-text bg-gradient-to-r from-purple to-red fcc gap-2>
-      <img inline-block w-10 src="/logo.svg" alt="logo">
-      <span>
-        Magic Color
-      </span>
-    </h1>
+  <header pt-2 sticky fcc top-0 z-1>
+    <hgroup w="85%" nav-bg fcc py-6>
+      <h1 text-4xl fw-600 text-transparent bg-clip-text bg-gradient-to-r from-purple to-red fcc gap-2>
+        <img inline-block w-10 src="/logo.svg" alt="logo">
+        <span>
+          Magic Color
+        </span>
+      </h1>
 
-    <div pa right-10 fcc gap-2>
-      <button i-carbon-switch-layer-2 icon-btn title="Built-In Colors" @click="togglePanel()" />
-      <button
-        i-carbon-light
-        dark:i-carbon-moon
-        icon-btn
-        title="Toggle Color Mode"
-        @click="toggleDark()"
-      />
-      <a
-        i-carbon-logo-github icon-btn
-        href="https://github.com/zyyv/magic-color"
-        target="_blank"
-        title="GitHub"
-      />
-    </div>
+      <div pa right-10 fcc gap-6>
+        <button i-carbon-switch-layer-2 icon-btn title="Built-In Colors" @click="togglePanel()" />
+        <button
+          i-carbon-light
+          dark:i-carbon-moon
+          icon-btn
+          title="Toggle Color Mode"
+          @click="toggleDark()"
+        />
+        <a
+          i-carbon-logo-github icon-btn
+          href="https://github.com/zyyv/magic-color"
+          target="_blank"
+          title="GitHub"
+        />
+      </div>
+    </hgroup>
   </header>
 </template>
