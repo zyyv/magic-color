@@ -15,6 +15,9 @@ export default defineConfig({
     'text': 'text-primary-text',
     'bg': 'bg-primary-bg',
     'icon-btn': 'inline-block text-1.2em',
+    'btn': 'inline-flex items-center justify-center w-full h-12 rd-md',
+    'btn-outline': 'btn b bg-transparent',
+    'btn-ghost': 'btn bg-transparent transition',
   },
   presets: [
     presetUseful({

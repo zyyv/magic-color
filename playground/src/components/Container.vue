@@ -51,7 +51,7 @@ provide('colorName', colorName)
               @click="panel = p.label"
             >
               <div :class="p.icon" icon-btn />
-              {{ p.label }}
+              <span ml-1 select-none>{{ p.label }}</span>
             </li>
           </ul>
         </div>
