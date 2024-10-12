@@ -3,6 +3,9 @@ import { presetUseful } from 'unocss-preset-useful'
 
 export default defineConfig({
   theme: {
+    fontFamily: {
+      commit: 'Commit Mono',
+    },
     colors: {
       primary: {
         DEFAULT: 'rgba(var(--c-text),%alpha)',
@@ -22,12 +25,6 @@ export default defineConfig({
   },
   presets: [
     presetUseful({
-      webFonts: {
-        fonts: {
-          mono: 'Fira Mono:400,700',
-          sans: 'DM Sans',
-        },
-      },
       icons: {
         extraProperties: {
           'display': 'inline-block',

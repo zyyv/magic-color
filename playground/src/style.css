@@ -38,3 +38,11 @@ html:not(.dark) .shiki span {
 html, body {
   --uno: text bg;
 }
+
+@font-face {
+  font-family: 'Commit Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(/fonts/CommitMono.woff2) format('woff2');
+}

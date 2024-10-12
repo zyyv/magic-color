@@ -18,7 +18,7 @@ const hashMc = computed(() => {
       >
       <p
         text-sm
-        :class="hashMc ? '' : 'font-mono text-transparent bg-clip-text bg-gradient-to-r from-red to-purple'"
+        :class="hashMc ? '' : 'text-transparent bg-clip-text bg-gradient-to-r from-red to-purple'"
         :style="{ color: hashMc?.hex() }"
       >
         {{ hashMc?.hex() ?? '👈 Hash' }}
