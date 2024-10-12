@@ -18,6 +18,7 @@ export default defineConfig({
     'btn': 'inline-flex items-center justify-center w-full h-12 rd-md',
     'btn-outline': 'btn b bg-transparent',
     'btn-ghost': 'btn bg-transparent transition',
+    'nav-bg': 'backdrop-blur-12 rd-2 shadow-xl bg-primary-bg/45',
   },
   presets: [
     presetUseful({
