@@ -42,8 +42,6 @@
     "dev": "unbuild --stub"
   },
   "dependencies": {
-    "@magic-color/core": "workspace:*",
-    "@magic-color/shared": "workspace:*",
-    "@magic-color/transform": "workspace:*"
+    "@magic-color/core": "workspace:*"
   }
 }

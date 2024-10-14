@@ -4,7 +4,7 @@
  * @see http://www.w3.org/TR/css3-color/#svg-color
  */
 
-export const w3cx11 = {
+export const W3cx11 = {
   aliceblue: '#f0f8ff',
   antiquewhite: '#faebd7',
   aqua: '#00ffff',

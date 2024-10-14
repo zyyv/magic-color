@@ -1,5 +1,5 @@
 {
-  "name": "@magic-color/transform",
+  "name": "@magic-color/transformer",
   "type": "module",
   "version": "1.3.0",
   "description": "Magic color transform library",
@@ -21,6 +21,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs"
+    },
+    "./colors": {
+      "types": "./dist/colors.d.ts",
+      "import": "./dist/colors.mjs"
     }
   },
   "main": "./dist/index.mjs",
@@ -42,7 +46,6 @@
     "dev": "unbuild --stub"
   },
   "dependencies": {
-    "@magic-color/core": "workspace:*",
     "@magic-color/shared": "workspace:*"
   }
 }

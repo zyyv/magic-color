@@ -6,7 +6,7 @@
  * @see https://github.com/gka/chroma.js
  */
 
-export const colorbrewer: Record<string, string[]> = {
+export const Colorbrewer: Record<string, string[]> = {
   // sequential
   OrRd: ['#fff7ec', '#fee8c8', '#fdd49e', '#fdbb84', '#fc8d59', '#ef6548', '#d7301f', '#b30000', '#7f0000'],
   PuBu: ['#fff7fb', '#ece7f2', '#d0d1e6', '#a6bddb', '#74a9cf', '#3690c0', '#0570b0', '#045a8d', '#023858'],
@@ -53,5 +53,5 @@ export const colorbrewer: Record<string, string[]> = {
 }
 
 // add lowercase aliases for case-insensitive matches
-for (const key of Object.keys(colorbrewer))
-  colorbrewer[key.toLowerCase()] = colorbrewer[key]
+for (const key of Object.keys(Colorbrewer))
+  Colorbrewer[key.toLowerCase()] = Colorbrewer[key]

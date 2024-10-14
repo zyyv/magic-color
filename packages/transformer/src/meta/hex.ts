@@ -1,4 +1,4 @@
-import type { HexColor, HsbColor, HslColor, LabColor, RgbColor } from '@magic-color/core'
+import type { HexColor, HsbColor, HslColor, LabColor, RgbColor } from '../types'
 import { rgbToHsb, rgbToLab } from './rgb'
 
 const hexRegex = /^#?([a-f\d]{3}|[a-f\d]{6}|[a-f\d]{8})$/i
