@@ -1,4 +1,4 @@
-import { Magicolor } from './core/basic'
+import { Magicolor } from 'magic-color/src/core/basic'
 
 const { sqrt, min, max, atan2, abs, cos, sin, exp, PI } = Math
 

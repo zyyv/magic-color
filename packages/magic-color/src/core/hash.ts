@@ -9,7 +9,7 @@
  */
 
 import type { ColorType } from '@magic-color/core'
-import { Magicolor } from './core/basic'
+import { Magicolor } from '@magic-color/core'
 
 export function hash(inputString: string, type: ColorType = 'hex'): string {
   let sum = 0

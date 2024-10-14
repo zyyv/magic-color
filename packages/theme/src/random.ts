@@ -1,5 +1,5 @@
 import type { ColorType } from '@magic-color/core'
-import { Magicolor } from './core/basic'
+import { Magicolor } from '@magic-color/core'
 
 /**
  * Generate a random color

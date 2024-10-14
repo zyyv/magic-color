@@ -209,14 +209,17 @@ importers:
       '@magic-color/core':
         specifier: workspace:*
         version: link:../core
-      '@magic-color/shared':
+      '@magic-color/theme':
         specifier: workspace:*
-        version: link:../shared
-      '@magic-color/transformer':
-        specifier: workspace:*
-        version: link:../transformer
+        version: link:../theme
 
   packages/shared: {}
+
+  packages/theme:
+    dependencies:
+      '@magic-color/core':
+        specifier: workspace:*
+        version: link:../core
 
   packages/transformer:
     dependencies:

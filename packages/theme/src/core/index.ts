@@ -1,8 +1,8 @@
 import type { BasicColorShades, ClosestColorShades, GenerateMeta, ThemeMetas, ThemeOptions } from './types'
-import { Magicolor } from '../core/basic'
+import { Magicolor } from '@magic-color/core'
+import { getColorName } from '../collections'
 import { deltaE } from '../delta-e'
 import { random } from '../random'
-import collections from './collections.json'
 import { hueShades } from './shades'
 
 const cache = new Map<string, GenerateMeta>()
@@ -28,12 +28,6 @@ function findClosetShade(color: string, colors: BasicColorShades[]): ClosestColo
     ...colorModel,
     closestShadeLightness: colorModel.shades.reduce((i, a) => i.lightnessDiff < a.lightnessDiff ? i : a),
   }
-}
-
-export function getColorName(color: string): string {
-  return collections
-    .map(t => [...t, deltaE(color, t[0])])
-    .reduce((t, i) => t[2] < i[2] ? t : i)[1] as string
 }
 
 function generate(color: string, colorShades: BasicColorShades[], apca = false): GenerateMeta {
