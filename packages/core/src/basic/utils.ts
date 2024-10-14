@@ -1,4 +1,5 @@
-import type { ColorObject, Colors, ColorType, Opacity } from '@magic-color/core'
+import type { Colors, ColorType, Opacity } from '@magic-color/transformer'
+import type { ColorObject } from '../types'
 import { isArray, isNumber, isObject, isString } from '@magic-color/shared'
 import { isHex, isHsb, isHsl, isKeyword, isRgb, parseHex, parseHsb, parseHsl, parseKeyword, parseLab, parseRgb, SupportTypes } from '@magic-color/transformer'
 

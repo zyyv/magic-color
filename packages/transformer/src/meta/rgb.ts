@@ -1,4 +1,4 @@
-import type { HexColor, HsbColor, HslColor, LabColor, RgbColor } from '@magic-color/core'
+import type { HexColor, HsbColor, HslColor, LabColor, RgbColor } from '../types'
 
 const rgbRegex = /^rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(0|0?\.\d+|1(?:\.0)?))?\)$/
 const newRgbRegex = /^rgb\((\d+)\s+(\d+)\s+(\d+)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/

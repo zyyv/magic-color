@@ -4,7 +4,7 @@
  */
 
 import type { RgbColor } from '@magic-color/core'
-import { Magicolor } from '../core/basic'
+import { Magicolor } from '@magic-color/core'
 import { SA98G } from './constant'
 
 function APCAcontrast(txtY: number, bgY: number, places = -1) {
