@@ -1,6 +1,6 @@
-import type { Colors, ColorType, Opacity } from '@magic-color/core'
-import type { ColorObject } from './types'
-import { isArray, isHex, isHsb, isHsl, isKeyword, isNumber, isObject, isRgb, isString, parseHex, parseHsb, parseHsl, parseKeyword, parseLab, parseRgb } from '@magic-color/core'
+import type { ColorObject, Colors, ColorType, Opacity } from '@magic-color/core'
+import { isArray, isNumber, isObject, isString } from '@magic-color/shared'
+import { isHex, isHsb, isHsl, isKeyword, isRgb, parseHex, parseHsb, parseHsl, parseKeyword, parseLab, parseRgb } from '@magic-color/transform'
 
 export const SupportTypes = ['rgb', 'hex', 'hsl', 'hsb', 'lab']
 

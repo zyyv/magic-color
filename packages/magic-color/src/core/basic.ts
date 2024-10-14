@@ -1,6 +1,5 @@
-import type { Colors, ColorType, HexColor, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/core'
-import type { ColorObject } from './types'
-import { hexToHsb, hexToHsl, hexToLab, hexToRgb, hsbToHex, hsbToHsl, hsbToLab, hsbToRgb, hslToHex, hslToHsb, hslToLab, hslToRgb, labToHex, labToHsb, labToHsl, labToRgb, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab } from '@magic-color/core'
+import type { ColorObject, Colors, ColorType, HexColor, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/core'
+import { hexToHsb, hexToHsl, hexToLab, hexToRgb, hsbToHex, hsbToHsl, hsbToLab, hsbToRgb, hslToHex, hslToHsb, hslToLab, hslToRgb, labToHex, labToHsb, labToHsl, labToRgb, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab } from '@magic-color/transform'
 import { getColorName } from '../theme'
 import { alphaToString, resolveArgs, SupportTypes } from './utils'
 

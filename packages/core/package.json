@@ -40,5 +40,8 @@
   "scripts": {
     "build": "unbuild",
     "dev": "unbuild --stub"
+  },
+  "dependencies": {
+    "@magic-color/shared": "workspace:*"
   }
 }

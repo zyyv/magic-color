@@ -1,4 +1,4 @@
-import type { HexColor, HsbColor, HslColor, LabColor, RgbColor } from '../types'
+import type { HexColor, HsbColor, HslColor, LabColor, RgbColor } from '@magic-color/core'
 import { rgbToHex, rgbToHsb, rgbToHsl } from './rgb'
 
 const labRegex = /^lab\(\s*(100|[1-9]?\d(?:\.\d+)?)\s+(-?(?:1[01]\d|12[0-8]|\d?\d)(?:\.\d+)?)\s+(-?(?:1[01]\d|12[0-8]|\d?\d)(?:\.\d+)?)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/

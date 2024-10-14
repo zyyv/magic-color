@@ -43,3 +43,9 @@ export type ColorValue = Colors[keyof Colors]
 export interface UnoColors {
   [key: string]: UnoColors & { DEFAULT?: string } | string
 }
+
+export interface ColorObject<T extends ColorType> {
+  type: T
+  values: Colors[T]
+  alpha: Opacity
+}

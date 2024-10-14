@@ -1,4 +1,4 @@
-import type { HexColor, HsbColor, HslColor, LabColor, RgbColor } from '../types'
+import type { HexColor, HsbColor, HslColor, LabColor, RgbColor } from '@magic-color/core'
 import { rgbToHex, rgbToHsb, rgbToLab } from './rgb'
 
 const hslRegex = /^hsl\((\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\)$/

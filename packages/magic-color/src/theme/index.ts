@@ -1,7 +1,7 @@
 import type { BasicColorShades, ClosestColorShades, GenerateMeta, ThemeMetas, ThemeOptions } from './types'
 import { Magicolor } from '../core/basic'
 import { deltaE } from '../delta-e'
-import { random } from '../utils'
+import { random } from '../random'
 import collections from './collections.json'
 import { hueShades } from './shades'
 

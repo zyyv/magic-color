@@ -1,9 +1,7 @@
-import type { HexColor } from '../types'
+import type { HexColor } from '@magic-color/core'
+import { colorbrewer, unoColors, w3cx11 } from '@magic-color/core'
+import { isObject } from '@magic-color/shared'
 
-import { colorbrewer } from '../colors/colorbrewer'
-import { unoColors } from '../colors/uno'
-import { w3cx11 } from '../colors/w3cx11'
-import { isObject } from '../utils'
 import { parseHex } from './hex'
 
 export function isKeyword(color: string): boolean {
