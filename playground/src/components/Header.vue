@@ -15,7 +15,7 @@
           dark:i-carbon-moon
           icon-btn
           title="Toggle Color Mode"
-          @click="toggleDark()"
+          @click="toggleDark"
         />
         <a
           i-carbon-logo-github icon-btn
