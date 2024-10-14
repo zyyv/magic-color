@@ -4,9 +4,11 @@
 // and Windi CSS
 // https://github.com/windicss/windicss/blob/main/src/config/colors.ts
 
-import type { UnoColors } from '../types'
+export interface UnoColorsType {
+  [key: string]: UnoColorsType & { DEFAULT?: string } | string
+}
 
-export const unoColors = {
+export const UnoColors = {
   inherit: 'inherit',
   current: 'currentColor',
   transparent: 'transparent',
@@ -355,10 +357,10 @@ export const unoColors = {
   get blueGray() {
     return this.slate
   },
-} satisfies UnoColors
+} satisfies UnoColorsType
 
 // assign default color, and color shortcuts
-Object.values(unoColors as UnoColors).forEach((color) => {
+Object.values(UnoColors as UnoColorsType).forEach((color) => {
   if (typeof color !== 'string' && color !== undefined) {
     color.DEFAULT = color.DEFAULT || color[400] as string
     Object.keys(color).forEach((key) => {

@@ -1,8 +1,36 @@
-import type { Colors, ColorType, HexColor, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/core'
-import type { ColorObject } from './types'
-import { hexToHsb, hexToHsl, hexToLab, hexToRgb, hsbToHex, hsbToHsl, hsbToLab, hsbToRgb, hslToHex, hslToHsb, hslToLab, hslToRgb, labToHex, labToHsb, labToHsl, labToRgb, rgbToHex, rgbToHsb, rgbToHsl, rgbToLab } from '@magic-color/core'
-import { getColorName } from '../theme'
-import { alphaToString, resolveArgs, SupportTypes } from './utils'
+import type { Colors, ColorType, HexColor, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/transformer'
+import type { ColorObject } from '../types'
+import {
+  hexToHsb,
+  hexToHsl,
+  hexToLab,
+  hexToRgb,
+
+  hsbToHex,
+  hsbToHsl,
+  hsbToLab,
+  hsbToRgb,
+
+  hslToHex,
+  hslToHsb,
+  hslToLab,
+  hslToRgb,
+
+  labToHex,
+  labToHsb,
+  labToHsl,
+  labToRgb,
+
+  rgbToHex,
+  rgbToHsb,
+  rgbToHsl,
+  rgbToLab,
+
+  SupportTypes,
+} from '@magic-color/transformer'
+import { alphaToString, resolveArgs } from './utils'
+
+export { guessType } from './utils'
 
 export class Magicolor<T extends ColorType> implements ColorObject<T> {
   type: T
@@ -49,10 +77,6 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
       default:
         throw new Error('Invalid color type.')
     }
-  }
-
-  get name() {
-    return getColorName(this.css('hex'))
   }
 
   toRgb(): Magicolor<'rgb'> {

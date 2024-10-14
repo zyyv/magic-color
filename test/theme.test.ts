@@ -1,12 +1,12 @@
-import type { ThemeMetas } from '../packages/magic-color/src/theme/types'
-import { mc } from 'magic-color'
+import type { ThemeMetas } from '@magic-color/theme'
+import { theme } from '@magic-color/theme'
 import { describe, expect, it } from 'vitest'
 
 describe('theme colors', () => {
   const testColor = '#9955FF'
 
   it('simple theme', () => {
-    expect(mc.theme(testColor)).toMatchInlineSnapshot(`
+    expect(theme(testColor)).toMatchInlineSnapshot(`
       {
         "100": "#eee8ff",
         "200": "#e0d5ff",
@@ -24,7 +24,7 @@ describe('theme colors', () => {
   })
 
   it('theme to other type', () => {
-    expect(mc.theme(testColor, { type: 'rgb' })).toMatchInlineSnapshot(`
+    expect(theme(testColor, { type: 'rgb' })).toMatchInlineSnapshot(`
       {
         "100": "rgb(238 232 255)",
         "200": "rgb(224 213 255)",
@@ -42,7 +42,7 @@ describe('theme colors', () => {
   })
 
   it('theme with render', () => {
-    expect(mc.theme(testColor, {
+    expect(theme(testColor, {
       type: 'rgb',
       render: (meta: [keyof ThemeMetas, string]) => {
         return [

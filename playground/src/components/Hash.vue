@@ -1,10 +1,10 @@
 <script lang='ts' setup>
-import { hash, mc } from 'magic-color'
+import { mc } from 'magic-color'
 
 const hashInput = ref('')
 const hashMc = computed(() => {
   if (hashInput.value)
-    return mc(hash(hashInput.value))
+    return mc(mc.hash(hashInput.value))
   return null
 })
 </script>

@@ -7,6 +7,9 @@
     "paths": {
       "magic-color": ["./packages/magic-color/src/indenx.ts"],
       "@magic-color/core": ["./packages/core/src/indenx.ts"],
+      "@magic-color/shared": ["./packages/shared/src/indenx.ts"],
+      "@magic-color/theme": ["./packages/theme/src/indenx.ts"],
+      "@magic-color/transformer": ["./packages/transformer/src/indenx.ts"],
       "@magic-color/vue": ["./packages/vue/src/indenx.ts"]
     },
     "resolveJsonModule": true,

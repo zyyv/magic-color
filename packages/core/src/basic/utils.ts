@@ -1,8 +1,7 @@
-import type { Colors, ColorType, Opacity } from '@magic-color/core'
-import type { ColorObject } from './types'
-import { isArray, isHex, isHsb, isHsl, isKeyword, isNumber, isObject, isRgb, isString, parseHex, parseHsb, parseHsl, parseKeyword, parseLab, parseRgb } from '@magic-color/core'
-
-export const SupportTypes = ['rgb', 'hex', 'hsl', 'hsb', 'lab']
+import type { Colors, ColorType, Opacity } from '@magic-color/transformer'
+import type { ColorObject } from '../types'
+import { isArray, isNumber, isObject, isString } from '@magic-color/shared'
+import { isHex, isHsb, isHsl, isKeyword, isRgb, parseHex, parseHsb, parseHsl, parseKeyword, parseLab, parseRgb, SupportTypes } from '@magic-color/transformer'
 
 export function alphaToString(alpha: Opacity, toHex = false): string {
   return toHex
@@ -154,8 +153,4 @@ export function resolveArgs<T extends ColorType = 'rgb'>(...args: any[]): [Color
 
     return [_values, _type, _alpha]
   }
-}
-
-export function valid(color: string) {
-  return guessType(color) !== undefined
 }
