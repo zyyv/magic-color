@@ -8,7 +8,7 @@ const colorMap = Object.fromEntries(
     .map(([k, v]) => {
       const numberKeyRe = /^\d{2,3}$/
       const keys = Object.keys(v).filter(k => numberKeyRe.test(k))
-      return [k[0].toUpperCase() + k.slice(1), Object.fromEntries(keys.map(k => [k, (v as any)[k]]) as [string, string][])]
+      return [k[0].toUpperCase() + k.slice(1).toLowerCase(), Object.fromEntries(keys.map(k => [k, (v as any)[k]]) as [string, string][])]
     }),
 )
 </script>
