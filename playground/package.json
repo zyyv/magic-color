@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@magic-color/core": "workspace:*",
+    "@magic-color/transformer": "workspace:*",
     "@magic-color/vue": "workspace:*",
     "@vueuse/core": "catalog:",
     "chart.js": "catalog:",

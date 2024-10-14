@@ -257,6 +257,9 @@ importers:
       '@magic-color/core':
         specifier: workspace:*
         version: link:../packages/core
+      '@magic-color/transformer':
+        specifier: workspace:*
+        version: link:../packages/transformer
       '@magic-color/vue':
         specifier: workspace:*
         version: link:../packages/vue

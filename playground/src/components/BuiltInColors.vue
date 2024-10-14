@@ -1,9 +1,9 @@
 <script lang='ts' setup>
-import { unoColors } from 'magic-color'
+import { UnoColors } from '@magic-color/transformer/colors'
 import ThemeColors from './ThemeColors.vue'
 
 const colorMap = Object.fromEntries(
-  Object.entries(unoColors)
+  Object.entries(UnoColors)
     .filter(([_, v]) => typeof v === 'object')
     .map(([k, v]) => {
       const numberKeyRe = /^\d{2,3}$/

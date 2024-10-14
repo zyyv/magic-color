@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { theme } from 'magic-color'
+import type { ThemeMetas } from 'magic-color'
 import { computed, ref, watch } from 'vue'
 import RatioTableSquare from './RatioTableSquare.vue'
 
 defineProps<{
-  colors: ReturnType<typeof theme>
+  colors: ThemeMetas
 }>()
 
 type ContrastType = 'WCAG' | 'APCA'

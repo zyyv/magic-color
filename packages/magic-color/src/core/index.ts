@@ -1,6 +1,6 @@
 import type { Colors, ColorType, Opacity } from '@magic-color/core'
 import { guessType, Magicolor, SupportTypes } from '@magic-color/core'
-import { deltaE, getColorName, random } from '@magic-color/theme'
+import { deltaE, getColorName, random, theme } from '@magic-color/theme'
 import { calcAPCA, calcWCAG, getReadableTextColor, isWarmColor, reverseAPCA } from '../contrast'
 import { hash } from './hash'
 
@@ -10,6 +10,7 @@ export interface MagicolorInstance {
   valid: typeof guessType
   random: typeof random
   hash: typeof hash
+  theme: typeof theme
   wcag: typeof calcWCAG
   apca: typeof calcAPCA
   apcaReverse: typeof reverseAPCA
@@ -28,6 +29,7 @@ export const mc: MagicolorInstance = <T extends ColorType>(...args: any[]): Magi
 mc.valid = guessType
 mc.random = random
 mc.hash = hash
+mc.theme = theme
 mc.wcag = calcWCAG
 mc.apca = calcAPCA
 mc.apcaReverse = reverseAPCA
