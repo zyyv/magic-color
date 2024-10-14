@@ -20,11 +20,17 @@ const name = computed(() => mc.nameOf(color.value!))
 
 <template>
   <div>
-    <BuiltInColors v-if="showPanel" />
-    <ThemeColors v-else :name :colors :type ext>
-      <template #ext>
-        <Palette v-model:color="color" v-model:alpha="alpha" v-model:type="type" ps top-15 shadow />
-      </template>
-    </ThemeColors>
+    <Transition
+      enter-active-class="animate-fade-in animate-duration-150"
+      leave-active-class="animate-fade-out animate-duration-150"
+      mode="out-in"
+    >
+      <BuiltInColors v-if="showPanel" />
+      <ThemeColors v-else :name :colors :type ext>
+        <template #ext>
+          <Palette v-model:color="color" v-model:alpha="alpha" v-model:type="type" ps top-15 shadow />
+        </template>
+      </ThemeColors>
+    </Transition>
   </div>
 </template>

@@ -47,10 +47,16 @@ const [toggle, setToggle] = useToggle(props.ext)
         </li>
       </ul>
     </div>
-    <KeepAlive>
-      <Extension v-if="toggle" mt-8 :colors :name>
-        <slot name="ext" />
-      </Extension>
-    </KeepAlive>
+    <Transition
+      enter-active-class="animate-slide-in-up animate-duration-500"
+      leave-active-class="animate-slide-out-right animate-duration-500"
+      mode="out-in"
+    >
+      <KeepAlive>
+        <Extension v-if="toggle" mt-8 :colors :name>
+          <slot name="ext" />
+        </Extension>
+      </KeepAlive>
+    </Transition>
   </div>
 </template>

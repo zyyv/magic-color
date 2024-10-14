@@ -127,8 +127,9 @@ const { copy, copied } = useClipboard()
       </div>
     </div>
 
-    <div pr>
+    <div pr b="~ dashed dark:#3c3c3c #ccc" p2 rd>
       <div
+        v-if="highlightCode"
         text-xs select-none
         fcc gap-1
         pa right-1 top-1
@@ -141,7 +142,18 @@ const { copy, copied } = useClipboard()
         <i :class="copied ? 'i-carbon-checkmark' : 'i-carbon-bring-forward'" />
         Copy Code
       </div>
-      <div b="~ dashed dark:#3c3c3c #ccc" p2 rd v-html="highlightCode" />
+
+      <Transition
+        enter-active-class="animate-fade-in animate-duration-150"
+        leave-active-class="animate-fade-out animate-duration-150"
+        mode="out-in"
+      >
+        <div v-if="!highlightCode" animate-pulse>
+          <i inline-block i-carbon-assembly-reference animate-spin />
+          Computing code...
+        </div>
+        <div v-else v-html="highlightCode" />
+      </Transition>
     </div>
   </div>
 </template>
