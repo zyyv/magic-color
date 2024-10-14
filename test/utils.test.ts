@@ -1,7 +1,7 @@
 import type { ColorType } from 'magic-color'
 import { mc } from 'magic-color'
 import { describe, expect, it } from 'vitest'
-import { resolveArgs } from '../packages/magic-color/src/core/utils'
+import { resolveArgs } from '../packages/core/src/basic/utils'
 
 describe('utils scoped', () => {
   const hex = '#d15b14'

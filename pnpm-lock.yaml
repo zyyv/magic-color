@@ -140,6 +140,21 @@ importers:
       '@iconify/utils':
         specifier: 'catalog:'
         version: 2.1.33
+      '@magic-color/core':
+        specifier: workspace:*
+        version: link:packages/core
+      '@magic-color/shared':
+        specifier: workspace:*
+        version: link:packages/shared
+      '@magic-color/theme':
+        specifier: workspace:*
+        version: link:packages/theme
+      '@magic-color/transformer':
+        specifier: workspace:*
+        version: link:packages/transformer
+      '@magic-color/vue':
+        specifier: workspace:*
+        version: link:packages/vue
       '@types/node':
         specifier: 'catalog:'
         version: 22.7.5
