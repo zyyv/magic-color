@@ -28,14 +28,14 @@ const [toggle, setToggle] = useToggle(props.ext)
 </script>
 
 <template>
-  <div w="75%" pt-4 pb-6 px-6 rd-3 hover-sort-bg max-h-min>
+  <div w="75%" pt-4 pb-6 px-6 rd-3 transition hover:bg-sort:10 max-h-min>
     <div fbc mb-2>
       <p text-xl fw-700>
         {{ name }}
       </p>
-      <button v-if="showArrow" icon-btn i-carbon-arrows-horizontal title="Show Analytics" @click="setToggle()" />
+      <button v-if="showArrow" icon-btn i-carbon-arrows-vertical title="Show Analytics" @click="setToggle()" />
     </div>
-    <ul flex items-center justify-between gap-1>
+    <ul fbc>
       <li v-for="(v, k) in colors" :key="k">
         <ThemeColorItem :k="k as any" :v :color="getReadable(v)" :type />
       </li>

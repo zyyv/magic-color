@@ -11,26 +11,31 @@ export default defineConfig({
         DEFAULT: 'rgba(var(--c-text),%alpha)',
         text: 'rgba(var(--c-text),%alpha)',
         bg: 'rgba(var(--c-bg),%alpha)',
-        sortbg: 'rgba(var(--c-sort-bg),%alpha)',
       },
+      sort: 'rgba(var(--bg-sort),%alpha)',
     },
   },
-  shortcuts: {
+  shortcuts: [{
     'text': 'text-primary-text',
     'bg': 'bg-primary-bg',
-    'sort-bg': 'bg-primary-sortbg:10',
     'icon-btn': 'inline-block text-1.2em',
+    'nav-bg': 'backdrop-blur-12 rd-4 shadow-xl bg-primary-bg/45',
+    // components
     'btn': 'inline-flex items-center justify-center w-full h-12 rd-md',
     'btn-outline': 'btn b bg-transparent',
     'btn-ghost': 'btn bg-transparent transition',
-    'nav-bg': 'backdrop-blur-12 rd-4 shadow-xl bg-primary-bg/45',
-  },
+  }],
   presets: [
     presetUseful({
       icons: {
         extraProperties: {
           'display': 'inline-block',
           'vertical-align': 'text-bottom',
+        },
+      },
+      webFonts: {
+        fonts: {
+          dm: 'DM Sans',
         },
       },
     }),

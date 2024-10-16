@@ -14,7 +14,7 @@ const colorMap = Object.fromEntries(
 )
 
 function onBeforeEnter(el: HTMLElement) {
-  el.style.opacity = 0
+  el.style.opacity = '0'
   el.style.marginLeft = '100%'
 }
 
