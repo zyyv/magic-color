@@ -1,5 +1,6 @@
 <script lang='ts' setup>
 import { UnoColors } from '@magic-color/transformer/colors'
+import gsap from 'gsap'
 import ThemeColors from './ThemeColors.vue'
 
 const colorMap = Object.fromEntries(
@@ -11,12 +12,27 @@ const colorMap = Object.fromEntries(
       return [k[0].toUpperCase() + k.slice(1).toLowerCase(), Object.fromEntries(keys.map(k => [k, (v as any)[k]]) as [string, string][])]
     }),
 )
+
+function onBeforeEnter(el: HTMLElement) {
+  el.style.opacity = 0
+  el.style.marginLeft = '100%'
+}
+
+function onEnter(el, done) {
+  gsap.to(el, {
+    opacity: 1,
+    marginLeft: 'auto',
+    delay: el.dataset.index * 0.1,
+    onComplete: done,
+  })
+}
 </script>
 
 <template>
-  <div space-y-4>
-    <div v-for="(colors, name) in colorMap" :key="name">
-      <ThemeColors show-arrow :name="name as string" :colors="colors as any" type="hex" />
-    </div>
-  </div>
+  <TransitionGroup appear :css="false" space-y-4 tag="div" @before-enter="onBeforeEnter" @enter="onEnter">
+    <ThemeColors
+      v-for="(colors, name, index) in colorMap" :key="name" class="m-auto" show-arrow :name="name"
+      :colors="colors" type="hex" :data-index="index"
+    />
+  </TransitionGroup>
 </template>

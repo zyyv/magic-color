@@ -26,7 +26,7 @@ const name = computed(() => mc.nameOf(color.value!))
       mode="out-in"
     >
       <BuiltInColors v-if="showPanel" />
-      <ThemeColors v-else :name :colors :type ext>
+      <ThemeColors v-else m-auto :name :colors :type ext>
         <template #ext>
           <Palette v-model:color="color" v-model:alpha="alpha" v-model:type="type" ps top-15 shadow />
         </template>
