@@ -1,22 +1,23 @@
 <script lang='ts' setup>
 import type { ThemeMetas } from 'magic-color'
-import Chart from './Chart.vue'
-import Demo from './Demo.vue'
-import Exports from './Exports.vue'
-import RatioTable from './RatioTable.vue'
 
 defineProps<{
   colors: ThemeMetas
   name: string
 }>()
 
+const Chart = defineAsyncComponent(() => import('./Chart.vue'))
+const Demo = defineAsyncComponent(() => import('./Demo.vue'))
+const Exports = defineAsyncComponent(() => import('./Exports.vue'))
+const RatioTable = defineAsyncComponent(() => import('./RatioTable.vue'))
+
 const panels = [
   { label: 'Chart', component: Chart, icon: 'i-carbon-chart-line-smooth' },
   { label: 'Contrast', component: RatioTable, icon: 'i-carbon-brightness-contrast' },
   { label: 'Export', component: Exports, icon: 'i-carbon-download' },
   { label: 'Demo', component: Demo, icon: 'i-carbon-demo' },
-
 ]
+
 const panel = ref('Chart')
 const cp = computed(() => panels.find(p => p.label === panel.value)!.component)
 </script>
@@ -27,8 +28,7 @@ const cp = computed(() => panels.find(p => p.label === panel.value)!.component)
       <div fc mb-8>
         <ul b="~ #ccc dark:#3c3c3c" p1 rd fcc gap-2>
           <li
-            v-for="p in panels" :key="p.label"
-            text-sm px-2 cursor-pointer rd-sm
+            v-for="p in panels" :key="p.label" text-sm px-2 cursor-pointer rd-sm
             :class="panel === p.label ? 'bg-orange/10 text-orange' : 'text-#666 dark:text-#999'"
             @click="panel = p.label"
           >
@@ -37,9 +37,14 @@ const cp = computed(() => panels.find(p => p.label === panel.value)!.component)
           </li>
         </ul>
       </div>
-      <KeepAlive>
+      <Suspense :timeout="10">
         <component :is="cp" :colors="colors" :name />
-      </KeepAlive>
+        <template #fallback>
+          <div w-full h-full fcc>
+            <i text-20 inline-block i-carbon-assembly-reference animate-spin />
+          </div>
+        </template>
+      </Suspense>
     </div>
     <slot />
   </div>
