@@ -2,13 +2,12 @@
 import type { ColorType, ThemeMetas } from 'magic-color'
 import type { BuiltInParserName } from 'prettier'
 import { mc } from 'magic-color'
+import * as formaters from '../../utils/format'
 
 const props = defineProps<{
   colors: ThemeMetas
   name: string
 }>()
-
-const formaters = await import('../../utils/format')
 
 const copyCode = ref<string>()
 const exportType = ref(mc.supports[1]) // 'hex'
@@ -18,7 +17,7 @@ const langs = reactive<{
   name: string
   parser: BuiltInParserName
   lang: string
-  formater: Promise<(code: ThemeMetas, key: string) => string>
+  formater: (code: ThemeMetas, key: string) => string
 }[]>([
       {
         icon: 'i-logos-unocss',
@@ -68,7 +67,7 @@ const highlightCode = computedAsync(async () => {
   const key = props.name.toLowerCase().replace(/\s+/g, '-')
   const currentLang = langs.find(l => l.name === lang.value)!
   const colorsValue = Object.fromEntries(Object.entries(props.colors).map(([k, v]) => [k, mc(v).css(exportType.value as unknown as ColorType)]))
-  const formater = await currentLang.formater
+  const formater = currentLang.formater
   const prettifyCode = (await prettierCode(formater(colorsValue as unknown as ThemeMetas, key), currentLang.parser)).trim()
   copyCode.value = prettifyCode
   return highlight(prettifyCode, currentLang.lang)
@@ -146,8 +145,8 @@ const { copy, copied } = useClipboard()
         leave-active-class="animate-fade-out animate-duration-150" mode="out-in"
       >
         <div v-if="!highlightCode" animate-pulse>
-          <i inline-block i-carbon-assembly-reference animate-spin />
-          Computing code...
+          <i inline-block i-carbon-circle-dash animate-spin />
+          Computing code ···
         </div>
         <div v-else v-html="highlightCode" />
       </Transition>

@@ -37,11 +37,12 @@ const cp = computed(() => panels.find(p => p.label === panel.value)!.component)
           </li>
         </ul>
       </div>
-      <Suspense :timeout="10">
+      <Suspense :timeout="50">
         <component :is="cp" :colors="colors" :name />
         <template #fallback>
-          <div w-full h-full fcc>
-            <i text-20 inline-block i-carbon-assembly-reference animate-spin />
+          <div size-full fcc gap-1 animate-pulse>
+            <i text-lg inline-block i-carbon-circle-dash animate-spin />
+            <span>Loading···</span>
           </div>
         </template>
       </Suspense>
