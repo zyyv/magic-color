@@ -29,3 +29,11 @@ export function formatToSass(colors: ThemeMetas): string {
   }
   return scss
 }
+
+export function formatToLess(colors: ThemeMetas): string {
+  let less = ''
+  for (const [key, value] of Object.entries(colors)) {
+    less += `@color-${key}: ${value};\n`
+  }
+  return less
+}

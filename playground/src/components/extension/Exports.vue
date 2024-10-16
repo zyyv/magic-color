@@ -49,6 +49,13 @@ const langs = reactive<{
         formater: formaters.formatToSass,
       },
       {
+        icon: 'i-logos-less',
+        name: 'Less',
+        parser: 'less',
+        lang: 'less',
+        formater: formaters.formatToLess,
+      },
+      {
         name: 'JSON',
         icon: 'i-logos-json',
         parser: 'json',
