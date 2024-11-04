@@ -221,8 +221,8 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
     }
   }
 
-  hex(): string {
-    return this.value('hex')
+  hex(round = true): string {
+    return this.value('hex', round)
   }
 
   rgb(round = true): RgbColor {
