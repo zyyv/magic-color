@@ -69,7 +69,7 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
         return `${this.type}(${(this.values as HslColor).map(round ? Math.round : c => c).join(' ')}${withAlpha ? ` / ${this.alpha}` : ''})`
 
       case 'hsb':
-        return `${this.type}(${[this.values[0], `${this.values[1]}%`, `${this.values[2]}%`].join(', ')})`
+        return `${this.type}${withAlpha ? 'a' : ''}(${(this.values as HsbColor).map((c, i) => i > 0 ? `${round ? Math.round(c) : c}%` : round ? Math.round(c) : c).join(', ')}${withAlpha ? `, ${this.alpha}` : ''})`
 
       case 'lab':
         return `${this.type}(${(this.values as LabColor).map(round ? Math.round : c => c).join(' ')}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
@@ -221,8 +221,8 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
     }
   }
 
-  hex(round = true): string {
-    return this.value('hex', round)
+  hex(): string {
+    return this.value('hex')
   }
 
   rgb(round = true): RgbColor {
