@@ -3,7 +3,7 @@
   "type": "module",
   "version": "2.0.0",
   "private": true,
-  "packageManager": "pnpm@9.12.1",
+  "packageManager": "pnpm@9.14.4",
   "scripts": {
     "dev": "pnpm -r -F=\"./packages/*\" --parallel run dev",
     "build": "pnpm -r -F=\"./packages/*\" run build",
@@ -21,7 +21,7 @@
     "talk:build": "pnpm -C talk build",
     "deploy": "rimraf dist && nr build && nr talk:build && nr play:build",
     "sync-docs": "esno scripts/sync-docs.ts",
-    "taze": "taze minor -wIr && pnpm -r --parallel run update-post"
+    "taze": "taze major -wIr && pnpm -r --parallel run update-post"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",

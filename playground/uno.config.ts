@@ -38,6 +38,6 @@ export default defineConfig({
           dm: 'DM Sans',
         },
       },
-    }),
+    }) as any,
   ],
 })
