@@ -22,6 +22,12 @@ export type KeywordColor = string
  * [0-100, -128-127, -128-127]
  */
 export type LabColor = [number, number, number]
+/**
+ * [0-100, 0-150, 0-360]
+ *
+ * @see https://developer.mozilla.org/zh-CN/docs/Web/CSS/color_value/lch
+ */
+export type LchColor = [number, number, number]
 
 /**
  * 0-1
