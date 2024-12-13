@@ -39,7 +39,8 @@
   ],
   "scripts": {
     "build": "unbuild",
-    "dev": "unbuild --stub"
+    "dev": "unbuild --stub",
+    "attw": "attw --pack --config-path ../../.attw.json"
   },
   "dependencies": {
     "@magic-color/core": "workspace:*"
