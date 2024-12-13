@@ -31,8 +31,8 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Typecheck
-        run: pnpm typecheck
+      - name: Type Check
+        run: pnpm test:attw
 
   test:
     runs-on: ${{ matrix.os }}
