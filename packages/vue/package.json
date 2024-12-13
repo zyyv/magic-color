@@ -41,10 +41,10 @@
     "build": "unbuild",
     "dev": "unbuild --stub"
   },
+  "peerDependencies": {
+    "vue": "catalog:"
+  },
   "dependencies": {
     "magic-color": "workspace:*"
-  },
-  "devDependencies": {
-    "vue": "catalog:"
   }
 }
