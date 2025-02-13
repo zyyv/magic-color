@@ -79,6 +79,26 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
     }
   }
 
+  darken(amount = 1): Magicolor<T> {
+    const lab = this.lab()
+    lab[0] -= 18 * amount
+    if (lab[0] < 0) {
+      lab[0] = 0
+    }
+
+    return new Magicolor(lab, 'lab').to(this.type) as Magicolor<T>
+  }
+
+  lighten(amount = 1): Magicolor<T> {
+    const lab = this.lab()
+    lab[0] += 18 * amount
+    if (lab[0] > 100) {
+      lab[0] = 100
+    }
+
+    return new Magicolor(lab, 'lab').to(this.type) as Magicolor<T>
+  }
+
   toRgb(): Magicolor<'rgb'> {
     let value
     switch (this.type) {
