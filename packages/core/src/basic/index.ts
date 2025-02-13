@@ -86,7 +86,7 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
       lab[0] = 0
     }
 
-    return new Magicolor(lab, 'lab').to(this.type) as Magicolor<T>
+    return new Magicolor(lab, 'lab', this.alpha).to(this.type) as Magicolor<T>
   }
 
   lighten(amount = 1): Magicolor<T> {
@@ -96,7 +96,7 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
       lab[0] = 100
     }
 
-    return new Magicolor(lab, 'lab').to(this.type) as Magicolor<T>
+    return new Magicolor(lab, 'lab', this.alpha).to(this.type) as Magicolor<T>
   }
 
   toRgb(): Magicolor<'rgb'> {
