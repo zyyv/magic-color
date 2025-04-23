@@ -20,11 +20,11 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.js"
     }
   },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
@@ -38,8 +38,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "unbuild",
-    "dev": "unbuild --stub",
+    "build": "tsdown",
+    "dev": "tsdown -w",
     "attw": "attw --pack --config-path ../../.attw.json"
   },
   "peerDependencies": {
@@ -47,5 +47,8 @@
   },
   "dependencies": {
     "magic-color": "workspace:*"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:"
   }
 }

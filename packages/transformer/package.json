@@ -20,15 +20,15 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.js"
     },
     "./colors": {
       "types": "./dist/colors.d.ts",
-      "import": "./dist/colors.mjs"
+      "import": "./dist/colors.js"
     }
   },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "typesVersions": {
     "*": {
@@ -42,11 +42,14 @@
     "dist"
   ],
   "scripts": {
-    "build": "unbuild",
-    "dev": "unbuild --stub",
+    "build": "tsdown",
+    "dev": "tsdown -w",
     "attw": "attw --pack --config-path ../../.attw.json"
   },
   "dependencies": {
     "@magic-color/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:"
   }
 }
