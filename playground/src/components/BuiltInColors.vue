@@ -13,16 +13,16 @@ const colorMap = Object.fromEntries(
     }),
 )
 
-function onBeforeEnter(el: HTMLElement) {
-  el.style.opacity = '0'
-  el.style.marginLeft = '100%'
+function onBeforeEnter(el: Element) {
+  ;(el as HTMLElement).style.opacity = '0'
+  ;(el as HTMLElement).style.marginLeft = '100%'
 }
 
-function onEnter(el, done) {
+function onEnter(el: gsap.TweenTarget, done: gsap.Callback) {
   gsap.to(el, {
     opacity: 1,
     marginLeft: 'auto',
-    delay: el.dataset.index * 0.1,
+    delay: (el as any).dataset.index * 0.1,
     onComplete: done,
   })
 }
@@ -31,8 +31,8 @@ function onEnter(el, done) {
 <template>
   <TransitionGroup appear :css="false" space-y-4 tag="div" @before-enter="onBeforeEnter" @enter="onEnter">
     <ThemeColors
-      v-for="(colors, name, index) in colorMap" :key="name" class="m-auto" show-arrow :name="name"
-      :colors="colors" type="hex" :data-index="index"
+      v-for="(colors, name, index) in colorMap" :key="name" class="m-auto" show-arrow :name="name as string"
+      :colors="colors as any" type="hex" :data-index="index"
     />
   </TransitionGroup>
 </template>

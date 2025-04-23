@@ -3,7 +3,7 @@
     "target": "es2018",
     "lib": ["ESNext", "DOM"],
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "paths": {
       "magic-color": ["./packages/magic-color/src/indenx.ts"],
       "@magic-color/core": ["./packages/core/src/indenx.ts"],
