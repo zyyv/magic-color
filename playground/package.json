@@ -15,7 +15,7 @@
     "@magic-color/vue": "workspace:*",
     "@vueuse/core": "catalog:",
     "chart.js": "catalog:",
-    "gsap": "^3.12.7",
+    "gsap": "^3.13.0",
     "magic-color": "workspace:*",
     "vue": "catalog:"
   },
