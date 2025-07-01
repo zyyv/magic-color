@@ -42,7 +42,7 @@ watch(type, () => ratio.value = options.value[0].value)
             {{ c }}
           </li>
         </ul>
-        <h2 fcc gap-1 w-fit text-xl text-transparent bg-clip-text bg-gradient-to-r from-purple to-yellow>
+        <h2 fcc gap-1 w-fit text-xl text-transparent bg-clip-text bg-linear-to-r from-purple to-yellow>
           Ratio
           <i class="c-yellow/90" i-carbon-table-alias />
           Table
@@ -70,15 +70,15 @@ watch(type, () => ratio.value = options.value[0].value)
               </div>
             </th>
             <th>
-              <div text-primary:60>
+              <div text-basecolor text-op-80>
                 White
               </div>
             </th>
-            <th v-for="(_, k) in colors" :key="k" p0 text-primary:60>
+            <th v-for="(_, k) in colors" :key="k" p0 text-basecolor text-op-80>
               <div>{{ k }}</div>
             </th>
             <th>
-              <div text-primary:60>
+              <div text-basecolor text-op-80>
                 Black
               </div>
             </th>
@@ -87,7 +87,7 @@ watch(type, () => ratio.value = options.value[0].value)
         <tbody>
           <tr>
             <td fw-bold text-sm>
-              <div text-primary:60>
+              <div text-basecolor text-op-80>
                 White
               </div>
             </td>
@@ -104,7 +104,7 @@ watch(type, () => ratio.value = options.value[0].value)
 
           <tr v-for="(_, k) in colors" :key="k">
             <td fw-bold text-sm>
-              <div text-primary:60>
+              <div text-basecolor text-op-80>
                 {{ k }}
               </div>
             </td>
@@ -121,7 +121,7 @@ watch(type, () => ratio.value = options.value[0].value)
 
           <tr>
             <td fw-bold text-sm>
-              <div text-primary:60>
+              <div text-basecolor text-op-80>
                 Black
               </div>
             </td>

@@ -144,7 +144,7 @@ const { copy, copied } = useClipboard()
         enter-active-class="animate-fade-in animate-duration-150"
         leave-active-class="animate-fade-out animate-duration-150" mode="out-in"
       >
-        <div v-if="!highlightCode" animate-pulse>
+        <div v-if="!highlightCode" animate-pulse fsc gap-2>
           <i inline-block i-carbon-circle-dash animate-spin />
           Computing code ···
         </div>

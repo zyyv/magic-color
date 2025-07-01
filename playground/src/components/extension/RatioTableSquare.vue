@@ -56,7 +56,7 @@ const text = computed(() => {
 
 <style scoped>
 .squared {
-  --uno: fcc w-12 h-12 text-size-12px rd;
+  --uno: fcc w-12 h-12 text-size-12px;
 }
 
 .dark .placeholder {

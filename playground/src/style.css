@@ -1,15 +1,3 @@
-:root {
-  --c-bg: 245, 245, 245;
-  --bg-sort: 113, 113, 122;
-  --c-text: 60, 60, 67;
-}
-
-.dark {
-  --c-bg: 30, 30, 32;
-  --bg-sort: 163, 163, 163;
-  --c-text: 220, 220, 220;
-}
-
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
@@ -37,8 +25,8 @@ html:not(.dark) .shiki span {
   color: var(--shiki-light);
 }
 
-html, body {
-  --uno: text bg;
+body {
+  --uno: text-basecolor bg-basecolor;
 }
 
 @font-face {

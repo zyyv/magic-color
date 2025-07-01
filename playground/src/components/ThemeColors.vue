@@ -28,7 +28,7 @@ const [toggle, setToggle] = useToggle(props.ext)
 </script>
 
 <template>
-  <div w="75%" pt-4 pb-6 px-6 rd-3 transition hover:bg-sort:10 max-h-min>
+  <div w="75%" pt-4 pb-6 px-6 rd-3 transition max-h-min>
     <div fbc mb-2>
       <p text-xl fw-700>
         {{ name }}

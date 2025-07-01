@@ -85,6 +85,9 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
       case 'lab':
         return `${this.type}(${(this.values as LabColor).map(round ? Math.round : c => c).join(' ')}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
 
+      case 'lch':
+        return `${this.type}(${(this.values as LchColor).map(round ? Math.round : c => c).join(' ')}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
+
       default:
         throw new Error('Invalid color type.')
     }
@@ -290,6 +293,8 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
         return this.toHsb()
       case 'lab':
         return this.toLab()
+      case 'lch':
+        return this.toLch()
       default:
         throw new Error('Invalid color type.')
     }

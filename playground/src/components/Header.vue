@@ -1,7 +1,7 @@
 <template>
   <header pt-2 sticky fcc top-0 z-1>
     <hgroup w="75%" nav-bg fcc py-6>
-      <h1 text-4xl fw-600 text-transparent bg-clip-text bg-gradient-to-r from-purple to-red fcc gap-2>
+      <h1 text-4xl fw-600 text-transparent bg-clip-text bg-linear-to-r from-purple to-red fcc gap-2>
         <img inline-block w-10 src="/logo.svg" alt="logo">
         <span>
           Magicolor
