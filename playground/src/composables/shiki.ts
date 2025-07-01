@@ -1,21 +1,29 @@
 import type { HighlighterCore } from 'shiki/core'
 import { createHighlighterCore } from 'shiki/core'
-import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
+import { createOnigurumaEngine } from 'shiki/engine/oniguruma'
+
+import langCSS from 'shiki/langs/css.mjs'
+import langJavascript from 'shiki/langs/javascript.mjs'
+import langJSON from 'shiki/langs/json.mjs'
+import langLESS from 'shiki/langs/less.mjs'
+import langSCSS from 'shiki/langs/scss.mjs'
+
+import vitesseDark from 'shiki/themes/vitesse-dark.mjs'
+import vitesseLight from 'shiki/themes/vitesse-light.mjs'
 
 export const shiki = computedAsync<HighlighterCore>(async (onCancel) => {
   const shiki = await createHighlighterCore({
-    engine: createJavaScriptRegexEngine(),
+    engine: createOnigurumaEngine(() => import('shiki/wasm')),
     themes: [
-      () => import('shiki/themes/vitesse-dark.mjs'),
-      () => import('shiki/themes/vitesse-light.mjs'),
+      vitesseDark,
+      vitesseLight,
     ],
     langs: [
-      () => import('shiki/langs/css.mjs'),
-      () => import('shiki/langs/javascript.mjs'),
-      () => import('shiki/langs/json.mjs'),
-      () => import('shiki/langs/scss.mjs'),
-      () => import('shiki/langs/less.mjs'),
-      () => import ('shiki/langs/css.mjs'),
+      langCSS,
+      langJavascript,
+      langJSON,
+      langSCSS,
+      langLESS,
     ],
   })
 

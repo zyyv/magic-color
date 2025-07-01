@@ -33,10 +33,10 @@ export function deltaE(a: string, b: string, Kl = 1, Kc = 1, Kh = 1) {
         = abs(h1p - h2p) > 180 ? (h1p + h2p + 360) / 2 : (h1p + h2p) / 2
   const T
         = 1
-        - 0.17 * cos(deg2rad(avgHp - 30))
-        + 0.24 * cos(deg2rad(2 * avgHp))
-        + 0.32 * cos(deg2rad(3 * avgHp + 6))
-        - 0.2 * cos(deg2rad(4 * avgHp - 63))
+          - 0.17 * cos(deg2rad(avgHp - 30))
+          + 0.24 * cos(deg2rad(2 * avgHp))
+          + 0.32 * cos(deg2rad(3 * avgHp + 6))
+          - 0.2 * cos(deg2rad(4 * avgHp - 63))
   let deltaHp = h2p - h1p
   deltaHp
         = abs(deltaHp) <= 180

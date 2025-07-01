@@ -118,25 +118,25 @@ export default /* @__PURE__ */ defineComponent({
       }, [
         this.type === 'hex'
           ? h('label', {
-            style: {
-              display: 'flex',
-              alignItems: 'center',
-              flex: '1',
-              borderRight: '1px solid #3c3c3c',
-            },
-          }, [
-            h('input', {
-              value: this.hexV,
               style: {
-                textAlign: 'center',
-                outline: 'none',
-                backgroundColor: 'transparent',
-                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                flex: '1',
+                borderRight: '1px solid #3c3c3c',
               },
-              type: 'text',
-              onInput: (e: Event) => this.hexV = (e.target as HTMLInputElement).value,
-            }),
-          ])
+            }, [
+              h('input', {
+                value: this.hexV,
+                style: {
+                  textAlign: 'center',
+                  outline: 'none',
+                  backgroundColor: 'transparent',
+                  width: '100%',
+                },
+                type: 'text',
+                onInput: (e: Event) => this.hexV = (e.target as HTMLInputElement).value,
+              }),
+            ])
           : [
               h('label', {
                 style: {

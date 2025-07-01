@@ -1,9 +1,9 @@
 {
   "name": "@magic-color/monorepo",
   "type": "module",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "private": true,
-  "packageManager": "pnpm@9.14.4",
+  "packageManager": "pnpm@10.12.4",
   "scripts": {
     "dev": "pnpm -r -F=\"./packages/*\" --parallel run dev",
     "build": "pnpm -r -F=\"./packages/*\" run build",
@@ -13,6 +13,7 @@
     "release": "nr lint:fix && bumpp -r",
     "test": "vitest",
     "test:update": "vitest -u",
+    "test:attw": "pnpm -r -F=\"./packages/*\" run attw",
     "typecheck": "tsc --noEmit",
     "prepare": "simple-git-hooks",
     "play": "pnpm -C playground dev",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
     "@antfu/ni": "catalog:",
+    "@arethetypeswrong/cli": "catalog:",
     "@iconify-json/akar-icons": "catalog:",
     "@iconify-json/carbon": "catalog:",
     "@iconify-json/fluent-emoji": "catalog:",
@@ -47,13 +49,18 @@
     "rimraf": "catalog:",
     "simple-git-hooks": "catalog:",
     "taze": "catalog:",
+    "tsdown": "catalog:",
     "typescript": "catalog:",
-    "unbuild": "catalog:",
     "unocss": "catalog:",
     "unocss-preset-useful": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:",
     "vue": "catalog:"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@arethetypeswrong/cli": "patches/@arethetypeswrong__cli.patch"
+    }
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"

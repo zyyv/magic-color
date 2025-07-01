@@ -25,9 +25,9 @@ it('labToRgb', () => {
   `)
   expect(labToRgb([100, -128, 127])).toMatchInlineSnapshot(`
     [
-      -972.2825874428702,
-      304.40956777224443,
-      -416.00483070502156,
+      0,
+      255,
+      0,
     ]
   `)
   expect(labToRgb([75, 20, 30])).toMatchInlineSnapshot(`
