@@ -1,7 +1,7 @@
 {
   "name": "@magic-color/core",
   "type": "module",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Magic color core library",
   "author": "Chris <hizyyv@gmail.com>",
   "license": "MIT",
