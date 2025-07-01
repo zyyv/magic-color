@@ -1,4 +1,6 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
+import { labToRgb } from './lab'
+import { rgbToHex, rgbToHsb, rgbToHsl } from './rgb'
 
 const lchRegex = /^lch\((\d+(?:\.\d+)?%?)%?\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)(?:deg)?(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
 
@@ -18,24 +20,25 @@ export function parseLch(color: string) {
 }
 
 export function lchToRgb(color: LchColor): RgbColor {
-
+  return labToRgb(lchToLab(color))
 }
 
 export function lchToHex(color: LchColor): HexColor {
-
+  return rgbToHex(lchToRgb(color))
 }
 
 export function lchToHsl(color: LchColor): HslColor {
-
+  return rgbToHsl(lchToRgb(color))
 }
 
 export function lchToHsb(color: LchColor): HsbColor {
-
+  return rgbToHsb(lchToRgb(color))
 }
 
 export function lchToLab(color: LchColor): LabColor {
-  const [l, c, h] = color
-    if (isNaN(h)) h = 0;
-    h = h * DEG2RAD;
-    return [l, cos(h) * c, sin(h) * c];
+  let [l, c, h] = color
+  if (Number.isNaN(h))
+    h = 0
+  h = h * Math.PI / 180
+  return [l, Math.cos(h) * c, Math.sin(h) * c]
 }
