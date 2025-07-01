@@ -46,6 +46,13 @@ describe('utils scoped', () => {
     expect(testClose(hsb, 'hsl', hslValue)).toEqual(true)
     // TODO: Allow the output string for a tolerance of 1 when converting to hex
     // expect(mc(hsb).toHex().toString()).toEqual(hex)
+
+    const c = '#0894B2'
+    const mc = new Magicolor(c)
+
+    expect(mc.css('hsb')).toMatchInlineSnapshot(`"hsb(191, 96%, 70%)"`)
+
+    expect(mc.css('lab')).toMatchInlineSnapshot(`"lab(57 -22 -25)"`)
   })
 
   it('color with opacity', () => {

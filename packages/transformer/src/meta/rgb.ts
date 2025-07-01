@@ -1,4 +1,5 @@
-import type { HexColor, HsbColor, HslColor, LabColor, RgbColor } from '../types'
+import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
+import { labToLch } from './lab'
 
 const rgbRegex = /^rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(0|0?\.\d+|1(?:\.0)?))?\)$/
 const newRgbRegex = /^rgb\((\d+)\s+(\d+)\s+(\d+)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
@@ -107,4 +108,8 @@ export function rgbToLab(color: RgbColor): LabColor {
   const l = 116 * y - 16
 
   return [l < 0 ? 0 : l, 500 * (x - y), 200 * (y - z)] as LabColor
+}
+
+export function rgbToLch(color: RgbColor): LchColor {
+  return labToLch(rgbToLab(color))
 }

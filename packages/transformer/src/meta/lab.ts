@@ -1,4 +1,4 @@
-import type { HexColor, HsbColor, HslColor, LabColor, RgbColor } from '../types'
+import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
 import { rgbToHex, rgbToHsb, rgbToHsl } from './rgb'
 
 const labRegex = /^lab\(\s*(100|[1-9]?\d(?:\.\d+)?)\s+(-?(?:1[01]\d|12[0-8]|\d?\d)(?:\.\d+)?)\s+(-?(?:1[01]\d|12[0-8]|\d?\d)(?:\.\d+)?)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
@@ -57,4 +57,13 @@ export function labToHsl(color: LabColor): HslColor {
 
 export function labToHsb(color: LabColor): HsbColor {
   return rgbToHsb(labToRgb(color))
+}
+
+export function labToLch(color: LabColor): LchColor {
+  const [l, a, b] = color
+  const c = Math.sqrt(a * a + b * b)
+  let h = (Math.atan2(b, a) * 180 / Math.PI + 360) % 360
+  if (Math.round(c * 10000) === 0)
+    h = Number.NaN
+  return [l, c, h]
 }

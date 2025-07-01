@@ -1,30 +1,41 @@
-import type { Colors, ColorType, HexColor, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/transformer'
+import type { Colors, ColorType, HexColor, HsbColor, HslColor, LabColor, LchColor, Opacity, RgbColor } from '@magic-color/transformer'
 import type { ColorObject } from '../types'
 import {
   hexToHsb,
   hexToHsl,
   hexToLab,
+  hexToLch,
   hexToRgb,
 
   hsbToHex,
   hsbToHsl,
   hsbToLab,
+  hsbToLch,
   hsbToRgb,
 
   hslToHex,
   hslToHsb,
   hslToLab,
+  hslToLch,
   hslToRgb,
 
   labToHex,
   labToHsb,
   labToHsl,
+  labToLch,
   labToRgb,
+
+  lchToHex,
+  lchToHsb,
+  lchToHsl,
+  lchToLab,
+  lchToRgb,
 
   rgbToHex,
   rgbToHsb,
   rgbToHsl,
   rgbToLab,
+  rgbToLch,
 
   SupportTypes,
 } from '@magic-color/transformer'
@@ -115,6 +126,9 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
       case 'lab':
         value = labToRgb(this.values as LabColor)
         break
+      case 'lch':
+        value = lchToRgb(this.values as LchColor)
+        break
       default:
         value = this.values as RgbColor
     }
@@ -138,6 +152,9 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
         break
       case 'lab':
         value = labToHex(this.values as LabColor)
+        break
+      case 'lch':
+        value = lchToHex(this.values as LchColor)
         break
       case 'keyword':
       default:
@@ -165,6 +182,9 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
       case 'lab':
         value = labToHsl(this.values as LabColor)
         break
+      case 'lch':
+        value = lchToHsl(this.values as LchColor)
+        break
       default:
         value = this.values as HslColor
     }
@@ -189,6 +209,9 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
         break
       case 'lab':
         value = labToHsb(this.values as LabColor)
+        break
+      case 'lch':
+        value = lchToHsb(this.values as LchColor)
         break
       default:
         value = this.values as HsbColor
@@ -215,6 +238,9 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
       case 'hsb':
         value = hsbToLab(this.values as HsbColor)
         break
+      case 'lch':
+        value = lchToLab(this.values as LchColor)
+        break
       default:
         value = this.values as LabColor
     }
@@ -222,6 +248,34 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
     this._push<'lab'>(value, 'lab', this.alpha)
 
     return this as Magicolor<'lab'>
+  }
+
+  toLch(): Magicolor<'lch'> {
+    let value
+    switch (this.type) {
+      case 'keyword':
+      case 'hex':
+        value = hexToLch(this.values as HexColor)
+        break
+      case 'rgb':
+        value = rgbToLch(this.values as RgbColor)
+        break
+      case 'hsl':
+        value = hslToLch(this.values as HslColor)
+        break
+      case 'hsb':
+        value = hsbToLch(this.values as HsbColor)
+        break
+      case 'lab':
+        value = labToLch(this.values as LabColor)
+        break
+      default:
+        value = this.values as LchColor
+    }
+
+    this._push<'lch'>(value, 'lch', this.alpha)
+
+    return this as Magicolor<'lch'>
   }
 
   to(type: ColorType) {
@@ -328,7 +382,7 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 
   set<T extends ColorType>(operate: string, value: unknown) {
     const [type, channel] = operate.split('.') as [ColorType?, string?]
-    if (!type || !SupportTypes.includes(type)) {
+    if (!type || !SupportTypes.includes(type as any)) {
       throw new Error('Invalid operate type.')
     }
     if (!channel) {
@@ -381,7 +435,7 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 
   get(operate: string): number {
     const [type, channel] = operate.split('.') as [ColorType?, string?]
-    if (!type || !SupportTypes.includes(type)) {
+    if (!type || !SupportTypes.includes(type as any)) {
       throw new Error('Invalid operate type.')
     }
     if (!channel) {

@@ -1,5 +1,5 @@
-import type { HsbColor, HslColor, LabColor, RgbColor } from '../types'
-import { rgbToHex, rgbToLab } from './rgb'
+import type { HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
+import { rgbToHex, rgbToLab, rgbToLch } from './rgb'
 
 const hsbRegex = /^hsb\((\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\)$/
 
@@ -21,7 +21,11 @@ export function parseHsb(color: string) {
   return { values, alpha }
 }
 
-function parseHsbToRgb(color: HsbColor): RgbColor {
+export function hsbToHex(color: HsbColor) {
+  return rgbToHex(hsbToRgb(color))
+}
+
+export function hsbToRgb(color: HsbColor): RgbColor {
   let [h, s, b] = color
   h = h / 60
   s = s / 100
@@ -48,14 +52,6 @@ function parseHsbToRgb(color: HsbColor): RgbColor {
   return rgb.map(v => (v + m) * 255) as RgbColor
 }
 
-export function hsbToHex(color: HsbColor) {
-  return rgbToHex(parseHsbToRgb(color))
-}
-
-export function hsbToRgb(color: HsbColor): RgbColor {
-  return parseHsbToRgb(color)
-}
-
 export function hsbToHsl(color: HsbColor): HslColor {
   let [h, s, b] = color
   s /= 100
@@ -67,5 +63,9 @@ export function hsbToHsl(color: HsbColor): HslColor {
 }
 
 export function hsbToLab(color: HsbColor): LabColor {
-  return rgbToLab(parseHsbToRgb(color))
+  return rgbToLab(hsbToRgb(color))
+}
+
+export function hsbToLch(color: HsbColor): LchColor {
+  return rgbToLch(hsbToRgb(color))
 }
