@@ -10,8 +10,3 @@ NODE_VERSION = "20"
 from = "/*"
 to = "/play/index.html"
 status = 200
-
-[[redirects]]
-from = "/talk/*"
-to = "/talk/index.html"
-status = 200

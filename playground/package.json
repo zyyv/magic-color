@@ -13,24 +13,24 @@
     "@magic-color/core": "workspace:*",
     "@magic-color/transformer": "workspace:*",
     "@magic-color/vue": "workspace:*",
-    "@vueuse/core": "catalog:",
-    "chart.js": "catalog:",
+    "@vueuse/core": "catalog:playground",
+    "chart.js": "catalog:playground",
     "gsap": "^3.13.0",
     "magic-color": "workspace:*",
-    "vue": "catalog:"
+    "vue": "catalog:playground"
   },
   "devDependencies": {
-    "@iconify-json/carbon": "catalog:",
-    "@types/prettier": "catalog:",
-    "@vitejs/plugin-vue": "catalog:",
-    "prettier": "catalog:",
-    "shiki": "catalog:",
-    "typescript": "catalog:",
-    "unocss": "catalog:",
-    "unocss-preset-useful": "catalog:",
-    "unplugin-auto-import": "catalog:",
-    "unplugin-vue-components": "catalog:",
-    "vite": "catalog:",
-    "vue-tsc": "catalog:"
+    "@iconify-json/carbon": "catalog:icons",
+    "@types/prettier": "catalog:types",
+    "@vitejs/plugin-vue": "catalog:playground",
+    "prettier": "catalog:playground",
+    "shiki": "catalog:playground",
+    "typescript": "catalog:types",
+    "unocss": "catalog:uno",
+    "unocss-preset-useful": "catalog:uno",
+    "unplugin-auto-import": "catalog:playground",
+    "unplugin-vue-components": "catalog:playground",
+    "vite": "catalog:cli",
+    "vue-tsc": "catalog:cli"
   }
 }

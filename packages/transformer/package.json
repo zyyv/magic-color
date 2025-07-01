@@ -50,6 +50,6 @@
     "@magic-color/shared": "workspace:*"
   },
   "devDependencies": {
-    "tsdown": "catalog:"
+    "tsdown": "catalog:cli"
   }
 }

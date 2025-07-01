@@ -47,6 +47,6 @@
     "@magic-color/theme": "workspace:*"
   },
   "devDependencies": {
-    "tsdown": "catalog:"
+    "tsdown": "catalog:cli"
   }
 }

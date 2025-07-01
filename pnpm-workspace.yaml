@@ -1,45 +1,57 @@
 packages:
   - playground
-  - docs
-  - talk
   - packages/*
-  - examples/*
-catalog:
-  '@antfu/eslint-config': ^4.16.1
-  '@antfu/ni': ^25.0.0
-  '@arethetypeswrong/cli': 0.17.1
-  '@iconify-json/akar-icons': ^1.2.2
-  '@iconify-json/carbon': ^1.2.10
-  '@iconify-json/fluent-emoji': ^1.2.3
-  '@iconify-json/logos': ^1.2.4
-  '@iconify/utils': ^2.3.0
-  '@slidev/cli': 0.49.23
-  '@slidev/client': 0.49.23
-  '@types/node': ^24.0.8
-  '@types/prettier': ^3.0.0
-  '@unocss/preset-mini': ^66.3.2
-  '@vitejs/plugin-vue': ^6.0.0
-  '@vueuse/core': ^13.4.0
-  '@vueuse/shared': ^13.4.0
-  bumpp: ^10.2.0
-  chart.js: ^4.5.0
-  eslint: ^9.30.0
-  esno: ^4.8.0
-  lint-staged: ^16.1.2
-  pnpm: ^10.12.4
-  prettier: ^3.6.2
-  rimraf: ^6.0.1
-  shiki: ^3.7.0
-  simple-git-hooks: ^2.13.0
-  taze: ^19.1.0
-  tsdown: ^0.12.9
-  typescript: ^5.8.3
-  unbuild: ^3.5.0
-  unocss: ^66.3.2
-  unocss-preset-useful: ^1.0.1
-  unplugin-auto-import: ^19.3.0
-  unplugin-vue-components: ^28.8.0
-  vite: ^7.0.0
-  vitest: ^3.2.4
-  vue: ^3.5.17
-  vue-tsc: ^2.2.10
+
+catalogs:
+  cli:
+    '@antfu/eslint-config': ^4.16.1
+    '@antfu/ni': ^25.0.0
+    '@arethetypeswrong/cli': 0.17.1
+    bumpp: ^10.2.0
+    eslint: ^9.30.0
+    esno: ^4.8.0
+    lint-staged: ^16.1.2
+    pnpm: ^10.12.4
+    premove: ^4.0.0
+    simple-git-hooks: ^2.13.0
+    taze: ^19.1.0
+    tsdown: ^0.12.9
+    vite: ^7.0.0
+    vitest: ^3.2.4
+    vue-tsc: ^2.2.10
+
+  icons:
+    '@iconify-json/akar-icons': ^1.2.2
+    '@iconify-json/carbon': ^1.2.10
+    '@iconify-json/fluent-emoji': ^1.2.3
+    '@iconify-json/logos': ^1.2.4
+    '@iconify/utils': ^2.3.0
+
+  playground:
+    '@vitejs/plugin-vue': ^6.0.0
+    '@vueuse/core': ^13.4.0
+    chart.js: ^4.5.0
+    gsap: ^3.13.0
+    prettier: ^3.6.2
+    shiki: ^3.7.0
+    unplugin-auto-import: ^19.3.0
+    unplugin-vue-components: ^28.8.0
+    vue: ^3.5.17
+
+  types:
+    '@types/node': ^24.0.8
+    '@types/prettier': ^3.0.0
+    typescript: ^5.8.3
+
+  uno:
+    unocss: ^66.3.2
+    unocss-preset-useful: ^1.0.1
+
+onlyBuiltDependencies:
+  - esbuild
+  - simple-git-hooks
+
+autoInstallPeers: true
+ignoreWorkspaceRootCheck: true
+shamefullyHoist: true
+strictPeerDependencies: false

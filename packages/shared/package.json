@@ -43,6 +43,6 @@
     "attw": "attw --pack --config-path ../../.attw.json"
   },
   "devDependencies": {
-    "tsdown": "catalog:"
+    "tsdown": "catalog:cli"
   }
 }
