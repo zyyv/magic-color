@@ -27,10 +27,6 @@
 </a>
 </p>
 
-<p align="center">
-Watch my <a href="https://color.zyob.top/talk" target='_blank'>Talk</a> to learn more basic knowledge points.
-</p>
-
 ## Features
 
 <ul>
