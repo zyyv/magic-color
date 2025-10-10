@@ -19,49 +19,49 @@ const langs = reactive<{
   lang: string
   formater: (code: ThemeMetas, key: string) => string
 }[]>([
-      {
-        icon: 'i-logos-unocss',
-        name: 'UnoCSS',
-        parser: 'babel',
-        lang: 'javascript',
-        formater: formaters.formatToUnoCSS,
-      },
-      {
-        icon: 'i-logos-tailwindcss-icon',
-        name: 'Tailwind',
-        parser: 'babel',
-        lang: 'javascript',
-        formater: formaters.formatToTailwindCSS,
-      },
-      {
-        icon: 'i-logos-css-3',
-        name: 'CSS',
-        parser: 'css',
-        lang: 'css',
-        formater: formaters.formatToCSS,
-      },
-      {
-        icon: 'i-logos-sass',
-        name: 'Sass',
-        parser: 'scss',
-        lang: 'scss',
-        formater: formaters.formatToSass,
-      },
-      {
-        icon: 'i-logos-less',
-        name: 'Less',
-        parser: 'less',
-        lang: 'less',
-        formater: formaters.formatToLess,
-      },
-      {
-        name: 'JSON',
-        icon: 'i-logos-json',
-        parser: 'json',
-        lang: 'json',
-        formater: formaters.formatToJson,
-      },
-    ])
+  {
+    icon: 'i-logos-unocss',
+    name: 'UnoCSS',
+    parser: 'babel',
+    lang: 'javascript',
+    formater: formaters.formatToUnoCSS,
+  },
+  {
+    icon: 'i-logos-tailwindcss-icon',
+    name: 'Tailwind',
+    parser: 'babel',
+    lang: 'javascript',
+    formater: formaters.formatToTailwindCSS,
+  },
+  {
+    icon: 'i-logos-css-3',
+    name: 'CSS',
+    parser: 'css',
+    lang: 'css',
+    formater: formaters.formatToCSS,
+  },
+  {
+    icon: 'i-logos-sass',
+    name: 'Sass',
+    parser: 'scss',
+    lang: 'scss',
+    formater: formaters.formatToSass,
+  },
+  {
+    icon: 'i-logos-less',
+    name: 'Less',
+    parser: 'less',
+    lang: 'less',
+    formater: formaters.formatToLess,
+  },
+  {
+    name: 'JSON',
+    icon: 'i-logos-json',
+    parser: 'json',
+    lang: 'json',
+    formater: formaters.formatToJson,
+  },
+])
 
 const highlightCode = computedAsync(async () => {
   const key = props.name.toLowerCase().replace(/\s+/g, '-')
