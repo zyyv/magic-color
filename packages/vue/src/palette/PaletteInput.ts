@@ -104,6 +104,9 @@ export default /* @__PURE__ */ defineComponent({
           h('option', { value: 'hex' }, 'HEX'),
           h('option', { value: 'rgb' }, 'RGB'),
           h('option', { value: 'hsb' }, 'HSB'),
+          h('option', { value: 'hsl' }, 'HSL'),
+          h('option', { value: 'lab' }, 'LAB'),
+          h('option', { value: 'lch' }, 'LCH'),
         ]),
       ]),
       h('div', {
