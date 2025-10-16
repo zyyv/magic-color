@@ -95,7 +95,7 @@ export default /* @__PURE__ */ defineComponent({
           style: {
             width: '100%',
             height: '28px',
-            backgroundColor: 'transparent',
+            backgroundColor: '#272727',
             outline: 'none',
           },
           value: this.type,

@@ -82,6 +82,7 @@ export default /* @__PURE__ */ defineComponent({
         height: 240,
         barSize: 12,
         color: this.mcHsbColor,
+        type: this.type,
         onChange: this.handlePanelChange,
       }),
       h('div', {
