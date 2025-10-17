@@ -1,4 +1,4 @@
-import type { HsbColor } from 'magic-color'
+import type { ColorType, HsbColor } from 'magic-color'
 import { Magicolor } from 'magic-color'
 import { computed, defineComponent, h, onMounted, ref, watch } from 'vue'
 import { useControlBlock } from './hook'
@@ -21,6 +21,7 @@ export default /* #__PURE__ */ defineComponent({
       type: Array as unknown as PropType<HsbColor>,
       required: true,
     },
+    type: { type: String as () => ColorType, default: 'hex' },
   },
   setup(props, { emit }) {
     const ctx = ref<CanvasRenderingContext2D | null>(null)
@@ -44,12 +45,34 @@ export default /* #__PURE__ */ defineComponent({
       borderRadius: '50%',
       border: '2px solid white',
       boxShadow: 'rgba(0, 0, 0, 0.2) 0px 0px 0px 0.6px',
-      backgroundColor: new Magicolor(props.color, 'hsb').hex(),
+      backgroundColor: new Magicolor(props.color, props.type === 'hsl' ? 'hsl' : 'hsb').hex(),
       cursor: 'grab',
       userSelect: 'none',
     }))
 
     function drawBackground(ctx: CanvasRenderingContext2D) {
+      if (props.type === 'hsl') {
+        const image = ctx.createImageData(props.width, props.height)
+        const data = image.data
+
+        for (let y = 0; y < props.height; y++) {
+          const l = 100 - (y / props.height) * 100
+          for (let x = 0; x < props.width; x++) {
+            const h = props.color[0]
+            const s = (x / props.width) * 100
+            const [r, g, b] = new Magicolor([h, s, l], 'hsl').rgb()
+            const idx = (y * props.width + x) * 4
+            data[idx] = r
+            data[idx + 1] = g
+            data[idx + 2] = b
+            data[idx + 3] = 255
+          }
+        }
+
+        ctx.putImageData(image, 0, 0)
+        return
+      }
+
       const bgGradient: CanvasGradient = ctx.createLinearGradient(0, 0, props.width, 0)
       bgGradient.addColorStop(0, '#fff')
       bgGradient.addColorStop(1, new Magicolor([props.color[0], 100, 100], 'hsb').hex())
@@ -63,7 +86,10 @@ export default /* #__PURE__ */ defineComponent({
       ctx.fillRect(0, 0, props.width, props.height)
     }
 
-    watch(() => props.color, () => {
+    watch(() => [props.color[0], props.type], (current, old) => {
+      if (current[0] === old[0] && current[1] === old[1])
+        return
+
       if (ctx.value) {
         ctx.value.clearRect(0, 0, props.width, props.height)
         drawBackground(ctx.value)

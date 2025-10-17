@@ -95,7 +95,7 @@ export default /* @__PURE__ */ defineComponent({
           style: {
             width: '100%',
             height: '28px',
-            backgroundColor: 'transparent',
+            backgroundColor: '#272727',
             outline: 'none',
           },
           value: this.type,
@@ -104,6 +104,9 @@ export default /* @__PURE__ */ defineComponent({
           h('option', { value: 'hex' }, 'HEX'),
           h('option', { value: 'rgb' }, 'RGB'),
           h('option', { value: 'hsb' }, 'HSB'),
+          h('option', { value: 'hsl' }, 'HSL'),
+          h('option', { value: 'lab' }, 'LAB'),
+          h('option', { value: 'lch' }, 'LCH'),
         ]),
       ]),
       h('div', {
