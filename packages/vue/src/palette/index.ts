@@ -1,9 +1,9 @@
 import type { App } from 'vue'
-import Palette from './Palette'
-import PaletteControls from './PaletteControls'
-import PaletteInput from './PaletteInput'
-import PalettePanel from './PalettePanel'
-import PalettePreview from './PalettePreview'
+import Palette from './Palette.vue'
+import PaletteControls from './PaletteControls.vue'
+import PaletteInput from './PaletteInput.vue'
+import PalettePanel from './PalettePanel.vue'
+import PalettePreview from './PalettePreview.vue'
 
 export {
   Palette,
