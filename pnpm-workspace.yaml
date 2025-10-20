@@ -4,21 +4,21 @@ packages:
 
 catalogs:
   cli:
-    '@antfu/eslint-config': ^5.4.1
-    '@antfu/ni': ^26.1.0
+    '@antfu/eslint-config': ^6.0.0
+    '@antfu/ni': ^27.0.0
     '@arethetypeswrong/cli': 0.17.1
     bumpp: ^10.3.1
-    eslint: ^9.37.0
+    eslint: ^9.38.0
     esno: ^4.8.0
-    lint-staged: ^16.2.3
-    pnpm: ^10.18.2
+    lint-staged: ^16.2.4
+    pnpm: ^10.18.3
     premove: ^4.0.0
     simple-git-hooks: ^2.13.1
-    taze: ^19.7.0
-    tsdown: ^0.15.6
-    vite: ^7.1.9
+    taze: ^19.8.1
+    tsdown: ^0.15.8
+    vite: ^7.1.11
     vitest: ^3.2.4
-    vue-tsc: ^3.0.9
+    vue-tsc: ^3.1.1
 
   icons:
     '@iconify-json/akar-icons': ^1.2.7
@@ -30,21 +30,21 @@ catalogs:
   playground:
     '@vitejs/plugin-vue': ^6.0.1
     '@vueuse/core': ^13.9.0
-    chart.js: ^4.5.0
+    chart.js: ^4.5.1
     gsap: ^3.13.0
     prettier: ^3.6.2
     shiki: ^3.13.0
     unplugin-auto-import: ^20.2.0
-    unplugin-vue-components: ^29.1.0
+    unplugin-vue-components: ^30.0.0
     vue: ^3.5.22
 
   types:
-    '@types/node': ^24.7.1
+    '@types/node': ^24.8.1
     '@types/prettier': ^3.0.0
     typescript: ^5.9.3
 
   uno:
-    unocss: ^66.5.2
+    unocss: ^66.5.4
     unocss-preset-useful: ^1.0.1
 
 onlyBuiltDependencies:
