@@ -1,7 +1,7 @@
 {
   "name": "@magic-color/transformer",
   "type": "module",
-  "version": "2.0.4-beta.2",
+  "version": "2.0.4",
   "description": "Magic color transform library",
   "author": "Chris <hizyyv@gmail.com>",
   "license": "MIT",
