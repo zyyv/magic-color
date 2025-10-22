@@ -10,12 +10,12 @@ catalogs:
     bumpp: ^10.3.1
     eslint: ^9.38.0
     esno: ^4.8.0
-    lint-staged: ^16.2.4
-    pnpm: ^10.18.3
+    lint-staged: ^16.2.5
+    pnpm: ^10.19.0
     premove: ^4.0.0
     simple-git-hooks: ^2.13.1
     taze: ^19.8.1
-    tsdown: ^0.15.8
+    tsdown: ^0.15.9
     vite: ^7.1.11
     vitest: ^3.2.4
     vue-tsc: ^3.1.1
@@ -41,7 +41,7 @@ catalogs:
     vue-tsc: ^3.1.1
 
   types:
-    '@types/node': ^24.8.1
+    '@types/node': ^24.9.1
     '@types/prettier': ^3.0.0
     typescript: ^5.9.3
 
