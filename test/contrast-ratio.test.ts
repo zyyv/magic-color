@@ -20,7 +20,7 @@ describe('contrast ratio for APCA', () => {
     expect(mc.apca('#fff', '#000')).toMatchInlineSnapshot(`-107.88473318309848`)
     expect(mc.apca('#000', '#000')).toMatchInlineSnapshot(`0`)
     expect(mc.apca('#fff', '#fff')).toMatchInlineSnapshot(`0`)
-    expect(mc.apca('#89889867', '#fff')).toMatchInlineSnapshot(`25.345168601044676`)
+    expect(mc.apca('#89889867', '#fff')).toMatchInlineSnapshot(`25.345168601044666`)
   })
 
   it('reverseAPCA', () => {

@@ -1,4 +1,4 @@
-import type { Colors, ColorType, HexColor, HsbColor, HslColor, LabColor, LchColor, Opacity, RgbColor } from '@magic-color/transformer'
+import type { Colors, ColorType, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/transformer'
 import type { ColorObject } from '../types'
 import {
   hexToHsb,
@@ -43,6 +43,70 @@ import { alphaToString, resolveArgs } from './utils'
 
 export { guessType } from './utils'
 
+// 颜色转换映射表
+type ConversionFunction = (color: any) => any
+
+const CONVERSION_MAP: Record<string, Partial<Record<ColorType, ConversionFunction>>> = {
+  hex: {
+    rgb: hexToRgb,
+    hsl: hexToHsl,
+    hsb: hexToHsb,
+    lab: hexToLab,
+    lch: hexToLch,
+  },
+  keyword: {
+    rgb: hexToRgb,
+    hsl: hexToHsl,
+    hsb: hexToHsb,
+    lab: hexToLab,
+    lch: hexToLch,
+  },
+  rgb: {
+    hex: rgbToHex,
+    hsl: rgbToHsl,
+    hsb: rgbToHsb,
+    lab: rgbToLab,
+    lch: rgbToLch,
+  },
+  hsl: {
+    hex: hslToHex,
+    rgb: hslToRgb,
+    hsb: hslToHsb,
+    lab: hslToLab,
+    lch: hslToLch,
+  },
+  hsb: {
+    hex: hsbToHex,
+    rgb: hsbToRgb,
+    hsl: hsbToHsl,
+    lab: hsbToLab,
+    lch: hsbToLch,
+  },
+  lab: {
+    hex: labToHex,
+    rgb: labToRgb,
+    hsl: labToHsl,
+    hsb: labToHsb,
+    lch: labToLch,
+  },
+  lch: {
+    hex: lchToHex,
+    rgb: lchToRgb,
+    hsl: lchToHsl,
+    hsb: lchToHsb,
+    lab: lchToLab,
+  },
+}
+
+// 颜色通道映射表
+const CHANNEL_MAP: Record<string, readonly string[]> = {
+  rgb: ['r', 'g', 'b'],
+  hsl: ['h', 's', 'l'],
+  hsb: ['h', 's', 'b'],
+  lab: ['l', 'a', 'b'],
+  lch: ['l', 'c', 'h'],
+} as const
+
 export class Magicolor<T extends ColorType> implements ColorObject<T> {
   type: T
   values: Colors[T]
@@ -68,216 +132,110 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
   }
 
   private toString(withAlpha = false, round = true): string {
-    switch (this.type) {
-      case 'keyword':
-      case 'hex':
-        return this.values + (withAlpha ? alphaToString(this.alpha, true) : '')
+    const type = this.type
+    const values = this.values
 
-      case 'rgb':
-        return `${this.type}(${(this.values as RgbColor).map(round ? Math.round : c => c).join(' ')}${withAlpha ? ` / ${this.alpha}` : ''})`
-
-      case 'hsl':
-        return `${this.type}(${(this.values as HslColor).map(round ? Math.round : c => c).join(' ')}${withAlpha ? ` / ${this.alpha}` : ''})`
-
-      case 'hsb':
-        return `${this.type}${withAlpha ? 'a' : ''}(${(this.values as HsbColor).map((c, i) => i > 0 ? `${round ? Math.round(c) : c}%` : round ? Math.round(c) : c).join(', ')}${withAlpha ? `, ${this.alpha}` : ''})`
-
-      case 'lab':
-        return `${this.type}(${(this.values as LabColor).map(round ? Math.round : c => c).join(' ')}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
-
-      case 'lch':
-        return `${this.type}(${(this.values as LchColor).map(round ? Math.round : c => c).join(' ')}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
-
-      default:
-        throw new Error('Invalid color type.')
+    // 处理 hex 和 keyword 类型
+    if (type === 'hex' || type === 'keyword') {
+      return values + (withAlpha ? alphaToString(this.alpha, true) : '')
     }
+
+    // 处理数组类型的颜色值
+    if (Array.isArray(values)) {
+      const processedValues = (round ? values.map(Math.round) : values) as number[]
+
+      switch (type) {
+        case 'rgb':
+        case 'hsl':
+          return `${type}(${processedValues.join(' ')}${withAlpha ? ` / ${this.alpha}` : ''})`
+
+        case 'hsb': {
+          const formattedValues = (processedValues as number[]).map((c, i) => i > 0 ? `${c}%` : c).join(', ')
+          return `${type}${withAlpha ? 'a' : ''}(${formattedValues}${withAlpha ? `, ${this.alpha}` : ''})`
+        }
+
+        case 'lab':
+        case 'lch':
+          return `${type}(${processedValues.join(' ')}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
+
+        default:
+          throw new Error('Invalid color type.')
+      }
+    }
+
+    throw new Error('Invalid color type.')
   }
 
   darken(amount = 1): Magicolor<T> {
     const lab = this.lab()
-    lab[0] -= 18 * amount
-    if (lab[0] < 0) {
-      lab[0] = 0
-    }
-
+    lab[0] = Math.max(0, lab[0] - 18 * amount)
     return new Magicolor(lab, 'lab', this.alpha).to(this.type) as Magicolor<T>
   }
 
   lighten(amount = 1): Magicolor<T> {
     const lab = this.lab()
-    lab[0] += 18 * amount
-    if (lab[0] > 100) {
-      lab[0] = 100
-    }
-
+    lab[0] = Math.min(100, lab[0] + 18 * amount)
     return new Magicolor(lab, 'lab', this.alpha).to(this.type) as Magicolor<T>
   }
 
-  toRgb(): Magicolor<'rgb'> {
-    let value
-    switch (this.type) {
-      case 'keyword':
-      case 'hex':
-        value = hexToRgb(this.values as HexColor)
-        break
-      case 'hsl':
-        value = hslToRgb(this.values as HslColor)
-        break
-      case 'hsb':
-        value = hsbToRgb(this.values as HsbColor)
-        break
-      case 'lab':
-        value = labToRgb(this.values as LabColor)
-        break
-      case 'lch':
-        value = lchToRgb(this.values as LchColor)
-        break
-      default:
-        value = this.values as RgbColor
+  /**
+   * 统一的颜色转换方法
+   * @param targetType 目标颜色类型
+   * @returns 转换后的颜色值
+   */
+  private convert<K extends ColorType>(targetType: K): Colors[K] {
+    if (this.type === targetType as any) {
+      return this.values as Colors[K]
     }
 
-    this._push<'rgb'>(value, 'rgb', this.alpha)
+    const sourceType = this.type === 'keyword' ? 'hex' : this.type
+    const converters = CONVERSION_MAP[sourceType]
 
+    if (!converters) {
+      throw new Error(`Unsupported source type: ${sourceType}`)
+    }
+
+    const converter = converters[targetType]
+    if (!converter) {
+      throw new Error(`Cannot convert from ${this.type} to ${targetType}`)
+    }
+
+    return converter(this.values) as Colors[K]
+  }
+
+  toRgb(): Magicolor<'rgb'> {
+    const value = this.convert('rgb')
+    this._push('rgb', value, this.alpha)
     return this as Magicolor<'rgb'>
   }
 
   toHex(): Magicolor<'hex'> {
-    let value
-    switch (this.type) {
-      case 'rgb':
-        value = rgbToHex(this.values as RgbColor)
-        break
-      case 'hsl':
-        value = hslToHex(this.values as HslColor)
-        break
-      case 'hsb':
-        value = hsbToHex(this.values as HsbColor)
-        break
-      case 'lab':
-        value = labToHex(this.values as LabColor)
-        break
-      case 'lch':
-        value = lchToHex(this.values as LchColor)
-        break
-      case 'keyword':
-      default:
-        value = this.values as HexColor
-    }
-
-    this._push<'hex'>(value, 'hex', this.alpha)
-
+    const value = this.convert('hex')
+    this._push('hex', value, this.alpha)
     return this as Magicolor<'hex'>
   }
 
   toHsl(): Magicolor<'hsl'> {
-    let value
-    switch (this.type) {
-      case 'keyword':
-      case 'hex':
-        value = hexToHsl(this.values as HexColor)
-        break
-      case 'rgb':
-        value = rgbToHsl(this.values as RgbColor)
-        break
-      case 'hsb':
-        value = hsbToHsl(this.values as HsbColor)
-        break
-      case 'lab':
-        value = labToHsl(this.values as LabColor)
-        break
-      case 'lch':
-        value = lchToHsl(this.values as LchColor)
-        break
-      default:
-        value = this.values as HslColor
-    }
-
-    this._push<'hsl'>(value, 'hsl', this.alpha)
-
+    const value = this.convert('hsl')
+    this._push('hsl', value, this.alpha)
     return this as Magicolor<'hsl'>
   }
 
   toHsb(): Magicolor<'hsb'> {
-    let value
-    switch (this.type) {
-      case 'keyword':
-      case 'hex':
-        value = hexToHsb(this.values as HexColor)
-        break
-      case 'rgb':
-        value = rgbToHsb(this.values as RgbColor)
-        break
-      case 'hsl':
-        value = hslToHsb(this.values as HslColor)
-        break
-      case 'lab':
-        value = labToHsb(this.values as LabColor)
-        break
-      case 'lch':
-        value = lchToHsb(this.values as LchColor)
-        break
-      default:
-        value = this.values as HsbColor
-    }
-
-    this._push<'hsb'>(value, 'hsb', this.alpha)
-
+    const value = this.convert('hsb')
+    this._push('hsb', value, this.alpha)
     return this as Magicolor<'hsb'>
   }
 
   toLab(): Magicolor<'lab'> {
-    let value
-    switch (this.type) {
-      case 'keyword':
-      case 'hex':
-        value = hexToLab(this.values as HexColor)
-        break
-      case 'rgb':
-        value = rgbToLab(this.values as RgbColor)
-        break
-      case 'hsl':
-        value = hslToLab(this.values as HslColor)
-        break
-      case 'hsb':
-        value = hsbToLab(this.values as HsbColor)
-        break
-      case 'lch':
-        value = lchToLab(this.values as LchColor)
-        break
-      default:
-        value = this.values as LabColor
-    }
-
-    this._push<'lab'>(value, 'lab', this.alpha)
-
+    const value = this.convert('lab')
+    this._push('lab', value, this.alpha)
     return this as Magicolor<'lab'>
   }
 
   toLch(): Magicolor<'lch'> {
-    let value
-    switch (this.type) {
-      case 'keyword':
-      case 'hex':
-        value = hexToLch(this.values as HexColor)
-        break
-      case 'rgb':
-        value = rgbToLch(this.values as RgbColor)
-        break
-      case 'hsl':
-        value = hslToLch(this.values as HslColor)
-        break
-      case 'hsb':
-        value = hsbToLch(this.values as HsbColor)
-        break
-      case 'lab':
-        value = labToLch(this.values as LabColor)
-        break
-      default:
-        value = this.values as LchColor
-    }
-
-    this._push<'lch'>(value, 'lch', this.alpha)
-
+    const value = this.convert('lch')
+    this._push('lch', value, this.alpha)
     return this as Magicolor<'lch'>
   }
 
@@ -343,12 +301,10 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
     }
   }
 
-  private _push<T extends ColorType = any>(value: Colors[T], type: ColorType, alpha: Opacity) {
+  private _push<K extends ColorType>(type: K, value: Colors[K], alpha: Opacity) {
     this._stack.push(new Magicolor(value, type, alpha))
-    // @ts-expect-error - value is not assignable to type Colors[T]
-    this.values = value
-    // @ts-expect-error - type is not assignable to type T
-    this.type = type
+    this.values = value as any
+    this.type = type as any
   }
 
   get history(): Magicolor<any>[] {
@@ -364,14 +320,20 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
   }
 
   revert(deep = 1) {
-    if (deep > this._stack.length)
-      throw new Error('Invalid deep.')
+    if (deep < 1) {
+      throw new Error('Deep must be at least 1.')
+    }
+    if (deep > this._stack.length) {
+      throw new Error(`Cannot revert ${deep} steps. Only ${this._stack.length} steps in history.`)
+    }
 
     const mc = this._stack[this._stack.length - deep - 1]
     this.type = mc.type
     this.values = mc.values
     this.alpha = mc.alpha
     this._stack = this._stack.slice(0, this._stack.length - deep)
+
+    return this
   }
 
   clear() {
@@ -380,15 +342,18 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 
   clone(): Magicolor<T> {
     const mc = new Magicolor(this.values, this.type, this.alpha)
-    mc._stack = this._stack.slice()
+    // 只在需要时复制历史记录，避免不必要的性能开销
+    if (this._stack.length > 0) {
+      mc._stack = this._stack.slice()
+    }
     mc.cloned = true
     return mc
   }
 
-  set<T extends ColorType>(operate: string, value: unknown) {
+  set(operate: string, value: unknown) {
     const [type, channel] = operate.split('.') as [ColorType?, string?]
     if (!type || !SupportTypes.includes(type as any)) {
-      throw new Error('Invalid operate type.')
+      throw new Error(`Invalid operate type: ${type}`)
     }
     if (!channel) {
       throw new Error('Invalid channel.')
@@ -396,44 +361,58 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 
     const typeValue = this.value(type, false)
 
-    if (Array.isArray(typeValue)) {
-      const index = type.indexOf(channel)
-      if (index === -1) {
-        throw new Error('Invalid channel.')
+    if (!Array.isArray(typeValue)) {
+      throw new TypeError(`Cannot set value on non-array type: ${type}`)
+    }
+
+    const channels = CHANNEL_MAP[type]
+    if (!channels) {
+      throw new Error(`Unknown color type: ${type}`)
+    }
+
+    const index = channels.indexOf(channel)
+    if (index === -1) {
+      throw new Error(`Invalid channel: ${channel} for type ${type}. Valid channels: ${channels.join(', ')}`)
+    }
+
+    // 处理操作符
+    if (typeof value === 'string' && /^[+\-*/]/.test(value)) {
+      const operator = value[0]
+      const operand = Number.parseFloat(value.slice(1))
+
+      if (Number.isNaN(operand)) {
+        throw new TypeError(`Invalid operand value: ${value.slice(1)}`)
       }
 
-      if (typeof value === 'string' && /^[+\-*/]/.test(value)) {
-        const operator = value[0]
-        const operand = Number.parseFloat(value.slice(1))
-        switch (operator) {
-          case '+':
-            typeValue[index] += operand
-            break
-          case '-':
-            typeValue[index] -= operand
-            break
-          case '*':
-            typeValue[index] *= operand
-            break
-          case '/':
-            typeValue[index] /= operand
-            break
-          default:
-            throw new Error('Invalid operator.')
-        }
+      switch (operator) {
+        case '+':
+          typeValue[index] += operand
+          break
+        case '-':
+          typeValue[index] -= operand
+          break
+        case '*':
+          typeValue[index] *= operand
+          break
+        case '/':
+          if (operand === 0) {
+            throw new Error('Division by zero.')
+          }
+          typeValue[index] /= operand
+          break
+        default:
+          throw new Error(`Invalid operator: ${operator}`)
       }
-      else {
-        typeValue[index] = value as any
-      }
+    }
+    else if (typeof value === 'number') {
+      typeValue[index] = value
     }
     else {
-      throw new TypeError('Invalid operate type.')
+      throw new TypeError(`Invalid value type: expected number or operator string, got ${typeof value}`)
     }
 
-    // @ts-expect-error - type is not assignable to type T
-    this.type = type as T
-    // @ts-expect-error - value is not assignable to type Colors[T]
-    this.values = typeValue as Colors[T]
+    this.type = type as any
+    this.values = typeValue as any
 
     return this
   }
@@ -441,7 +420,7 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
   get(operate: string): number {
     const [type, channel] = operate.split('.') as [ColorType?, string?]
     if (!type || !SupportTypes.includes(type as any)) {
-      throw new Error('Invalid operate type.')
+      throw new Error(`Invalid operate type: ${type}`)
     }
     if (!channel) {
       throw new Error('Invalid channel.')
@@ -449,15 +428,20 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 
     const typeValue = this.value(type, false)
 
-    if (Array.isArray(typeValue)) {
-      const index = type.indexOf(channel)
-      if (index === -1) {
-        throw new Error('Invalid channel.')
-      }
-      return typeValue[index]
+    if (!Array.isArray(typeValue)) {
+      throw new TypeError(`Cannot get value from non-array type: ${type}`)
     }
-    else {
-      throw new TypeError('Invalid operate type.')
+
+    const channels = CHANNEL_MAP[type]
+    if (!channels) {
+      throw new Error(`Unknown color type: ${type}`)
     }
+
+    const index = channels.indexOf(channel)
+    if (index === -1) {
+      throw new Error(`Invalid channel: ${channel} for type ${type}. Valid channels: ${channels.join(', ')}`)
+    }
+
+    return typeValue[index]
   }
 }
