@@ -151,4 +151,111 @@ describe('utils scoped', () => {
     expect(mc.lighten().lighten().hex()).toMatchInlineSnapshot(`"#ffbd73"`)
     expect(mc.lighten().lighten().lighten().hex()).toMatchInlineSnapshot(`"#ffefa3"`)
   })
+
+  it('get and set methods', () => {
+    const color = new Magicolor('#ff6600')
+
+    // Test get method for different color types
+    expect(color.get('rgb.r')).toBe(255)
+    expect(color.get('rgb.g')).toBe(102)
+    expect(color.get('rgb.b')).toBe(0)
+
+    expect(color.get('hsl.h')).toBeCloseTo(24, 0)
+    expect(color.get('hsl.s')).toBeCloseTo(100, 0)
+    expect(color.get('hsl.l')).toBeCloseTo(50, 0)
+
+    expect(color.get('hsb.h')).toBeCloseTo(24, 0)
+    expect(color.get('hsb.s')).toBeCloseTo(100, 0)
+    expect(color.get('hsb.b')).toBeCloseTo(100, 0)
+
+    // Test set method with direct value
+    const color2 = new Magicolor('#ff6600')
+    color2.set('rgb.r', 128)
+    expect(color2.get('rgb.r')).toBe(128)
+    expect(color2.rgb()).toEqual([128, 102, 0])
+
+    // Test set method with operators
+    const color3 = new Magicolor('#ff6600')
+    color3.set('rgb.r', '+50')
+    expect(color3.get('rgb.r')).toBe(305) // 255 + 50
+
+    const color4 = new Magicolor('#ff6600')
+    color4.set('rgb.g', '-20')
+    expect(color4.get('rgb.g')).toBe(82) // 102 - 20
+
+    const color5 = new Magicolor('#ff6600')
+    color5.set('rgb.b', '*2')
+    expect(color5.get('rgb.b')).toBe(0) // 0 * 2
+
+    const color6 = new Magicolor('#808080')
+    color6.set('rgb.r', '/2')
+    expect(color6.get('rgb.r')).toBe(64) // 128 / 2
+
+    // Test chaining
+    const color7 = new Magicolor('#ff6600')
+    color7.set('rgb.r', 200).set('rgb.g', 100).set('rgb.b', 50)
+    expect(color7.rgb()).toEqual([200, 100, 50])
+
+    // Test set with HSL
+    const color8 = new Magicolor('#ff6600')
+    color8.set('hsl.h', 180)
+    expect(color8.get('hsl.h')).toBeCloseTo(180, 0)
+
+    // Test set with LAB
+    const color9 = new Magicolor('#ff6600')
+    color9.set('lab.l', 70)
+    expect(color9.get('lab.l')).toBeCloseTo(70, 0)
+  })
+
+  it('get and set error handling', () => {
+    const color = new Magicolor('#ff6600')
+
+    // Test invalid type
+    expect(() => color.get('invalid.r')).toThrow('Invalid operate type')
+
+    // Test invalid channel
+    expect(() => color.get('rgb.x')).toThrow('Invalid channel: x for type rgb')
+
+    // Test missing channel
+    expect(() => color.get('rgb')).toThrow('Invalid channel')
+
+    // Test set with invalid type
+    expect(() => color.set('invalid.r', 100)).toThrow('Invalid operate type')
+
+    // Test set with invalid channel
+    expect(() => color.set('rgb.x', 100)).toThrow('Invalid channel: x for type rgb')
+
+    // Test set with invalid value type
+    expect(() => color.set('rgb.r', {} as any)).toThrow('Invalid value type')
+
+    // Test set with invalid operator (string that doesn't match operator pattern)
+    expect(() => color.set('rgb.r', 'invalid')).toThrow('Invalid value type')
+
+    // Test set with invalid operand
+    expect(() => color.set('rgb.r', '+abc')).toThrow('Invalid operand value')
+
+    // Test division by zero
+    expect(() => color.set('rgb.r', '/0')).toThrow('Division by zero')
+
+    // Test set on hex type (non-array)
+    expect(() => color.set('hex.r', 100)).toThrow('Cannot set value on non-array type')
+
+    // Test get on hex type (non-array)
+    expect(() => color.get('hex.r')).toThrow('Cannot get value from non-array type')
+  })
+
+  it('revert error handling', () => {
+    const color = new Magicolor('#ff6600')
+    color.toRgb()
+    color.toHsl()
+
+    // Test invalid deep (< 1)
+    expect(() => color.revert(0)).toThrow('Deep must be at least 1')
+
+    // Test invalid deep (> stack length)
+    expect(() => color.revert(10)).toThrow('Cannot revert 10 steps. Only 2 steps in history')
+
+    // Test valid revert returns this
+    expect(color.revert(1)).toBe(color)
+  })
 })
