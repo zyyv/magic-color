@@ -221,10 +221,6 @@ importers:
       '@magic-color/transformer':
         specifier: workspace:*
         version: link:../transformer
-    devDependencies:
-      tsdown:
-        specifier: catalog:cli
-        version: 0.15.9(typescript@5.9.3)(vue-tsc@3.1.1(typescript@5.9.3))
 
   packages/magic-color:
     dependencies:
@@ -234,36 +230,20 @@ importers:
       '@magic-color/theme':
         specifier: workspace:*
         version: link:../theme
-    devDependencies:
-      tsdown:
-        specifier: catalog:cli
-        version: 0.15.9(typescript@5.9.3)(vue-tsc@3.1.1(typescript@5.9.3))
 
-  packages/shared:
-    devDependencies:
-      tsdown:
-        specifier: catalog:cli
-        version: 0.15.9(typescript@5.9.3)(vue-tsc@3.1.1(typescript@5.9.3))
+  packages/shared: {}
 
   packages/theme:
     dependencies:
       '@magic-color/core':
         specifier: workspace:*
         version: link:../core
-    devDependencies:
-      tsdown:
-        specifier: catalog:cli
-        version: 0.15.9(typescript@5.9.3)(vue-tsc@3.1.1(typescript@5.9.3))
 
   packages/transformer:
     dependencies:
       '@magic-color/shared':
         specifier: workspace:*
         version: link:../shared
-    devDependencies:
-      tsdown:
-        specifier: catalog:cli
-        version: 0.15.9(typescript@5.9.3)(vue-tsc@3.1.1(typescript@5.9.3))
 
   packages/vue:
     dependencies:
@@ -274,9 +254,6 @@ importers:
         specifier: catalog:playground
         version: 3.5.22(typescript@5.9.3)
     devDependencies:
-      tsdown:
-        specifier: catalog:cli
-        version: 0.15.9(typescript@5.9.3)(vue-tsc@3.1.1(typescript@5.9.3))
       unplugin-vue:
         specifier: catalog:playground
         version: 7.0.2(@types/node@24.9.1)(jiti@2.5.1)(tsx@4.20.3)(vue@3.5.22(typescript@5.9.3))(yaml@2.8.1)

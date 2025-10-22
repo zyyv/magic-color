@@ -41,8 +41,5 @@
     "build": "tsdown",
     "dev": "tsdown -w",
     "attw": "attw --pack --config-path ../../.attw.json"
-  },
-  "devDependencies": {
-    "tsdown": "catalog:cli"
   }
 }

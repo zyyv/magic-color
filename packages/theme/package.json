@@ -44,8 +44,5 @@
   },
   "dependencies": {
     "@magic-color/core": "workspace:*"
-  },
-  "devDependencies": {
-    "tsdown": "catalog:cli"
   }
 }

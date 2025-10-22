@@ -45,8 +45,5 @@
   "dependencies": {
     "@magic-color/shared": "workspace:*",
     "@magic-color/transformer": "workspace:*"
-  },
-  "devDependencies": {
-    "tsdown": "catalog:cli"
   }
 }

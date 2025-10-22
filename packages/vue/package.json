@@ -49,7 +49,6 @@
     "magic-color": "workspace:*"
   },
   "devDependencies": {
-    "tsdown": "catalog:cli",
     "unplugin-vue": "catalog:playground"
   }
 }
