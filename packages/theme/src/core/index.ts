@@ -1,11 +1,10 @@
 import type { BasicColorShades, ClosestColorShades, GenerateMeta, ThemeMetas, ThemeOptions } from './types'
 import { Magicolor } from '@magic-color/core'
-import { getColorName } from '../collections'
 import { deltaE } from '../delta-e'
 import { random } from '../random'
 import { hueShades } from './shades'
 
-const cache = new Map<string, GenerateMeta>()
+const cache = new Map<string, GenerateMeta['shades']>()
 
 function findClosetShade(color: string, colors: BasicColorShades[]): ClosestColorShades {
   const normalizedColors = colors.map((meta) => {
@@ -30,7 +29,7 @@ function findClosetShade(color: string, colors: BasicColorShades[]): ClosestColo
   }
 }
 
-function generate(color: string, colorShades: BasicColorShades[], apca = false): GenerateMeta {
+function generate(color: string, colorShades: BasicColorShades[], apca = false): GenerateMeta['shades'] {
   const closedShade = findClosetShade(color, colorShades)
 
   const _h = new Magicolor(color).get('hsl.h')
@@ -47,42 +46,34 @@ function generate(color: string, colorShades: BasicColorShades[], apca = false):
   else
     d = d.toString()
 
-  const name = getColorName(color)
+  return closedShade.shades.map((shade) => {
+    let _color = shade.color
 
-  return {
-    id: name.toLowerCase(),
-    name,
-    shades: closedShade.shades.map((shade) => {
-      let _color = shade.color
+    const u = new Magicolor(_color).get('hsl.s') / 100 * k
+    _color = new Magicolor(_color)
+      .set('hsl.s', u * 100 > 100 ? 100 : u * 100)
+      .set('hsl.h', d)
+      .hex()
 
-      const u = new Magicolor(_color).get('hsl.s') / 100 * k
-      _color = new Magicolor(_color).set('hsl.s', u * 100 > 100 ? 100 : u * 100).hex()
-      _color = new Magicolor(_color).set('hsl.h', d).hex()
+    if (closedShade.closestShadeLightness.key === shade.key)
+      _color = new Magicolor(color).hex()
 
-      if (closedShade.closestShadeLightness.key === shade.key)
-        _color = new Magicolor(color).hex()
+    if (apca) {
+      // if (shade.number < 500) {
+      //     let b = i.find(v => v.number == shade.number).apcaOnBlack;
+      //     C = M(b, "#000", C);
+      // } else {
+      //     let b = i.find(v => v.number == shade.number).apcaOnWhite;
+      //     C = M(b, "#fff", C);
+      // }
+    }
 
-      if (apca) {
-        // if (shade.number < 500) {
-        //     let b = i.find(v => v.number == shade.number).apcaOnBlack;
-        //     C = M(b, "#000", C);
-        // } else {
-        //     let b = i.find(v => v.number == shade.number).apcaOnWhite;
-        //     C = M(b, "#fff", C);
-        // }
-      }
-
-      return {
-        key: shade.key.toString() as unknown as keyof ThemeMetas,
-        color: _color,
-        hsl: [
-          Math.round(new Magicolor(_color).get('hsl.h')) || 0,
-          Math.round(new Magicolor(_color).get('hsl.s')),
-          Math.round(new Magicolor(_color).get('hsl.l')),
-        ],
-      }
-    }),
-  }
+    return {
+      key: shade.key,
+      color: _color,
+      hsl: new Magicolor(_color).value('hsl'),
+    }
+  })
 }
 
 /**
@@ -112,27 +103,27 @@ function generate(color: string, colorShades: BasicColorShades[], apca = false):
  * @returns ThemeMetas
  */
 export function theme(color: string = random(), options: ThemeOptions = {}): ThemeMetas {
-  const _mc = new Magicolor(color)
+  const input = new Magicolor(color)
   const defaultOptions: ThemeOptions = {
-    type: _mc.type,
+    type: input.type,
     // @ts-expect-error - render is rightable
     render: c => c,
   }
   const { type, render } = { ...defaultOptions, ...options } as Required<ThemeOptions>
 
-  let metas
-  const key = _mc.css('hex')
+  let shades: GenerateMeta['shades']
+  const key = input.css('hex')
   if (cache.has(key)) {
-    metas = cache.get(key)
+    shades = cache.get(key)!
   }
   else {
-    metas = generate(key, hueShades)
-    cache.set(key, metas)
+    shades = generate(key, hueShades)
+    cache.set(key, shades)
   }
 
-  const shades = metas!.shades.map(shade => render([shade.key, new Magicolor(shade.color).css(type)]))
+  const entries = shades!.map(shade => render([shade.key, new Magicolor(shade.color).css(type)]))
 
-  return Object.fromEntries(shades) as unknown as ThemeMetas
+  return Object.fromEntries(entries) as unknown as ThemeMetas
 }
 
 export * from './types'

@@ -1,5 +1,5 @@
 import { deltaE } from '../delta-e'
-import collections from './colors.json'
+import collections from './colors'
 
 export function getColorName(color: string): string {
   return collections
