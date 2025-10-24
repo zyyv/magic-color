@@ -30,6 +30,9 @@ jobs:
           cache: pnpm
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Update npm
+        run: npm install -g npm@latest
+
       - name: Install Dependencies 📦️ & Build ٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ
         run: pnpm i
 
