@@ -33,11 +33,6 @@ jobs:
       - name: PNPM build ٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ
         run: pnpm build
 
-      - name: Set publishing config
-        run: pnpm config set '//registry.npmjs.org/:_authToken' "${NODE_AUTH_TOKEN}"
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-
       - name: Publish to NPM
         run: pnpm -r publish --access public --no-git-checks
 
