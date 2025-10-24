@@ -12,10 +12,11 @@ jobs:
   release:
     permissions:
       id-token: write
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -23,11 +24,11 @@ jobs:
         uses: pnpm/action-setup@v4
 
       - name: Set node LTS ✨
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v5
         with:
           node-version: lts/*
           cache: pnpm
-          registry-url: 'https://registry.npmjs.org/'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies 📦️
         run: pnpm i
@@ -41,4 +42,3 @@ jobs:
       - run: npx changelogithub
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          fetch-depth: 0
