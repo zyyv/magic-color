@@ -8,7 +8,8 @@
   "homepage": "https://github.com/zyyv/magic-color#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zyyv/magic-color.git"
+    "url": "git+https://github.com/zyyv/magic-color.git",
+    "directory": "packages/magic-color"
   },
   "bugs": "https://github.com/zyyv/magic-color/issues",
   "keywords": [
