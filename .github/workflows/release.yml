@@ -30,11 +30,8 @@ jobs:
           cache: pnpm
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install Dependencies 📦️
+      - name: Install Dependencies 📦️ & Build ٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ
         run: pnpm i
-
-      - name: PNPM build ٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ
-        run: pnpm build
 
       - name: Publish to NPM
         run: pnpm -r publish --access public --no-git-checks
