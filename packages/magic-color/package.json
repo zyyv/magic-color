@@ -1,7 +1,7 @@
 {
   "name": "magic-color",
   "type": "module",
-  "version": "2.0.4",
+  "version": "2.0.5-beta.1",
   "description": "Magic color creator.",
   "author": "Chris <hizyyv@gmail.com>",
   "license": "MIT",
