@@ -77,7 +77,7 @@ function handleLangChange(e: Event) {
   lang.value = (e.target as HTMLInputElement).value
 }
 function handleExportTypeChange(e: Event) {
-  exportType.value = (e.target as HTMLInputElement).value as BuiltInParserName
+  exportType.value = (e.target as HTMLInputElement).value as any
 }
 
 const { copy, copied } = useClipboard()

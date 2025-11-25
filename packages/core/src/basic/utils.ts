@@ -25,7 +25,7 @@ function resolveColorString(color: string) {
   }
 
   return {
-    ...parseMap[type](color),
+    ...parseMap[type as keyof typeof parseMap](color),
     type,
   } as ColorObject<ColorType>
 }
