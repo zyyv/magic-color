@@ -1,6 +1,6 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
 import { labToRgb } from './lab'
-import { rgbToHex, rgbToHsb, rgbToHsl } from './rgb'
+import { rgbToHex, rgbToHsb, rgbToHsl, rgbToOklab, rgbToOklch } from './rgb'
 
 const lchRegex = /^lch\((\d+(?:\.\d+)?%?)%?\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)(?:deg)?(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
 
@@ -41,4 +41,12 @@ export function lchToLab(color: LchColor): LabColor {
     h = 0
   h = h * Math.PI / 180
   return [l, Math.cos(h) * c, Math.sin(h) * c]
+}
+
+export function lchToOklab(color: LchColor): LabColor {
+  return rgbToOklab(lchToRgb(color))
+}
+
+export function lchToOklch(color: LchColor): LchColor {
+  return rgbToOklch(lchToRgb(color))
 }

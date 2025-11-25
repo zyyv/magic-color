@@ -42,6 +42,8 @@ export interface Colors {
   hsl: HslColor
   lab: LabColor
   lch: LchColor
+  oklab: LabColor
+  oklch: LchColor
 }
 
 export type ColorType = keyof Colors

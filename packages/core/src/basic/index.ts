@@ -1,41 +1,69 @@
-import type { Colors, ColorType, HsbColor, HslColor, LabColor, Opacity, RgbColor } from '@magic-color/transformer'
+import type { Colors, ColorType, HsbColor, HslColor, LabColor, LchColor, Opacity, RgbColor } from '@magic-color/transformer'
 import type { ColorObject } from '../types'
 import {
   hexToHsb,
   hexToHsl,
   hexToLab,
   hexToLch,
+  hexToOklab,
+  hexToOklch,
   hexToRgb,
 
   hsbToHex,
   hsbToHsl,
   hsbToLab,
   hsbToLch,
+  hsbToOklab,
+  hsbToOklch,
   hsbToRgb,
 
   hslToHex,
   hslToHsb,
   hslToLab,
   hslToLch,
+  hslToOklab,
+  hslToOklch,
   hslToRgb,
 
   labToHex,
   labToHsb,
   labToHsl,
   labToLch,
+  labToOklab,
+  labToOklch,
   labToRgb,
 
   lchToHex,
   lchToHsb,
   lchToHsl,
   lchToLab,
+  lchToOklab,
+  lchToOklch,
   lchToRgb,
+
+  oklabToHex,
+  oklabToHsb,
+  oklabToHsl,
+  oklabToLab,
+  oklabToLch,
+  oklabToOklch,
+  oklabToRgb,
+
+  oklchToHex,
+  oklchToHsb,
+  oklchToHsl,
+  oklchToLab,
+  oklchToLch,
+  oklchToOklab,
+  oklchToRgb,
 
   rgbToHex,
   rgbToHsb,
   rgbToHsl,
   rgbToLab,
   rgbToLch,
+  rgbToOklab,
+  rgbToOklch,
 
   SupportTypes,
 } from '@magic-color/transformer'
@@ -53,6 +81,8 @@ const CONVERSION_MAP: Record<string, Partial<Record<ColorType, ConversionFunctio
     hsb: hexToHsb,
     lab: hexToLab,
     lch: hexToLch,
+    oklab: hexToOklab,
+    oklch: hexToOklch,
   },
   keyword: {
     rgb: hexToRgb,
@@ -60,6 +90,8 @@ const CONVERSION_MAP: Record<string, Partial<Record<ColorType, ConversionFunctio
     hsb: hexToHsb,
     lab: hexToLab,
     lch: hexToLch,
+    oklab: hexToOklab,
+    oklch: hexToOklch,
   },
   rgb: {
     hex: rgbToHex,
@@ -67,6 +99,8 @@ const CONVERSION_MAP: Record<string, Partial<Record<ColorType, ConversionFunctio
     hsb: rgbToHsb,
     lab: rgbToLab,
     lch: rgbToLch,
+    oklab: rgbToOklab,
+    oklch: rgbToOklch,
   },
   hsl: {
     hex: hslToHex,
@@ -74,6 +108,8 @@ const CONVERSION_MAP: Record<string, Partial<Record<ColorType, ConversionFunctio
     hsb: hslToHsb,
     lab: hslToLab,
     lch: hslToLch,
+    oklab: hslToOklab,
+    oklch: hslToOklch,
   },
   hsb: {
     hex: hsbToHex,
@@ -81,6 +117,8 @@ const CONVERSION_MAP: Record<string, Partial<Record<ColorType, ConversionFunctio
     hsl: hsbToHsl,
     lab: hsbToLab,
     lch: hsbToLch,
+    oklab: hsbToOklab,
+    oklch: hsbToOklch,
   },
   lab: {
     hex: labToHex,
@@ -88,6 +126,8 @@ const CONVERSION_MAP: Record<string, Partial<Record<ColorType, ConversionFunctio
     hsl: labToHsl,
     hsb: labToHsb,
     lch: labToLch,
+    oklab: labToOklab,
+    oklch: labToOklch,
   },
   lch: {
     hex: lchToHex,
@@ -95,6 +135,26 @@ const CONVERSION_MAP: Record<string, Partial<Record<ColorType, ConversionFunctio
     hsl: lchToHsl,
     hsb: lchToHsb,
     lab: lchToLab,
+    oklab: lchToOklab,
+    oklch: lchToOklch,
+  },
+  oklab: {
+    hex: oklabToHex,
+    rgb: oklabToRgb,
+    hsl: oklabToHsl,
+    hsb: oklabToHsb,
+    lab: oklabToLab,
+    lch: oklabToLch,
+    oklch: oklabToOklch,
+  },
+  oklch: {
+    hex: oklchToHex,
+    rgb: oklchToRgb,
+    hsl: oklchToHsl,
+    hsb: oklchToHsb,
+    lab: oklchToLab,
+    lch: oklchToLch,
+    oklab: oklchToOklab,
   },
 }
 
@@ -105,6 +165,8 @@ const CHANNEL_MAP: Record<string, readonly string[]> = {
   hsb: ['h', 's', 'b'],
   lab: ['l', 'a', 'b'],
   lch: ['l', 'c', 'h'],
+  oklab: ['l', 'a', 'b'],
+  oklch: ['l', 'c', 'h'],
 } as const
 
 export class Magicolor<T extends ColorType> implements ColorObject<T> {
@@ -156,6 +218,8 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 
         case 'lab':
         case 'lch':
+        case 'oklab':
+        case 'oklch':
           return `${type}(${processedValues.join(' ')}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
 
         default:
@@ -239,6 +303,18 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
     return this as Magicolor<'lch'>
   }
 
+  toOklab(): Magicolor<'oklab'> {
+    const value = this.convert('oklab')
+    this._push('oklab', value, this.alpha)
+    return this as Magicolor<'oklab'>
+  }
+
+  toOklch(): Magicolor<'oklch'> {
+    const value = this.convert('oklch')
+    this._push('oklch', value, this.alpha)
+    return this as Magicolor<'oklch'>
+  }
+
   to(type: ColorType) {
     switch (type) {
       case 'rgb':
@@ -253,6 +329,10 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
         return this.toLab()
       case 'lch':
         return this.toLch()
+      case 'oklab':
+        return this.toOklab()
+      case 'oklch':
+        return this.toOklch()
       default:
         throw new Error('Invalid color type.')
     }
@@ -276,6 +356,18 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 
   lab(round = true): LabColor {
     return this.value('lab', round)
+  }
+
+  lch(round = true): LchColor {
+    return this.value('lch', round)
+  }
+
+  oklab(round = true): LabColor {
+    return this.value('oklab', round)
+  }
+
+  oklch(round = true): LchColor {
+    return this.value('oklch', round)
   }
 
   value<K extends ColorType = T>(type: K = this.type as unknown as K, round = true): Colors[K] {

@@ -1,6 +1,6 @@
-import type { HexColor, HsbColor, HslColor, LchColor, RgbColor } from '../types'
+import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
 import { oklabToRgb } from './oklab'
-import { rgbToHex, rgbToHsb, rgbToHsl } from './rgb'
+import { rgbToHex, rgbToHsb, rgbToHsl, rgbToLab, rgbToLch } from './rgb'
 
 const oklchRegex = /^oklch\(\s*(100|[1-9]?\d(?:\.\d+)?)%?\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)(?:deg)?(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
 
@@ -19,7 +19,7 @@ export function parseOklch(color: string) {
   return { values: oklch, alpha }
 }
 
-function oklchToOklab(color: LchColor) {
+export function oklchToOklab(color: LchColor): LabColor {
   let [l, c, h] = color
   if (Number.isNaN(h))
     h = 0
@@ -43,4 +43,12 @@ export function oklchToHsl(color: LchColor): HslColor {
 
 export function oklchToHsb(color: LchColor): HsbColor {
   return rgbToHsb(oklchToRgb(color))
+}
+
+export function oklchToLab(color: LchColor): LabColor {
+  return rgbToLab(oklchToRgb(color))
+}
+
+export function oklchToLch(color: LchColor): LchColor {
+  return rgbToLch(oklchToRgb(color))
 }

@@ -1,5 +1,5 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
-import { rgbToHex, rgbToHsb, rgbToHsl } from './rgb'
+import { rgbToHex, rgbToHsb, rgbToHsl, rgbToLab, rgbToLch } from './rgb'
 
 const oklabRegex = /^oklab\(\s*(100|[1-9]?\d(?:\.\d+)?%?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
 
@@ -72,6 +72,14 @@ export function oklabToHsl(color: LabColor): HslColor {
 
 export function oklabToHsb(color: LabColor): HsbColor {
   return rgbToHsb(oklabToRgb(color))
+}
+
+export function oklabToLab(color: LabColor): LabColor {
+  return rgbToLab(oklabToRgb(color))
+}
+
+export function oklabToLch(color: LabColor): LchColor {
+  return rgbToLch(oklabToRgb(color))
 }
 
 export function oklabToOklch(color: LabColor): LchColor {

@@ -1,5 +1,5 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
-import { rgbToHsb, rgbToLab, rgbToLch } from './rgb'
+import { rgbToHsb, rgbToLab, rgbToLch, rgbToOklab, rgbToOklch } from './rgb'
 
 const hexRegex = /^#?([a-f\d]{3}|[a-f\d]{6}|[a-f\d]{8})$/i
 
@@ -77,6 +77,14 @@ export function hexToLab(color: HexColor): LabColor {
 
 export function hexToLch(color: HexColor): LchColor {
   return rgbToLch(hexToRgb(color))
+}
+
+export function hexToOklab(color: HexColor): LabColor {
+  return rgbToOklab(hexToRgb(color))
+}
+
+export function hexToOklch(color: HexColor): LchColor {
+  return rgbToOklch(hexToRgb(color))
 }
 
 export function toHex(c: number) {

@@ -1,5 +1,5 @@
 import type { HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
-import { rgbToHex, rgbToLab, rgbToLch } from './rgb'
+import { rgbToHex, rgbToLab, rgbToLch, rgbToOklab, rgbToOklch } from './rgb'
 
 const hsbRegex = /^hsb\((\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\)$/
 
@@ -68,4 +68,12 @@ export function hsbToLab(color: HsbColor): LabColor {
 
 export function hsbToLch(color: HsbColor): LchColor {
   return rgbToLch(hsbToRgb(color))
+}
+
+export function hsbToOklab(color: HsbColor): LabColor {
+  return rgbToOklab(hsbToRgb(color))
+}
+
+export function hsbToOklch(color: HsbColor): LchColor {
+  return rgbToOklch(hsbToRgb(color))
 }
