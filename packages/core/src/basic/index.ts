@@ -41,14 +41,15 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 
     // 处理数组类型的颜色值
     if (Array.isArray(values)) {
-      const processedValues = (round ? values.map(Math.round) : values) as number[]
-
       switch (type) {
         case 'rgb':
-        case 'hsl':
+        case 'hsl': {
+          const processedValues = (round ? (values as number[]).map(Math.round) : values) as number[]
           return `${type}(${processedValues.join(' ')}${withAlpha ? ` / ${this.alpha}` : ''})`
+        }
 
         case 'hsb': {
+          const processedValues = (round ? (values as number[]).map(Math.round) : values) as number[]
           const formattedValues = (processedValues as number[]).map((c, i) => i > 0 ? `${c}%` : c).join(', ')
           return `${type}${withAlpha ? 'a' : ''}(${formattedValues}${withAlpha ? `, ${this.alpha}` : ''})`
         }
@@ -56,8 +57,14 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
         case 'lab':
         case 'lch':
         case 'oklab':
-        case 'oklch':
-          return `${type}(${processedValues.join(' ')}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
+        case 'oklch': {
+          const v = values as number[]
+          const format = (n: number) => round ? Math.round(n * 1000) / 1000 : n
+          const L = `${format(v[0])}%`
+          const A = format(v[1])
+          const B = format(v[2])
+          return `${type}(${L} ${A} ${B}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
+        }
 
         default:
           throw new Error('Invalid color type.')

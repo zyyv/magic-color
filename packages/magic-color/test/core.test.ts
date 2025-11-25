@@ -51,8 +51,10 @@ describe('utils scoped', () => {
     const mc = new Magicolor(c)
 
     expect(mc.css('hsb')).toMatchInlineSnapshot(`"hsb(191, 96%, 70%)"`)
-
-    expect(mc.css('lab')).toMatchInlineSnapshot(`"lab(57 -22 -25)"`)
+    expect(mc.css('lab')).toMatchInlineSnapshot(`"lab(56.529% -21.702 -24.849)"`)
+    expect(mc.css('lch')).toMatchInlineSnapshot(`"lch(56.529% 32.991 228.868)"`)
+    expect(mc.css('oklab')).toMatchInlineSnapshot(`"oklab(61.64% -0.086 -0.07)"`)
+    expect(mc.css('oklch')).toMatchInlineSnapshot(`"oklch(61.64% 0.11 219.178)"`)
   })
 
   it('color with opacity', () => {
