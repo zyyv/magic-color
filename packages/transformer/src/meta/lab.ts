@@ -19,13 +19,17 @@ export function parseLab(color: string): { values: LabColor, alpha: number } {
 }
 
 function xyz_rgb(r: number) {
-  r = 255 * (r <= 0.00304 ? 12.92 * r : 1.055 * r ** (1 / 2.4) - 0.055)
+  r = 255 * (r <= 0.0031308 ? 12.92 * r : 1.055 * r ** (1 / 2.4) - 0.055)
   return Math.min(Math.max(0, r), 255)
-  // return 255 * (r <= 0.00304 ? 12.92 * r : 1.055 * r ** (1 / 2.4) - 0.055)
 }
 
+const delta = 6 / 29
+const delta2 = delta * delta
+const multiplier = 3 * delta2
+const offset = 4 / 29
+
 function lab_xyz(t: number) {
-  return t > 0.206896552 ? t * t * t : 0.12841855 * (t - 0.137931034)
+  return t > delta ? t * t * t : multiplier * (t - offset)
 }
 
 export function labToRgb(color: LabColor): RgbColor {

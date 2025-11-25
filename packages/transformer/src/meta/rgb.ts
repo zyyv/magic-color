@@ -33,7 +33,7 @@ export function rgbToHsl(color: RgbColor): HslColor {
   let s = 0
   const l = (max + min) / 2
 
-  if (max !== min) {
+  if (Math.abs(max - min) > 1e-6) {
     const delta = max - min
     s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min)
     switch (max) {
@@ -91,9 +91,14 @@ export function rgbToLab(color: RgbColor): LabColor {
   }
 
   function xyz_lab(t: number) {
-    if (t > 0.008856452)
+    const delta = 6 / 29
+    const delta3 = delta * delta * delta
+    const multiplier = 3 * delta * delta
+    const offset = 4 / 29
+
+    if (t > delta3)
       return t ** (1 / 3)
-    return t / 0.12841855 + 0.137931034
+    return t / multiplier + offset
   }
 
   function rgb2xyz(color: RgbColor) {

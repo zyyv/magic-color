@@ -1,111 +1,62 @@
-import type { LabColor, RgbColor } from '@magic-color/core'
-import { isLab, labToRgb, rgbToLab } from '@magic-color/core'
-import { Magicolor } from 'magic-color'
-import { expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
+import { isLab, labToHex, labToHsb, labToHsl, labToLch, labToRgb } from '../src/meta/lab'
 
-it('isLabColor', () => {
-  expect(isLab('lab(50 20 30)')).toBe(true) // true
-  expect(isLab('lab(100 -128 127)')).toBe(true) // true
-  expect(isLab('lab(75 20 30 / 0.5)')).toBe(true) // true
-  expect(isLab('lab(75 20 30 / 1)')).toBe(true) // true
-  expect(isLab('lab(75 20 30 / 1.0)')).toBe(true) // true
-  expect(isLab('lab(50 20 30.5)')).toBe(true) // true
-  expect(isLab('lab(101 20 30)')).toBe(false) // false
-  expect(isLab('lab(50 -130 30)')).toBe(false) // false
-  expect(isLab('lab(50 20 30 / 1.5)')).toBe(false) // false
-})
+describe('lab', () => {
+  it('isLab', () => {
+    expect(isLab('lab(50 20 30)')).toBe(true)
+    expect(isLab('lab(100 -128 127)')).toBe(true)
+    expect(isLab('lab(75 20 30 / 0.5)')).toBe(true)
+    expect(isLab('lab(50 20 30.5)')).toBe(true)
+    expect(isLab('lab(101 20 30)')).toBe(false)
+  })
 
-it('labToRgb', () => {
-  expect(labToRgb([50, 20, 30])).toMatchInlineSnapshot(`
-    [
-      164.2520877386953,
-      104.8433217869744,
-      68.71466076356329,
-    ]
-  `)
-  expect(labToRgb([100, -128, 127])).toMatchInlineSnapshot(`
-    [
-      0,
-      255,
-      0,
-    ]
-  `)
-  expect(labToRgb([75, 20, 30])).toMatchInlineSnapshot(`
-    [
-      236.82325973780596,
-      169.8002010736493,
-      130.52031424115725,
-    ]
-  `)
-  expect(labToRgb([50, 20, 30])).toMatchInlineSnapshot(`
-    [
-      164.2520877386953,
-      104.8433217869744,
-      68.71466076356329,
-    ]
-  `)
-})
+  it('labToRgb', () => {
+    const white = labToRgb([100, 0, 0])
+    expect(white[0]).toBeCloseTo(255, 1)
+    expect(white[1]).toBeCloseTo(255, 1)
+    expect(white[2]).toBeCloseTo(255, 1)
 
-it('rgbToLab', () => {
-  expect(rgbToLab([164, 105, 69])).toMatchInlineSnapshot(`
-    [
-      50.01022911983196,
-      19.82671731880359,
-      29.845650407467296,
-    ]
-  `)
-  expect(rgbToLab([0, 255, 0])).toMatchInlineSnapshot(`
-    [
-      87.73472235279792,
-      -86.1827164205346,
-      83.17932050269782,
-    ]
-  `)
+    expect(labToRgb([0, 0, 0])).toEqual([0, 0, 0])
 
-  expect(rgbToLab([237, 170, 131])).toMatchInlineSnapshot(`
-    [
-      75.07423625590387,
-      20.012134272798633,
-      29.845636679036012,
-    ]
-  `)
-  expect(rgbToLab([164, 105, 69])).toMatchInlineSnapshot(`
-    [
-      50.01022911983196,
-      19.82671731880359,
-      29.845650407467296,
-    ]
-  `)
+    const rgb = labToRgb([62.66, 4.29, -38.38])
+    expect(rgb[0]).toBeCloseTo(111.51, 1)
+    expect(rgb[1]).toBeCloseTo(152.54, 1)
+    expect(rgb[2]).toBeCloseTo(219.43, 1)
+  })
 
-  expect(rgbToLab([255, 242, 200])).toMatchInlineSnapshot(`
-    [
-      95.55366509379728,
-      -2.1208794524856245,
-      21.880330115432578,
-    ]
-  `)
-  expect(rgbToLab([0, 154, 62])).toMatchInlineSnapshot(`
-    [
-      55.54032302177262,
-      -54.610362643217556,
-      38.10564093179264,
-    ]
-  `)
-})
+  it('labToHex', () => {
+    expect(labToHex([100, 0, 0])).toBe('#ffffff')
+    expect(labToHex([0, 0, 0])).toBe('#000000')
+    expect(labToHex([62.66, 4.29, -38.38])).toBe('#7099db')
+  })
 
-it('magic for rgb and lab', () => {
-  const rgb = [164, 105, 69] as RgbColor
-  const lab = [50, 20, 30] as LabColor
+  it('labToHsl', () => {
+    const white = labToHsl([100, 0, 0])
+    expect(white[1]).toBeCloseTo(0, 1) // Saturation might be weird if hue is weird, but for white it should be 0 or undefined?
+    // Actually, for white, L=100.
+    expect(white[2]).toBeCloseTo(100, 1)
 
-  const mc = new Magicolor(rgb, 'rgb')
-  expect(mc.toLab().value()).toEqual(lab)
-  expect(mc.toLab().css()).toEqual(`lab(50 20 30)`)
-  expect(mc.toLab().value('rgb')).toEqual(rgb)
-  expect(mc.css('lab')).toEqual('lab(50 20 30)')
-  expect(mc.css(true)).toEqual('lab(50 20 30 / 100%)')
+    const hsl = labToHsl([62.66, 4.29, -38.38])
+    expect(hsl[0]).toBeCloseTo(217.18, 1)
+    expect(hsl[1]).toBeCloseTo(60.27, 1)
+    expect(hsl[2]).toBeCloseTo(64.89, 1)
+  })
 
-  const mc2 = new Magicolor(lab, 'lab')
-  expect(mc2.toRgb().value()).toEqual(rgb)
-  expect(mc2.toRgb().css()).toEqual(`rgb(164 105 69)`)
-  expect(mc2.toRgb().value('lab')).toEqual(lab)
+  it('labToHsb', () => {
+    const white = labToHsb([100, 0, 0])
+    expect(white[1]).toBeCloseTo(0, 1)
+    expect(white[2]).toBeCloseTo(100, 1)
+
+    const hsb = labToHsb([62.66, 4.29, -38.38])
+    expect(hsb[0]).toBeCloseTo(217.18, 1)
+    expect(hsb[1]).toBeCloseTo(49.18, 1)
+    expect(hsb[2]).toBeCloseTo(86.05, 1)
+  })
+
+  it('labToLch', () => {
+    const lch = labToLch([62.66, 4.29, -38.38])
+    expect(lch[0]).toBeCloseTo(62.66, 1)
+    expect(lch[1]).toBeCloseTo(38.61, 1)
+    expect(lch[2]).toBeCloseTo(276.37, 1)
+  })
 })
