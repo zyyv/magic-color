@@ -60,6 +60,15 @@ Provide powerful for <a href="https://onu.zyob.top" target="_blank">Onu UI</a>.
 </li>
 </ul>
 
+## Packages
+
+- [magic-color](./packages/magic-color) - Magic color creator.
+- [@magic-color/core](./packages/core) - Magic color core library.
+- [@magic-color/theme](./packages/theme) - Magic color theme generator.
+- [@magic-color/transformer](./packages/transformer) - Magic color transform library.
+- [@magic-color/vue](./packages/vue) - Magic color vue component.
+- [@magic-color/shared](./packages/shared) - Magic color common utils library.
+
 ## Usage
 
 ```bash
@@ -86,7 +95,7 @@ const color = mc('#ffffff', 'hex', 1) // specify opacity
 
 `Magicolor` will automatically infer the input color type and the opacity.
 
-**Currently Magicolor supports the following types: `RGB`, `HEX`, `HSL`, `HSB`, `LAB`, `Keyword`.**
+**Currently Magicolor supports the following types: `RGB`, `HEX`, `HSL`, `HSB`, `LAB`, `LCH`, `OKLCH`, `OKLAB`.**
 
 You can convert between supported types.
 
@@ -197,6 +206,22 @@ mc.theme('#9955ff', {
 //   "--color-primary-900": "46 26 77",
 //   "--color-primary-950": "31 17 51",
 // }
+```
+
+## Development
+
+```bash
+# install dependencies
+pnpm install
+
+# build all packages
+pnpm build
+
+# dev
+pnpm dev
+
+# playground
+pnpm play
 ```
 
 ## Credits
