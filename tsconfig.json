@@ -1,16 +1,22 @@
 {
   "compilerOptions": {
-    "target": "es2018",
+    "target": "esnext",
     "lib": ["ESNext", "DOM"],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "paths": {
-      "magic-color": ["./packages/magic-color/src/indenx.ts"],
-      "@magic-color/core": ["./packages/core/src/indenx.ts"],
-      "@magic-color/shared": ["./packages/shared/src/indenx.ts"],
-      "@magic-color/theme": ["./packages/theme/src/indenx.ts"],
-      "@magic-color/transformer": ["./packages/transformer/src/indenx.ts"],
-      "@magic-color/vue": ["./packages/vue/src/indenx.ts"]
+      "magic-color": ["./packages/magic-color/src/"],
+      "magic-color/*": ["./packages/magic-color/src/*"],
+      "@magic-color/core": ["./packages/core/src/"],
+      "@magic-color/core/*": ["./packages/core/src/*"],
+      "@magic-color/shared": ["./packages/shared/src/"],
+      "@magic-color/shared/*": ["./packages/shared/src/*"],
+      "@magic-color/theme": ["./packages/theme/src/"],
+      "@magic-color/theme/*": ["./packages/theme/src/*"],
+      "@magic-color/transformer": ["./packages/transformer/src/"],
+      "@magic-color/transformer/*": ["./packages/transformer/src/*"],
+      "@magic-color/vue": ["./packages/vue/src/"],
+      "@magic-color/vue/*": ["./packages/vue/src/*"]
     },
     "resolveJsonModule": true,
     "types": [

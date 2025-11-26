@@ -7,6 +7,7 @@ export const alias = {
   '@magic-color/core': r('./packages/core/src/index.ts'),
   '@magic-color/shared': r('./packages/shared/src/index.ts'),
   '@magic-color/theme': r('./packages/theme/src/index.ts'),
+  '@magic-color/transformer/colors': r('./packages/transformer/src/colors/index.ts'),
   '@magic-color/transformer': r('./packages/transformer/src/index.ts'),
   '@magic-color/vue': r('./packages/vue/src/index.ts'),
 }

@@ -1,7 +1,7 @@
 {
   "name": "@magic-color/shared",
   "type": "module",
-  "version": "2.1.0",
+  "version": "2.2.1",
   "description": "Magic color common utils library",
   "author": "Chris <hizyyv@gmail.com>",
   "license": "MIT",
@@ -20,18 +20,18 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
     }
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/*",
-        "./dist/index.d.ts"
+        "./dist/*.d.mts",
+        "./*"
       ]
     }
   },
