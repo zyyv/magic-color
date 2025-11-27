@@ -1,19 +1,40 @@
 <script lang='ts' setup>
-import type { ThemeMetas } from 'magic-color'
+import type { ColorType, ThemeMetas } from 'magic-color'
 import Chart from 'chart.js/auto'
 import { Magicolor } from 'magic-color'
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const props = defineProps<{
   colors: ThemeMetas
+  type: ColorType
 }>()
 
 const chartRef = ref<HTMLCanvasElement | null>(null)
 
 let chart: Chart | null = null
 
-function getData(colors: ThemeMetas, type: 'h' | 's' | 'l') {
-  return Object.values(colors).map(c => new Magicolor(c).value('hsl')[type === 'h' ? 0 : type === 's' ? 1 : 2])
+const CHANNEL_MAP: Record<string, string[]> = {
+  rgb: ['Red', 'Green', 'Blue'],
+  hsl: ['Hue', 'Saturation', 'Lightness'],
+  hsb: ['Hue', 'Saturation', 'Brightness'],
+  lab: ['Lightness', 'A', 'B'],
+  lch: ['Lightness', 'Chroma', 'Hue'],
+  oklab: ['Lightness', 'A', 'B'],
+  oklch: ['Lightness', 'Chroma', 'Hue'],
+}
+
+function getLabels(type: ColorType) {
+  if (type === 'hex' || type === 'keyword')
+    return CHANNEL_MAP.rgb
+  return CHANNEL_MAP[type] || ['C1', 'C2', 'C3']
+}
+
+function getData(colors: ThemeMetas, type: ColorType, index: number) {
+  const targetType = (type === 'hex' || type === 'keyword') ? 'rgb' : type
+  return Object.values(colors).map((c) => {
+    const val = new Magicolor(c).value(targetType, false)
+    return Array.isArray(val) ? val[index] : 0
+  })
 }
 
 const defaultConfig = {
@@ -21,27 +42,37 @@ const defaultConfig = {
   pointBorderWidth: 2,
 }
 
-watch(() => props.colors, (newColors) => {
-  if (chart) {
-    chart.data.datasets.forEach((dataset, i) => {
-      dataset.data = getData(newColors, i === 0 ? 'h' : i === 1 ? 's' : 'l')
-      dataset.borderColor = newColors[i === 0 ? 300 : i === 1 ? 500 : 700]
-      dataset.backgroundColor = newColors[i === 0 ? 300 : i === 1 ? 500 : 700]
-    })
-    chart.update()
-  }
+function updateChart() {
+  if (!chart)
+    return
+
+  const labels = getLabels(props.type)
+
+  chart.data.datasets.forEach((dataset, i) => {
+    dataset.label = labels[i]
+    dataset.data = getData(props.colors, props.type, i)
+    dataset.borderColor = props.colors[i === 0 ? 300 : i === 1 ? 500 : 700]
+    dataset.backgroundColor = props.colors[i === 0 ? 300 : i === 1 ? 500 : 700]
+  })
+  chart.update()
+}
+
+watch(() => [props.colors, props.type], () => {
+  updateChart()
 }, { deep: true })
 
 onMounted(() => {
   if (chartRef.value) {
+    const labels = getLabels(props.type)
+
     chart = new Chart(chartRef.value, {
       type: 'line',
       data: {
         labels: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950],
         datasets: [
           {
-            label: 'Hue',
-            data: getData(props.colors, 'h'),
+            label: labels[0],
+            data: getData(props.colors, props.type, 0),
             fill: false,
             borderColor: props.colors[300],
             backgroundColor: props.colors[300],
@@ -50,8 +81,8 @@ onMounted(() => {
             pointBorderWidth: defaultConfig.pointBorderWidth,
           },
           {
-            label: 'Saturation',
-            data: getData(props.colors, 's'),
+            label: labels[1],
+            data: getData(props.colors, props.type, 1),
             fill: false,
             borderColor: props.colors[500],
             backgroundColor: props.colors[500],
@@ -59,8 +90,8 @@ onMounted(() => {
             tension: defaultConfig.tension,
           },
           {
-            label: 'Lightness',
-            data: getData(props.colors, 'l'),
+            label: labels[2],
+            data: getData(props.colors, props.type, 2),
             fill: false,
             borderColor: props.colors[700],
             backgroundColor: props.colors[700],

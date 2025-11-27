@@ -60,7 +60,8 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
         case 'oklch': {
           const v = values as number[]
           const format = (n: number) => round ? Math.round(n * 1000) / 1000 : n
-          const L = `${format(v[0])}%`
+          const isOk = type.startsWith('ok')
+          const L = isOk ? `${format(v[0])}%` : format(v[0])
           const A = format(v[1])
           const B = format(v[2])
           return `${type}(${L} ${A} ${B}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
@@ -216,7 +217,14 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 
   value<K extends ColorType = T>(type: K = this.type as unknown as K, round = true): Colors[K] {
     const mc = this.clone().to(type)
-    return (Array.isArray(mc.values) && round ? mc.values.map(Math.round) : mc.values) as Colors[K]
+    if (Array.isArray(mc.values)) {
+      return (round
+        ? mc.values.map(Math.round)
+        : mc.values.map(v => Math.round(v * 1000) / 1000)
+      ) as Colors[K]
+    }
+
+    return mc.values as Colors[K]
   }
 
   css(): string

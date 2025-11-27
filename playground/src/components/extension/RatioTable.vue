@@ -64,9 +64,7 @@ watch(type, () => ratio.value = options.value[0].value)
           <tr>
             <th>
               <div>
-                <!-- <span>text</span> -->
                 <div h-1px class="rotate-z-45deg w-60%" bg=" gray/80" />
-              <!-- <span>bg</span> -->
               </div>
             </th>
             <th>

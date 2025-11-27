@@ -1,6 +1,8 @@
+import { PrimeVueResolver } from '@primevue/auto-import-resolver'
 import vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 import { alias } from '../alias'
 
@@ -18,6 +20,11 @@ export default defineConfig({
   plugins: [
     vue(),
     UnoCSS(),
+    Components({
+      resolvers: [
+        PrimeVueResolver(),
+      ],
+    }),
     AutoImport({
       imports: [
         'vue',
