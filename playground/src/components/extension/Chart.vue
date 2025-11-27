@@ -32,7 +32,7 @@ function getLabels(type: ColorType) {
 function getData(colors: ThemeMetas, type: ColorType, index: number) {
   const targetType = (type === 'hex' || type === 'keyword') ? 'rgb' : type
   return Object.values(colors).map((c) => {
-    const val = new Magicolor(c).value(targetType)
+    const val = new Magicolor(c).value(targetType, false)
     return Array.isArray(val) ? val[index] : 0
   })
 }

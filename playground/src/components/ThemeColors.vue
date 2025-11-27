@@ -14,7 +14,6 @@ const {
   colors,
   name,
   getReadable,
-  formatColor,
   channelHeaders,
   tableData,
   copyColor,
@@ -94,7 +93,7 @@ const options = mc.supports.map(type => ({ label: type.toUpperCase(), value: typ
         <template #body="{ data }">
           <Button
             class="w-full h-10 rd fcc relative cursor-pointer group transition hover:scale-105"
-            :style="{ backgroundColor: formatColor(data.color), color: getReadable(data.color) }"
+            :style="{ backgroundColor: data.color, color: getReadable(data.color) }"
             unstyled
             @click="copyColor(data.color)"
           >
@@ -109,7 +108,7 @@ const options = mc.supports.map(type => ({ label: type.toUpperCase(), value: typ
       </Column>
       <Column header="Value" style="width: 20%">
         <template #body="{ data }">
-          <span text-sm font-mono op-80>{{ formatColor(data.color) }}</span>
+          <span text-sm font-mono op-80>{{ data.color }}</span>
         </template>
       </Column>
       <Column

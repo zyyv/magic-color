@@ -39,10 +39,6 @@ export function useTheme() {
     })
   }
 
-  function formatColor(v: string) {
-    return mc(v).to(exportType.value).css()
-  }
-
   const channelHeaders = computed(() => {
     const type = exportType.value
     if (type === 'hex' || type === 'keyword')
@@ -77,7 +73,7 @@ export function useTheme() {
   const copiedColor = ref<string | null>(null)
 
   function copyColor(v: string) {
-    copy(formatColor(v))
+    copy(v)
     copiedColor.value = v
   }
 
@@ -89,7 +85,6 @@ export function useTheme() {
     name,
     shades,
     getReadable,
-    formatColor,
     channelHeaders,
     tableData,
     copyColor,

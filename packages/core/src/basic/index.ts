@@ -60,7 +60,8 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
         case 'oklch': {
           const v = values as number[]
           const format = (n: number) => round ? Math.round(n * 1000) / 1000 : n
-          const L = `${format(v[0])}%`
+          const isOk = type.startsWith('ok')
+          const L = isOk ? `${format(v[0])}%` : format(v[0])
           const A = format(v[1])
           const B = format(v[2])
           return `${type}(${L} ${A} ${B}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
