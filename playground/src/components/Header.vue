@@ -2,7 +2,7 @@
   <header pt-2 fcc z-1>
     <hgroup w="75%" fcc py-6>
       <h1 text-4xl fw-600 text-transparent bg-clip-text bg-linear-to-r from-purple to-red fcc gap-2>
-        <img inline-block w-10 src="/logo.svg" alt="logo">
+        <img inline-block w-10 width="40" height="40" src="/logo.svg" alt="logo">
         <span>
           Magicolor
         </span>

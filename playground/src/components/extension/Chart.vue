@@ -1,6 +1,16 @@
 <script lang='ts' setup>
 import type { ColorType, ThemeMetas } from 'magic-color'
-import Chart from 'chart.js/auto'
+import {
+  CategoryScale,
+  Chart,
+  Legend,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from 'chart.js'
 import { Magicolor } from 'magic-color'
 import { onMounted, ref, watch } from 'vue'
 
@@ -8,6 +18,17 @@ const props = defineProps<{
   colors: ThemeMetas
   type: ColorType
 }>()
+
+Chart.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  LineController,
+)
 
 const chartRef = ref<HTMLCanvasElement | null>(null)
 
