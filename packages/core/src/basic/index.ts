@@ -216,7 +216,14 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 
   value<K extends ColorType = T>(type: K = this.type as unknown as K, round = true): Colors[K] {
     const mc = this.clone().to(type)
-    return (Array.isArray(mc.values) && round ? mc.values.map(Math.round) : mc.values) as Colors[K]
+    if (Array.isArray(mc.values)) {
+      return (round
+        ? mc.values.map(Math.round)
+        : mc.values.map(v => Math.round(v * 1000) / 1000)
+      ) as Colors[K]
+    }
+
+    return mc.values as Colors[K]
   }
 
   css(): string
