@@ -9,8 +9,7 @@ export default defineConfig({
   },
   shortcuts: [
     {
-      'icon-btn': 'inline-block text-1.2em',
-      'nav-bg': 'backdrop-blur-12 rd-4 shadow-xl',
+      'icon-btn': 'inline-block text-1.2em cursor-pointer',
       // components
       'btn': 'inline-flex items-center justify-center w-full h-12 rd-md',
       'btn-outline': 'btn b bg-transparent',

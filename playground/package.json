@@ -13,7 +13,7 @@
     "@magic-color/core": "workspace:*",
     "@magic-color/transformer": "workspace:*",
     "@magic-color/vue": "workspace:*",
-    "@primeuix/themes": "^1.2.5",
+    "@primeuix/themes": "^2.0.0",
     "@vueuse/core": "catalog:playground",
     "chart.js": "catalog:playground",
     "gsap": "^3.13.0",

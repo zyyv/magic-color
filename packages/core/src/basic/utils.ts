@@ -1,7 +1,7 @@
 import type { Colors, ColorType, Opacity } from '@magic-color/transformer'
 import type { ColorObject } from '../types'
 import { isArray, isNumber, isObject, isString } from '@magic-color/shared'
-import { isHex, isHsb, isHsl, isKeyword, isLab, isLch, isRgb, parseHex, parseHsb, parseHsl, parseKeyword, parseLab, parseLch, parseOklab, parseOklch, parseRgb, SupportTypes } from '@magic-color/transformer'
+import { isHex, isHsb, isHsl, isKeyword, isLab, isLch, isOklab, isOklch, isRgb, parseHex, parseHsb, parseHsl, parseKeyword, parseLab, parseLch, parseOklab, parseOklch, parseRgb, SupportTypes } from '@magic-color/transformer'
 
 export function alphaToString(alpha: Opacity, toHex = false): string {
   return toHex
@@ -44,6 +44,8 @@ export function guessType(color: string): ColorType | undefined {
     keyword: isKeyword,
     lab: isLab,
     lch: isLch,
+    oklab: isOklab,
+    oklch: isOklch,
   }
 
   for (const [type, test] of Object.entries(map)) {
