@@ -1,3 +1,11 @@
+<script setup lang="ts">
+const { copied, copy } = useClipboard()
+
+function handleShare() {
+  copy(location.href)
+}
+</script>
+
 <template>
   <header pt-2 fcc z-1>
     <hgroup w="75%" fcc py-6>
@@ -10,14 +18,21 @@
 
       <div pa right-10 fcc gap-6>
         <button
-          i-carbon-light
+          hover:text-teal
+          :class="copied ? 'i-carbon:checkmark' : 'i-carbon:share'"
+          icon-btn
+          title="Share Color"
+          @click="handleShare"
+        />
+        <button
+          i-carbon:light
           dark:i-carbon-moon
           icon-btn
           title="Toggle Color Mode"
           @click="toggleDark"
         />
         <a
-          i-carbon-logo-github icon-btn
+          i-carbon:logo-github icon-btn
           href="https://github.com/zyyv/magic-color"
           target="_blank"
           title="GitHub"

@@ -1,5 +1,5 @@
 import type { ColorType, ThemeMetas } from 'magic-color'
-import { mc } from 'magic-color'
+import { guessType, mc } from 'magic-color'
 
 const CHANNEL_MAP: Record<string, string[]> = {
   rgb: ['R', 'G', 'B'],
@@ -12,9 +12,20 @@ const CHANNEL_MAP: Record<string, string[]> = {
 }
 
 export function useTheme() {
-  const color = ref(import.meta.env.DEV ? '#529e82' : mc.random())
+  const params = useUrlSearchParams('history')
+  const color = ref((params.color as string) || (import.meta.env.DEV ? '#529e82' : mc.random()))
+
+  watch(color, (v) => {
+    params.color = v
+  })
+
+  watch(() => params.color, (v) => {
+    if (v && v !== color.value)
+      color.value = v as string
+  })
+
   const alpha = ref(1)
-  const exportType = ref<ColorType>('hex')
+  const exportType = ref<ColorType>(guessType(color.value!) || 'hex')
 
   const colors = computed<ThemeMetas>(() => {
     try {
