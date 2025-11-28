@@ -5,13 +5,15 @@ const props = defineProps<{
   colors: ThemeMetas
 }>()
 
+const isDark = ref(false)
+
 const inlineStyle = computed(() => {
   return Object.fromEntries(Object.entries(props.colors).map(([key, value]) => [`--color-${key}`, value]))
 })
 </script>
 
 <template>
-  <div class="demo-container" :style="inlineStyle">
+  <div class="demo-container" :class="{ dark: isDark }" :style="inlineStyle">
     <header class="demo-header">
       <div class="demo-logo">
         Portal
@@ -22,6 +24,9 @@ const inlineStyle = computed(() => {
         <a href="#">About</a>
       </nav>
       <div class="demo-actions">
+        <button class="demo-btn-icon" title="Toggle Dark Mode" @click="isDark = !isDark">
+          <div :class="isDark ? 'i-carbon-moon' : 'i-carbon-sun'" />
+        </button>
         <button class="demo-btn-outline">
           Login
         </button>
@@ -311,5 +316,133 @@ const inlineStyle = computed(() => {
   font-size: 0.875rem;
   padding-top: 2rem;
   border-top: 1px solid var(--color-200);
+}
+
+.demo-btn-icon {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-600);
+  padding: 0.5rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.demo-btn-icon:hover {
+  background-color: var(--color-50);
+}
+
+/* Dark Mode Styles */
+.demo-container.dark {
+  background-color: #1a1a1a;
+  color: var(--color-100);
+  border-color: var(--color-800);
+}
+
+.demo-container.dark .demo-header {
+  background-color: #1a1a1a;
+  border-bottom-color: var(--color-800);
+}
+
+.demo-container.dark .demo-logo {
+  color: var(--color-200);
+}
+
+.demo-container.dark .demo-nav a {
+  color: var(--color-400);
+}
+
+.demo-container.dark .demo-nav a.active {
+  color: var(--color-200);
+}
+
+.demo-container.dark .demo-nav a:hover {
+  color: var(--color-100);
+}
+
+.demo-container.dark .demo-btn-outline {
+  color: var(--color-300);
+  border-color: var(--color-700);
+}
+
+.demo-container.dark .demo-btn-outline:hover {
+  background-color: var(--color-900);
+  border-color: var(--color-600);
+}
+
+.demo-container.dark .demo-hero {
+  background: linear-gradient(to bottom, var(--color-950), #1a1a1a);
+}
+
+.demo-container.dark .demo-hero h1 {
+  color: var(--color-50);
+}
+
+.demo-container.dark .demo-hero p {
+  color: var(--color-300);
+}
+
+.demo-container.dark .demo-card {
+  background-color: #222;
+  border-color: var(--color-800);
+}
+
+.demo-container.dark .demo-card:hover {
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+  border-color: var(--color-700);
+}
+
+.demo-container.dark .demo-card-icon {
+  background-color: var(--color-900);
+  color: var(--color-300);
+}
+
+.demo-container.dark .demo-card h3 {
+  color: var(--color-100);
+}
+
+.demo-container.dark .demo-card p {
+  color: var(--color-400);
+}
+
+.demo-container.dark .demo-link {
+  color: var(--color-300);
+}
+
+.demo-container.dark .demo-link:hover {
+  color: var(--color-100);
+}
+
+.demo-container.dark .demo-footer {
+  background-color: var(--color-950);
+  border-top-color: var(--color-800);
+}
+
+.demo-container.dark .demo-footer-col h4 {
+  color: var(--color-100);
+}
+
+.demo-container.dark .demo-footer-col a {
+  color: var(--color-400);
+}
+
+.demo-container.dark .demo-footer-col a:hover {
+  color: var(--color-200);
+}
+
+.demo-container.dark .demo-copyright {
+  color: var(--color-500);
+  border-top-color: var(--color-800);
+}
+
+.demo-container.dark .demo-btn-icon {
+  color: var(--color-300);
+}
+
+.demo-container.dark .demo-btn-icon:hover {
+  background-color: var(--color-900);
 }
 </style>
