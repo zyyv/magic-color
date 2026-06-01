@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/zyyv/magic-color/main/public/logo.svg" style="width:100px;" />
+<img src="https://raw.githubusercontent.com/zyyv/magic-color/main/public/logo.svg" style="width:100px;" alt="logo" />
 </p>
 
 <h1 align="center">magic-color</h1>
@@ -52,7 +52,7 @@ Theme color generator and fully customizable.
 </li>
 <li>
 <span>
-<img src='https://onu.zyob.top/logo.svg' width='18' />
+<img src='https://onu.zyob.top/logo.svg' width='18' alt="Onu UI logo" />
 </span>
 <span>
 Provide powerful for <a href="https://onu.zyob.top" target="_blank">Onu UI</a>.

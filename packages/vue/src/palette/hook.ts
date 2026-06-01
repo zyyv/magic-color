@@ -4,7 +4,9 @@ interface useControlBlockOptions {
   /**
    * When the value of the control block changes, this function will be called.
    *
-   * @param value { x: number, y: number } - The new value of the control block.
+   * @param value - The new value of the control block.
+   * @param value.x - The x value.
+   * @param value.y - The y value.
    * @example value = { x: 0.5, y: 0.5 }
    */
   onChange?: (value: { x: number, y: number }) => void

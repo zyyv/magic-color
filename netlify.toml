@@ -4,7 +4,7 @@ command = "pnpm run deploy"
 
 [build.environment]
 NPM_FLAGS = "--version"
-NODE_VERSION = "20"
+NODE_VERSION = "24"
 
 [[redirects]]
 from = "/*"
