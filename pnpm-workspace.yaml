@@ -1,59 +1,81 @@
+autoInstallPeers: true
+ignoreWorkspaceRootCheck: true
+strictPeerDependencies: false
+minimumReleaseAgeExclude:
+  - '@vitest/expect@4.1.8'
+  - '@vitest/mocker@4.1.8'
+  - '@vitest/pretty-format@4.1.8'
+  - '@vitest/runner@4.1.8'
+  - '@vitest/snapshot@4.1.8'
+  - '@vitest/spy@4.1.8'
+  - '@vitest/utils@4.1.8'
+  - lint-staged@17.0.7
+  - vite@8.0.15
+  - vitest@4.1.8
+shamefullyHoist: true
+shellEmulator: true
+
+trustPolicy: no-downgrade
+
 packages:
   - playground
   - packages/*
 
+patchedDependencies:
+  '@arethetypeswrong/cli': patches/@arethetypeswrong__cli.patch
+
+allowBuilds:
+  esbuild: true
+  simple-git-hooks: true
+catalog:
+  '@primeuix/themes': ^2.0.3
+  '@primevue/auto-import-resolver': ^4.5.5
+  primevue: ^4.5.5
 catalogs:
   cli:
-    '@antfu/eslint-config': ^6.2.0
-    '@antfu/ni': ^27.0.1
+    '@antfu/eslint-config': ^9.0.0
+    '@antfu/ni': ^30.1.0
     '@arethetypeswrong/cli': 0.17.1
-    bumpp: ^10.3.1
-    eslint: ^9.39.1
+    bumpp: ^11.1.0
+    eslint: ^10.4.1
     esno: ^4.8.0
-    lint-staged: ^16.2.7
-    pnpm: ^10.23.0
+    lint-staged: ^17.0.7
+    pnpm: ^11.5.0
     premove: ^4.0.0
     simple-git-hooks: ^2.13.1
-    taze: ^19.9.0
-    tsdown: ^0.16.7
-    vite: ^7.2.4
-    vitest: ^4.0.14
-    vue-tsc: ^3.1.5
+    taze: ^19.14.1
+    tsdown: ^0.22.1
+    vite: ^8.0.15
+    vitest: ^4.1.8
+    vue-tsc: ^3.3.3
 
   icons:
     '@iconify-json/akar-icons': ^1.2.7
-    '@iconify-json/carbon': ^1.2.14
+    '@iconify-json/carbon': ^1.2.22
     '@iconify-json/fluent-emoji': ^1.2.7
-    '@iconify-json/logos': ^1.2.10
-    '@iconify/utils': ^3.0.2
+    '@iconify-json/logos': ^1.2.11
+    '@iconify/utils': ^3.1.3
 
   playground:
-    '@vitejs/plugin-vue': ^6.0.2
-    '@vueuse/core': ^14.0.0
+    '@vitejs/plugin-vue': ^6.0.7
+    '@vueuse/core': ^14.3.0
     chart.js: ^4.5.1
-    gsap: ^3.13.0
-    prettier: ^3.6.2
-    shiki: ^3.15.0
-    unplugin-auto-import: ^20.2.0
-    unplugin-vue: ^7.0.8
-    unplugin-vue-components: ^30.0.0
-    vue: ^3.5.25
-    vue-tsc: ^3.1.5
+    gsap: ^3.15.0
+    prettier: ^3.8.3
+    shiki: ^4.1.0
+    unplugin-auto-import: ^21.0.0
+    unplugin-vue: ^7.2.0
+    unplugin-vue-components: ^32.1.0
+    vue: ^3.5.35
 
   types:
-    '@types/node': ^24.10.1
+    '@types/node': ^25.9.1
     '@types/prettier': ^3.0.0
-    typescript: ^5.9.3
+    typescript: ^6.0.3
 
   uno:
-    unocss: ^66.5.9
+    unocss: ^66.7.0
     unocss-preset-useful: ^1.0.1
-
 onlyBuiltDependencies:
   - esbuild
   - simple-git-hooks
-
-autoInstallPeers: true
-ignoreWorkspaceRootCheck: true
-shamefullyHoist: true
-strictPeerDependencies: false
