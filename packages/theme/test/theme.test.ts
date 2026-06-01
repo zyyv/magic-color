@@ -66,4 +66,24 @@ describe('theme colors', () => {
       }
     `)
   })
+
+  it('closestShade color', () => {
+    const input = '#8B5CF6'
+    const themeColors = theme(input)
+    expect(themeColors).toMatchInlineSnapshot(`
+      {
+        "100": "#efe9fe",
+        "200": "#e2d6fe",
+        "300": "#cbb5fd",
+        "400": "#ad8bfa",
+        "50": "#f7f3ff",
+        "500": "#8B5CF6",
+        "600": "#713aed",
+        "700": "#5e28d9",
+        "800": "#4e21b6",
+        "900": "#421d95",
+        "950": "#2a1065",
+      }
+    `)
+  })
 })

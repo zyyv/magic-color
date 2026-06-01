@@ -294,7 +294,12 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
     return mc
   }
 
-  set(operate: string, value: unknown) {
+  /**
+   * 解析 `type.channel` 操作字符串，定位到对应的通道
+   * @param operate 形如 `rgb.r`、`hsl.h` 的操作字符串
+   * @param action  当前操作（用于在非数组类型上抛出更友好的错误信息）
+   */
+  private resolveChannel(operate: string, action: 'get' | 'set') {
     const [type, channel] = operate.split('.') as [ColorType?, string?]
     if (!type || !SupportTypes.includes(type as any)) {
       throw new Error(`Invalid operate type: ${type}`)
@@ -303,10 +308,9 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
       throw new Error('Invalid channel.')
     }
 
-    const typeValue = this.value(type, false)
-
-    if (!Array.isArray(typeValue)) {
-      throw new TypeError(`Cannot set value on non-array type: ${type}`)
+    const values = this.value(type, false)
+    if (!Array.isArray(values)) {
+      throw new TypeError(`Cannot ${action} value ${action === 'get' ? 'from' : 'on'} non-array type: ${type}`)
     }
 
     const channels = CHANNEL_MAP[type]
@@ -319,73 +323,61 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
       throw new Error(`Invalid channel: ${channel} for type ${type}. Valid channels: ${channels.join(', ')}`)
     }
 
-    // 处理操作符
-    if (typeof value === 'string' && /^[+\-*/]/.test(value)) {
-      const operator = value[0]
-      const operand = Number.parseFloat(value.slice(1))
+    return { type, values, index }
+  }
 
-      if (Number.isNaN(operand)) {
-        throw new TypeError(`Invalid operand value: ${value.slice(1)}`)
+  /**
+   * 计算通道的新值：支持直接赋值（number）与操作符表达式（如 `+50`、`/2`）
+   */
+  private resolveValue(current: number, value: unknown): number {
+    if (typeof value === 'number') {
+      return value
+    }
+
+    if (typeof value === 'string') {
+      // 操作符表达式，如 `+50`、`-20`、`*2`、`/2`
+      if (/^[+\-*/]/.test(value)) {
+        const operator = value[0]
+        const operand = Number.parseFloat(value.slice(1))
+        if (Number.isNaN(operand)) {
+          throw new TypeError(`Invalid operand value: ${value.slice(1)}`)
+        }
+
+        switch (operator) {
+          case '+': return current + operand
+          case '-': return current - operand
+          case '*': return current * operand
+          case '/':
+            if (operand === 0) {
+              throw new Error('Division by zero.')
+            }
+            return current / operand
+        }
       }
 
-      switch (operator) {
-        case '+':
-          typeValue[index] += operand
-          break
-        case '-':
-          typeValue[index] -= operand
-          break
-        case '*':
-          typeValue[index] *= operand
-          break
-        case '/':
-          if (operand === 0) {
-            throw new Error('Division by zero.')
-          }
-          typeValue[index] /= operand
-          break
-        default:
-          throw new Error(`Invalid operator: ${operator}`)
+      // 纯数字字符串，直接作为绝对值
+      const parsed = Number.parseFloat(value)
+      if (!Number.isNaN(parsed)) {
+        return parsed
       }
     }
-    else if (typeof value === 'number') {
-      typeValue[index] = value
-    }
-    else {
-      throw new TypeError(`Invalid value type: expected number or operator string, got ${typeof value}`)
-    }
+
+    throw new TypeError(`Invalid value type: expected number or operator string, got ${typeof value}`)
+  }
+
+  set(operate: string, value: unknown) {
+    const { type, values, index } = this.resolveChannel(operate, 'set')
+
+    values[index] = this.resolveValue(values[index], value)
 
     this.type = type as any
-    this.values = typeValue as any
+    this.values = values as any
 
     return this
   }
 
   get(operate: string): number {
-    const [type, channel] = operate.split('.') as [ColorType?, string?]
-    if (!type || !SupportTypes.includes(type as any)) {
-      throw new Error(`Invalid operate type: ${type}`)
-    }
-    if (!channel) {
-      throw new Error('Invalid channel.')
-    }
-
-    const typeValue = this.value(type, false)
-
-    if (!Array.isArray(typeValue)) {
-      throw new TypeError(`Cannot get value from non-array type: ${type}`)
-    }
-
-    const channels = CHANNEL_MAP[type]
-    if (!channels) {
-      throw new Error(`Unknown color type: ${type}`)
-    }
-
-    const index = channels.indexOf(channel)
-    if (index === -1) {
-      throw new Error(`Invalid channel: ${channel} for type ${type}. Valid channels: ${channels.join(', ')}`)
-    }
-
-    return typeValue[index]
+    const { values, index } = this.resolveChannel(operate, 'get')
+    return values[index]
   }
 }
