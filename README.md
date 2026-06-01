@@ -52,10 +52,10 @@ Theme color generator and fully customizable.
 </li>
 <li>
 <span>
-<img src='https://onu.zyob.top/logo.svg' width='18' alt="Onu UI logo" />
+<img src='https://onu.zyyv.dev/logo.svg' width='18' alt="Onu UI logo" />
 </span>
 <span>
-Provide powerful for <a href="https://onu.zyob.top" target="_blank">Onu UI</a>.
+Provide powerful for <a href="https://onu.zyyv.dev" target="_blank">Onu UI</a>.
 </span>
 </li>
 </ul>
