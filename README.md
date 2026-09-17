@@ -224,6 +224,16 @@ pnpm dev
 pnpm play
 ```
 
+### Deploy playground to Cloudflare Pages
+
+```bash
+# build a standalone Pages artifact
+pnpm --filter playground run build:pages
+
+# deploy to the existing magic-color-playground project
+pnpm exec wrangler pages deploy dist-playground --project-name=magic-color-playground --branch=main
+```
+
 ## Credits
 
 - [apca-w3](https://github.com/Myndex/apca-w3)

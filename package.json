@@ -52,7 +52,8 @@
     "unocss-preset-useful": "catalog:uno",
     "vite": "catalog:cli",
     "vitest": "catalog:cli",
-    "vue": "catalog:playground"
+    "vue": "catalog:playground",
+    "wrangler": "catalog:cli"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"

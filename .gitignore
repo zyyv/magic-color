@@ -5,6 +5,7 @@
 *.tgz
 coverage
 dist
+dist-playground
 lib-cov
 logs
 node_modules

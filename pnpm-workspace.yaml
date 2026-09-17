@@ -49,6 +49,7 @@ allowBuilds:
   esbuild: true
   pnpm: true
   simple-git-hooks: true
+  workerd: true
 
 catalog:
   '@primeuix/themes': ^3.0.0
@@ -72,6 +73,7 @@ catalogs:
     vite: ^8.3.0
     vitest: ^5.0.1
     vue-tsc: ^3.3.11
+    wrangler: ^4.132.0
 
   icons:
     '@iconify-json/akar-icons': ^1.2.7
