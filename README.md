@@ -234,6 +234,8 @@ pnpm --filter playground run build:pages
 pnpm exec wrangler pages deploy dist-playground --project-name=magic-color-playground --branch=main
 ```
 
+If the repository is connected through Cloudflare Workers Builds, keep the default deploy command `npx wrangler deploy`. The root `wrangler.jsonc` points that command at `dist-playground`.
+
 ## Credits
 
 - [apca-w3](https://github.com/Myndex/apca-w3)

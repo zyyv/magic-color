@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "magic-color-playground",
+  "compatibility_date": "2026-09-17",
+  "assets": {
+    "directory": "./dist-playground",
+    "not_found_handling": "single-page-application"
+  }
+}
