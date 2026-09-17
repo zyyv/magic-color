@@ -9,7 +9,9 @@ export default defineConfig({
   plugins: [Vue({ isProduction: true })],
   dts: { vue: true },
   clean: true,
-  external: [
-    'vue',
-  ],
+  deps: {
+    neverBundle: [
+      'vue',
+    ],
+  },
 })
