@@ -1,10 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-
-const targetPath = path.resolve(__dirname, '../dist/play')
+const targetPath = path.resolve(import.meta.dirname, '../dist/play')
 
 async function moveBuildFiles(dirPath: string, depth = 0) {
   let files = await fs.readdir(dirPath)
@@ -40,7 +37,7 @@ async function ensureTargetDirExists(p: string) {
 
 async function main() {
   await ensureTargetDirExists(targetPath)
-  await moveBuildFiles(path.resolve(__dirname, '../dist'))
+  await moveBuildFiles(path.resolve(import.meta.dirname, '../dist'))
 }
 
 main()
