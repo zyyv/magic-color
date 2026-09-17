@@ -236,6 +236,13 @@ pnpm exec wrangler pages deploy dist-playground --project-name=magic-color-playg
 
 If the repository is connected through Cloudflare Workers Builds, keep the default deploy command `npx wrangler deploy`. The root `wrangler.jsonc` points that command at `dist-playground`.
 
+Set the Workers Builds commands to:
+
+```text
+Build command: pnpm run build:cloudflare
+Deploy command: npx wrangler deploy
+```
+
 ## Credits
 
 - [apca-w3](https://github.com/Myndex/apca-w3)

@@ -18,6 +18,7 @@
     "prepare": "simple-git-hooks",
     "play": "pnpm -C playground dev",
     "play:build": "pnpm -C playground build && esno scripts/move-build-files.ts",
+    "build:cloudflare": "pnpm --filter playground run build:pages",
     "deploy": "premove dist && nr build && nr play:build",
     "sync-docs": "esno scripts/sync-docs.ts",
     "taze": "taze major -wIr && pnpm -r --parallel run update-post"
