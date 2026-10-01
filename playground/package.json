@@ -14,17 +14,14 @@
     "@magic-color/core": "workspace:*",
     "@magic-color/transformer": "workspace:*",
     "@magic-color/vue": "workspace:*",
-    "@primeuix/themes": "catalog:",
     "@vueuse/core": "catalog:playground",
     "chart.js": "catalog:playground",
     "gsap": "catalog:playground",
     "magic-color": "workspace:*",
-    "primevue": "catalog:",
     "vue": "catalog:playground"
   },
   "devDependencies": {
     "@iconify-json/carbon": "catalog:icons",
-    "@primevue/auto-import-resolver": "catalog:",
     "@types/prettier": "catalog:types",
     "@vitejs/plugin-vue": "catalog:playground",
     "prettier": "catalog:playground",
