@@ -12,7 +12,7 @@ export function alphaToString(alpha: Opacity, toHex = false): string {
 function resolveColorString(color: string) {
   const type = guessType(color)
   if (!type)
-    throw new Error(`Invalid color: ${color}.`)
+    throw new TypeError(`Invalid color: ${color}.`)
 
   const parseMap = {
     rgb: parseRgb,
@@ -102,7 +102,7 @@ export function resolveArgs<T extends ColorType = 'rgb'>(...args: any[]): [Color
     else if (isString(anyValue)) {
       const { values, type: _type, alpha } = resolveColorString(anyValue)
       if (type !== _type) {
-        throw new Error(`Invalid color type: ${type}.`)
+        throw new TypeError(`Invalid color type: ${type}. Detected ${_type}.`)
       }
       return [values as Colors[T], type, alpha]
     }
@@ -123,7 +123,7 @@ export function resolveArgs<T extends ColorType = 'rgb'>(...args: any[]): [Color
       return [
         args.slice(0, 3) as Colors[T],
         'rgb' as T,
-        args[4] ?? 1,
+        args[3] ?? 1,
       ]
     }
 
@@ -147,7 +147,9 @@ export function resolveArgs<T extends ColorType = 'rgb'>(...args: any[]): [Color
       _values = anyValue
     }
     else if (isString(anyValue)) {
-      const { values } = resolveColorString(anyValue)
+      const { values, type: detectedType } = resolveColorString(anyValue)
+      if (_type !== detectedType && !(_type === 'keyword' && detectedType === 'hex'))
+        throw new TypeError(`Invalid color type: ${_type}. Detected ${detectedType}.`)
       return [values as Colors[T], _type as T, _alpha]
     }
     else if (isNumber(anyValue)) {

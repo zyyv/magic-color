@@ -89,6 +89,7 @@ describe('utils scoped', () => {
 it('resolveArgs', () => {
   const testCases = [
     { args: [255, 0, 0, 1], expected: [[255, 0, 0], 'rgb', 1] },
+    { args: [255, 0, 0, 0.5], expected: [[255, 0, 0], 'rgb', 0.5] },
     { args: [255, 0, 0, 'rgb'], expected: [[255, 0, 0], 'rgb', 1] },
     { args: [[255, 0, 0], 'rgb', 0.5], expected: [[255, 0, 0], 'rgb', 0.5] },
     { args: [{ r: 255, g: 0, b: 0 }, 'rgb', 1], expected: [[255, 0, 0], 'rgb', 1] },

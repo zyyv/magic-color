@@ -244,6 +244,16 @@ describe('utils scoped', () => {
 
     // Test get on hex type (non-array)
     expect(() => color.get('hex.r')).toThrow('Cannot get value from non-array type')
+
+    for (const invalid of [Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY]) {
+      expect(() => color.set('rgb.r', invalid)).toThrow('Value must be a finite number')
+    }
+    for (const invalid of ['12abc', '+12abc', '+1e309', '']) {
+      expect(() => color.set('rgb.r', invalid)).toThrow()
+    }
+    expect(color.hex()).toBe('#ff6600')
+    expect(color.set('rgb.r', '1e2').get('rgb.r')).toBe(100)
+    expect(() => color.set('rgb.r', '*1e308')).toThrow('Result must be a finite number')
   })
 
   it('revert error handling', () => {
@@ -259,5 +269,29 @@ describe('utils scoped', () => {
 
     // Test valid revert returns this
     expect(color.revert(1)).toBe(color)
+    expect(() => color.revert(0.5)).toThrow('Deep must be at least 1 and an integer')
+    expect(color.revert(1).hex()).toBe('#ff6600')
+    expect(color.history).toEqual([])
+
+    const oneStep = new Magicolor('#123456')
+    oneStep.toRgb()
+    expect(oneStep.clone().revert().hex()).toBe('#123456')
+    expect(oneStep.revert().hex()).toBe('#123456')
+
+    oneStep.toRgb()
+    oneStep.clear()
+    oneStep.toHsl()
+    expect(oneStep.revert().type).toBe('rgb')
+  })
+
+  it('rejects non-finite color channels and alpha at construction', () => {
+    expect(new Magicolor(255, 0, 0, 0.5).alpha).toBe(0.5)
+    expect(() => new Magicolor('#ff0000' as any, 'rgb', 0.5)).toThrow('Invalid color type: rgb. Detected hex')
+    expect(() => new Magicolor([255, 0, 0] as any, 'hex')).toThrow('Invalid value for color type: hex')
+    expect(() => new Magicolor([255, 0, 0], 'unknown' as any)).toThrow('Invalid color type: unknown')
+    expect(() => new Magicolor([Number.NaN, 0, 0])).toThrow('Color channels must be three finite numbers')
+    expect(() => new Magicolor([0, 0, Number.POSITIVE_INFINITY])).toThrow('Color channels must be three finite numbers')
+    expect(() => new Magicolor([0, 0, 0], 'rgb', Number.NaN)).toThrow('Alpha must be a finite number')
+    expect(() => new Magicolor([0, 0, 0], 'rgb', 2)).toThrow('Alpha must be a finite number')
   })
 })

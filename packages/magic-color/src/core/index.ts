@@ -6,7 +6,7 @@ import { hash } from './hash'
 
 export interface MagicolorInstance {
   <T extends ColorType>(value: Colors[T] | Record<string, number>, type?: T, alpha?: Opacity): Magicolor<T>
-  <T extends ColorType = 'rgb'>(v1: number, v2: number, v3: number, type?: T, alpha?: Opacity): Magicolor<T>
+  <T extends ColorType = 'rgb'>(v1: number, v2: number, v3: number, typeOrAlpha?: T | Opacity, alpha?: Opacity): Magicolor<T>
   valid: typeof guessType
   random: typeof random
   hash: typeof hash

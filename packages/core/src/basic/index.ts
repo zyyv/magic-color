@@ -6,6 +6,8 @@ import { alphaToString, resolveArgs } from './utils'
 
 export { guessType } from './utils'
 
+const DECIMAL_RE = /^(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i
+
 export class Magicolor<T extends ColorType> implements ColorObject<T> {
   type: T
   values: Colors[T]
@@ -14,19 +16,32 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
   cloned = false
 
   private _stack: Magicolor<any>[] = []
+  private _origin?: Magicolor<any>
 
   constructor(value: Colors[T] | Record<string, number>, type?: T, alpha?: Opacity)
-  constructor(v1: number, v2: number, v3: number, type?: T, alpha?: Opacity)
+  constructor(v1: number, v2: number, v3: number, typeOrAlpha?: T | Opacity, alpha?: Opacity)
   constructor(...args: any[]) {
     const result = resolveArgs<T>(...args)
     if (result) {
       const [values, type, alpha] = result
+      if (type !== 'keyword' && !SupportTypes.includes(type as any)) {
+        throw new TypeError(`Invalid color type: ${type}.`)
+      }
+      if (Array.isArray(values) && (values.length !== 3 || !values.every(Number.isFinite))) {
+        throw new TypeError('Color channels must be three finite numbers.')
+      }
+      if ((type === 'hex' || type === 'keyword') !== (typeof values === 'string')) {
+        throw new TypeError(`Invalid value for color type: ${type}.`)
+      }
+      if (!Number.isFinite(alpha) || alpha < 0 || alpha > 1) {
+        throw new RangeError('Alpha must be a finite number between 0 and 1.')
+      }
       this.values = values
       this.type = type
       this.alpha = alpha
     }
     else {
-      throw new Error('Invalid color type.')
+      throw new TypeError('Invalid color type.')
     }
   }
 
@@ -183,7 +198,7 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
       case 'oklch':
         return this.toOklch()
       default:
-        throw new Error('Invalid color type.')
+        throw new TypeError(`Invalid target color type: ${type}.`)
     }
   }
 
@@ -250,6 +265,8 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
   }
 
   private _push<K extends ColorType>(type: K, value: Colors[K], alpha: Opacity) {
+    if (this._stack.length === 0)
+      this._origin = new Magicolor(this.values, this.type, this.alpha)
     this._stack.push(new Magicolor(value, type, alpha))
     this.values = value as any
     this.type = type as any
@@ -268,24 +285,27 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
   }
 
   revert(deep = 1) {
-    if (deep < 1) {
-      throw new Error('Deep must be at least 1.')
+    if (!Number.isInteger(deep) || deep < 1) {
+      throw new RangeError('Deep must be at least 1 and an integer.')
     }
     if (deep > this._stack.length) {
-      throw new Error(`Cannot revert ${deep} steps. Only ${this._stack.length} steps in history.`)
+      throw new RangeError(`Cannot revert ${deep} steps. Only ${this._stack.length} steps in history.`)
     }
 
-    const mc = this._stack[this._stack.length - deep - 1]
+    const mc = deep === this._stack.length ? this._origin! : this._stack[this._stack.length - deep - 1]
     this.type = mc.type
     this.values = mc.values
     this.alpha = mc.alpha
     this._stack = this._stack.slice(0, this._stack.length - deep)
+    if (this._stack.length === 0)
+      this._origin = undefined
 
     return this
   }
 
   clear() {
     this._stack = []
+    this._origin = undefined
   }
 
   clone(): Magicolor<T> {
@@ -293,6 +313,7 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
     // 只在需要时复制历史记录，避免不必要的性能开销
     if (this._stack.length > 0) {
       mc._stack = this._stack.slice()
+      mc._origin = this._origin
     }
     mc.cloned = true
     return mc
@@ -306,10 +327,10 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
   private resolveChannel(operate: string, action: 'get' | 'set') {
     const [type, channel] = operate.split('.') as [ColorType?, string?]
     if (!type || !SupportTypes.includes(type as any)) {
-      throw new Error(`Invalid operate type: ${type}`)
+      throw new TypeError(`Invalid operate type: ${type}`)
     }
     if (!channel) {
-      throw new Error('Invalid channel.')
+      throw new TypeError('Invalid channel.')
     }
 
     const values = this.value(type, false)
@@ -324,7 +345,7 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 
     const index = channels.indexOf(channel)
     if (index === -1) {
-      throw new Error(`Invalid channel: ${channel} for type ${type}. Valid channels: ${channels.join(', ')}`)
+      throw new TypeError(`Invalid channel: ${channel} for type ${type}. Valid channels: ${channels.join(', ')}`)
     }
 
     return { type, values, index }
@@ -335,35 +356,47 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
    */
   private resolveValue(current: number, value: unknown): number {
     if (typeof value === 'number') {
+      if (!Number.isFinite(value))
+        throw new TypeError('Value must be a finite number.')
       return value
     }
 
     if (typeof value === 'string') {
+      const input = value.trim()
       // 操作符表达式，如 `+50`、`-20`、`*2`、`/2`
-      if (/^[+\-*/]/.test(value)) {
-        const operator = value[0]
-        const operand = Number.parseFloat(value.slice(1))
-        if (Number.isNaN(operand)) {
-          throw new TypeError(`Invalid operand value: ${value.slice(1)}`)
+      if (/^[+\-*/]/.test(input)) {
+        const operator = input[0]
+        const operandText = input.slice(1)
+        if (!DECIMAL_RE.test(operandText) || !Number.isFinite(Number(operandText))) {
+          throw new TypeError(`Invalid operand value: ${operandText}`)
         }
+        const operand = Number(operandText)
 
+        let result: number
         switch (operator) {
-          case '+': return current + operand
-          case '-': return current - operand
-          case '*': return current * operand
+          case '+': result = current + operand
+            break
+          case '-': result = current - operand
+            break
+          case '*': result = current * operand
+            break
           case '/':
             if (operand === 0) {
-              throw new Error('Division by zero.')
+              throw new RangeError('Division by zero.')
             }
-            return current / operand
+            result = current / operand
+            break
+          default:
+            throw new TypeError(`Invalid operator: ${operator}`)
         }
+        if (!Number.isFinite(result))
+          throw new RangeError('Result must be a finite number.')
+        return result
       }
 
       // 纯数字字符串，直接作为绝对值
-      const parsed = Number.parseFloat(value)
-      if (!Number.isNaN(parsed)) {
-        return parsed
-      }
+      if (DECIMAL_RE.test(input) && Number.isFinite(Number(input)))
+        return Number(input)
     }
 
     throw new TypeError(`Invalid value type: expected number or operator string, got ${typeof value}`)
