@@ -212,16 +212,6 @@ catalogs:
     wrangler:
       specifier: ^4.144.0
       version: 4.144.0
-  default:
-    '@primeuix/themes':
-      specifier: ^3.0.1
-      version: 3.0.1
-    '@primevue/auto-import-resolver':
-      specifier: ^5.0.2
-      version: 5.0.2
-    primevue:
-      specifier: ^5.0.2
-      version: 5.0.2
   icons:
     '@iconify-json/akar-icons':
       specifier: ^1.2.7
@@ -444,9 +434,6 @@ importers:
       '@magic-color/vue':
         specifier: workspace:*
         version: link:../packages/vue
-      '@primeuix/themes':
-        specifier: 'catalog:'
-        version: 3.0.1
       '@vueuse/core':
         specifier: catalog:playground
         version: 15.0.0(vue@3.5.43(typescript@7.0.2))
@@ -459,9 +446,6 @@ importers:
       magic-color:
         specifier: workspace:*
         version: link:../packages/magic-color
-      primevue:
-        specifier: 'catalog:'
-        version: 5.0.2(vue@3.5.43(typescript@7.0.2))
       vue:
         specifier: catalog:playground
         version: 3.5.43(typescript@7.0.2)
@@ -469,9 +453,6 @@ importers:
       '@iconify-json/carbon':
         specifier: catalog:icons
         version: 1.2.28
-      '@primevue/auto-import-resolver':
-        specifier: 'catalog:'
-        version: 5.0.2
       '@types/prettier':
         specifier: catalog:types
         version: 3.0.0
@@ -1555,49 +1536,6 @@ packages:
 
   '@poppinss/exception@1.2.3':
     resolution: {integrity: sha512-dCED+QRChTVatE9ibtoaxc+WkdzOSjYTKi/+uacHWIsfodVfpsueo3+DKpgU5Px8qXjgmXkSvhXvSCz3fnP9lw==}
-
-  '@primeicons/core@8.0.1':
-    resolution: {integrity: sha512-KJ5j8h4KVbl7lX0UosENk8d8N43GGj7H7ICyCUV8re+VdduE69bYlxfaCtM2KRdpoy45eu4JiZgT5P1Mh2JNpg==}
-
-  '@primeicons/vue@8.0.1':
-    resolution: {integrity: sha512-mNOajP2ni5gUkuFqHNxy2dmvXpYzvH3z/jeYOqD0W+iXu0g6M439PyHqayxhoOGjJ5R1h0L6xnYbm3nVHtPwvQ==}
-    peerDependencies:
-      vue: ^3
-
-  '@primeui/license-manager@1.1.0':
-    resolution: {integrity: sha512-irjhOGs6Xjwh1JhMyXtdUsYCsve6kBySZzDUhS/mWxsjwQm/wSN7oulyP/f5huJKdhZSzaN6rVApwpp4nDWE1g==}
-
-  '@primeuix/motion@1.0.0':
-    resolution: {integrity: sha512-rqpFRKmUVp9BI3YQKdok0rLUwzYShXzuuxy72Kq74xYRV14eR+4+XrIXOdyVs7j7CYV0ajYowiRpJCrVgdrq6A==}
-    engines: {node: '>=12.11.0'}
-
-  '@primeuix/styled@1.0.0':
-    resolution: {integrity: sha512-6SXoeQWwKswSqTv1ygaXNfY7otHo6Rb9mxbKJK5WF8adWlZ6CtwmlNfIP+p8cH/zGccsei/5Bu7IetXlMoZGjQ==}
-    engines: {node: '>=12.11.0'}
-
-  '@primeuix/styles@3.0.0':
-    resolution: {integrity: sha512-nFsG2V0kbn3Q/fr0EV0Lxy2cKeW1F+WFXyxWI1CxWAAXW34mTCLkDd6OFbN5dP9hrSJOVaeXWzTdoonh1sdklQ==}
-
-  '@primeuix/themes@3.0.1':
-    resolution: {integrity: sha512-UmHzvA16DKb3dcE+2J8NbgK6eI5zFJQbCaNBW1YyY+ADZEVId4H275TPTcwlZ/8ywt0AFpunEPiyLQE1oub9pA==}
-
-  '@primeuix/utils@0.8.2':
-    resolution: {integrity: sha512-4Cz5HY1XHqJwhq1ieml6l5IDkWt41Amdw/t2rAQxNXv7WwAhgb8QrnjJM6scW9h1D0PjQgm9Z3RgNlWCU+WZng==}
-    engines: {node: '>=12.11.0'}
-
-  '@primevue/auto-import-resolver@5.0.2':
-    resolution: {integrity: sha512-cMjBJwTeyyFOBHgIfJbS/Wafv7yj+ZYTfHIXk1IY/XPoEZpK9kvFHoYXQMjvOE2EtXV/MJ+SXeIcSKM9Nkxfgw==}
-
-  '@primevue/core@5.0.2':
-    resolution: {integrity: sha512-/W/C3jw2uEWbcX8m0Ze516Z54kVLiO+V6irRZDBNFqNhtE051mHON4HOnfWNfy21xOFQIiMua1c4NeOtcTgfyQ==}
-    peerDependencies:
-      vue: ^3.5.0
-
-  '@primevue/icons@5.0.2':
-    resolution: {integrity: sha512-pZtcnzL0Ui5TAGuaLmN6Fot4jUJEQ5WwvSVU2qPm+tHgpIz/87jX/j+0CT+O5uc/h8HUH8B3rcl+FEZh7b3PKg==}
-
-  '@primevue/metadata@5.0.2':
-    resolution: {integrity: sha512-T95HDAVzacgEYg+usldu66gdRy/gNFt84LEAK4NROsZS/J66tQicUtPTgZ6Fim+Q1Kw4mUJ6l/S3XukMmb5vKg==}
 
   '@quansync/fs@1.0.0':
     resolution: {integrity: sha512-4TJ3DFtlf1L5LDMaM6CanJ/0lckGNtJcMjQ1NAV6zDmA0tEHKZtxNKin8EgPaVX1YzljbxckyT2tJrpQKAtngQ==}
@@ -3749,9 +3687,6 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  primevue@5.0.2:
-    resolution: {integrity: sha512-6k5I9vpR4heSXym2wuUcqXXAPjFbozIlVBllAsHRl73zPo+rQSONKvwwFA/6MP9Drg71nYsLffD4VBgQMLkUvg==}
-
   property-information@7.2.0:
     resolution: {integrity: sha512-IAtzIB6sUiWaJYrX9smp3V46pBGbBeLFRGdh25kg1334VcBlD8HzhPeNIWQH9zhGmo2itIe25EHt9dQP7G5hmg==}
 
@@ -5301,57 +5236,6 @@ snapshots:
       supports-color: 10.2.2
 
   '@poppinss/exception@1.2.3': {}
-
-  '@primeicons/core@8.0.1':
-    dependencies:
-      '@primeuix/utils': 0.8.2
-
-  '@primeicons/vue@8.0.1(vue@3.5.43(typescript@7.0.2))':
-    dependencies:
-      '@primeicons/core': 8.0.1
-      '@primeuix/utils': 0.8.2
-      vue: 3.5.43(typescript@7.0.2)
-
-  '@primeui/license-manager@1.1.0': {}
-
-  '@primeuix/motion@1.0.0':
-    dependencies:
-      '@primeuix/utils': 0.8.2
-
-  '@primeuix/styled@1.0.0':
-    dependencies:
-      '@primeui/license-manager': 1.1.0
-      '@primeuix/utils': 0.8.2
-
-  '@primeuix/styles@3.0.0':
-    dependencies:
-      '@primeuix/styled': 1.0.0
-
-  '@primeuix/themes@3.0.1':
-    dependencies:
-      '@primeuix/styled': 1.0.0
-
-  '@primeuix/utils@0.8.2': {}
-
-  '@primevue/auto-import-resolver@5.0.2':
-    dependencies:
-      '@primevue/metadata': 5.0.2
-
-  '@primevue/core@5.0.2(vue@3.5.43(typescript@7.0.2))':
-    dependencies:
-      '@primeui/license-manager': 1.1.0
-      '@primeuix/styled': 1.0.0
-      '@primeuix/utils': 0.8.2
-      vue: 3.5.43(typescript@7.0.2)
-
-  '@primevue/icons@5.0.2(vue@3.5.43(typescript@7.0.2))':
-    dependencies:
-      '@primeuix/utils': 0.8.2
-      '@primevue/core': 5.0.2(vue@3.5.43(typescript@7.0.2))
-    transitivePeerDependencies:
-      - vue
-
-  '@primevue/metadata@5.0.2': {}
 
   '@quansync/fs@1.0.0':
     dependencies:
@@ -7666,19 +7550,6 @@ snapshots:
   premove@4.0.0: {}
 
   prettier@3.9.9: {}
-
-  primevue@5.0.2(vue@3.5.43(typescript@7.0.2)):
-    dependencies:
-      '@primeicons/vue': 8.0.1(vue@3.5.43(typescript@7.0.2))
-      '@primeui/license-manager': 1.1.0
-      '@primeuix/motion': 1.0.0
-      '@primeuix/styled': 1.0.0
-      '@primeuix/styles': 3.0.0
-      '@primeuix/utils': 0.8.2
-      '@primevue/core': 5.0.2(vue@3.5.43(typescript@7.0.2))
-      '@primevue/icons': 5.0.2(vue@3.5.43(typescript@7.0.2))
-    transitivePeerDependencies:
-      - vue
 
   property-information@7.2.0: {}
 

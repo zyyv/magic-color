@@ -1,43 +1,20 @@
 <script setup lang="ts">
 const { copied, copy } = useClipboard()
-
-function handleShare() {
-  copy(location.href)
-}
+const homeUrl = import.meta.env.BASE_URL
+function handleShare() { copy(location.href) }
 </script>
 
 <template>
-  <header pt-2 fcc z-1>
-    <hgroup w="75%" fcc py-6>
-      <h1 text-4xl fw-600 text-transparent bg-clip-text bg-linear-to-r from-purple to-red fcc gap-2>
-        <img inline-block w-10 width="40" height="40" src="/logo.svg" alt="logo">
-        <span>
-          Magicolor
-        </span>
-      </h1>
-
-      <div pa right-10 fcc gap-6>
-        <button
-          hover:text-teal
-          :class="copied ? 'i-carbon:checkmark' : 'i-carbon:share'"
-          icon-btn
-          title="Share Color"
-          @click="handleShare"
-        />
-        <button
-          i-carbon:light
-          dark:i-carbon-moon
-          icon-btn
-          title="Toggle Color Mode"
-          @click="toggleDark"
-        />
-        <a
-          i-carbon:logo-github icon-btn
-          href="https://github.com/zyyv/magic-color"
-          target="_blank"
-          title="GitHub"
-        />
-      </div>
-    </hgroup>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" :href="homeUrl" aria-label="Magicolor home"><img src="/logo.svg" width="34" height="34" alt=""><span>magicolor<span class="brand-period">.</span></span></a>
+      <span class="header-descriptor">A tiny studio for color</span>
+      <nav class="header-actions" aria-label="Site actions">
+        <button class="header-action" type="button" :title="copied ? 'Link copied' : 'Copy share link'" :aria-label="copied ? 'Link copied' : 'Copy share link'" @click="handleShare"><i :class="copied ? 'i-carbon-checkmark' : 'i-carbon-share'" /> <span>{{ copied ? 'Copied' : 'Share' }}</span></button>
+        <button class="header-action icon-only" type="button" title="Toggle color mode" aria-label="Toggle color mode" @click="toggleDark"><i class="i-carbon-sun dark:i-carbon-moon" /></button>
+        <a class="header-action icon-only" href="https://github.com/zyyv/magic-color" target="_blank" rel="noopener noreferrer" title="GitHub" aria-label="GitHub"><i class="i-carbon-logo-github" /></a>
+      </nav>
+    </div>
   </header>
 </template>

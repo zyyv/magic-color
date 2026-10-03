@@ -1,127 +1,77 @@
 <script setup lang="ts">
 import { mc } from 'magic-color'
-import Button from 'primevue/button'
-import Column from 'primevue/column'
-import DataTable from 'primevue/datatable'
-import Popover from 'primevue/popover'
-import Select from 'primevue/select'
+import { onClickOutside, onKeyStroke } from '@vueuse/core'
+import ColorInsights from './ColorInsights.vue'
+import PaletteTable from './PaletteTable.vue'
 import Extension from './extension/index.vue'
 
-const {
-  color,
-  alpha,
-  exportType,
-  colors,
-  name,
-  getReadable,
-  channelHeaders,
-  tableData,
-  copyColor,
-  copied,
-  copiedColor,
-} = useTheme()
+const { color, alpha, exportType, colors, name, channelHeaders, tableData, copyColor, copied, copiedColor } = useTheme()
+const pickerOpen = ref(false)
+const pickerAnchor = useTemplateRef<HTMLElement>('pickerAnchor')
+const baseHex = computed(() => {
+  try { return mc(color.value).hex() }
+  catch { return '#529e82' }
+})
+const activeShade = computed(() => {
+  if (!tableData.value.length)
+    return null
+  const exact = tableData.value.find(row => mc(row.color).hex().toLowerCase() === baseHex.value.toLowerCase())
+  if (exact)
+    return exact.shade
+  return tableData.value.reduce((best, row) => mc.deltaE(baseHex.value, row.color) < mc.deltaE(baseHex.value, best.color) ? row : best).shade
+})
 
-const op = ref()
-const {
-  onMouseEnter,
-  onMouseLeave,
-  onContentMouseEnter,
-  onContentMouseLeave,
-} = usePopoverHover(op)
+onClickOutside(pickerAnchor, () => pickerOpen.value = false)
+onKeyStroke('Escape', () => pickerOpen.value = false)
 
-const options = mc.supports.map(type => ({ label: type.toUpperCase(), value: type }))
+function randomColor() {
+  color.value = mc.random()
+}
 </script>
 
 <template>
-  <div pt-4 pb-6 px-6 rd-3 transition max-h-min>
-    <Popover ref="op">
-      <div @mouseenter="onContentMouseEnter" @mouseleave="onContentMouseLeave">
-        <Palette v-model:color="color" v-model:alpha="alpha" v-model:type="exportType" />
+  <main id="main-content" class="workspace">
+    <section class="intro">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line" /> THE COLOR WORKSPACE</div>
+        <h2>Find the right <em>shade.</em></h2>
+        <p>Build a complete color scale from one idea. Explore its values, test contrast, and export it for your project.</p>
       </div>
-    </Popover>
-    <DataTable
-      :value="tableData"
-      class="w-full !bg-transparent"
-      scrollable
-      :pt="{
-        root: { style: 'background: transparent' },
-        header: { style: 'background: transparent' },
-        bodyRow: { style: 'background: transparent' },
-        rowGroupHeader: { style: 'background: transparent' },
-      }"
-    >
-      <template #header>
-        <div fbc>
-          <h3
-            flex items-center gap-2
-            @mouseenter="onMouseEnter"
-            @mouseleave="onMouseLeave"
-          >
-            <div>
-              <div
-                class="size-6 rounded shadow cursor-pointer border border-gray:10 hover:scale-110 transition"
-                :style="{ backgroundColor: color }"
-              />
+      <div class="intro-meta"><span>11 steps</span><span>8 color spaces</span><span>Live preview</span></div>
+    </section>
+
+    <section class="editor-surface" aria-labelledby="palette-title">
+      <div class="editor-heading">
+        <div class="editor-title"><h3 id="palette-title">{{ name || 'Custom color' }}</h3><span class="color-code">{{ baseHex.toUpperCase() }}</span></div>
+        <div class="editor-actions">
+          <button class="plain-action" type="button" @click="randomColor"><i class="i-carbon-renew" /> Surprise me</button>
+          <div ref="pickerAnchor" class="editor-popover-anchor">
+            <button class="plain-action" type="button" aria-haspopup="dialog" :aria-expanded="pickerOpen" aria-controls="palette-editor" @click="pickerOpen = !pickerOpen"><i class="i-carbon-settings-adjust" /> Edit color</button>
+            <div v-if="pickerOpen" id="palette-editor" class="palette-popover" role="dialog" aria-label="Edit base color">
+              <Palette v-model:color="color" v-model:alpha="alpha" v-model:type="exportType" />
             </div>
-            <span class="text-xl fw-700">{{ name }}</span>
-          </h3>
-          <div fsc gap-2>
-            <span text-sm>
-              Type as:
-            </span>
-            <Select
-              v-model="exportType"
-              :options="options"
-              option-label="label"
-              option-value="value"
-              size="small"
-              class="!h-7 flex items-center important:[&>span]:text-12.5px"
-              :pt="{
-                label: 'py-0',
-                option: '!text-xs !py-1',
-              }"
-            />
           </div>
         </div>
-      </template>
-      <Column field="shade" header="Shade" style="width: 10%">
-        <template #body="{ data }">
-          <span font-bold>{{ data.shade }}</span>
-        </template>
-      </Column>
-      <Column header="Color" style="width: 40%">
-        <template #body="{ data }">
-          <Button
-            class="w-full h-10 rd fcc relative cursor-pointer group transition hover:scale-105"
-            :style="{ backgroundColor: data.color, color: getReadable(data.color) }"
-            unstyled
-            @click="copyColor(data.color)"
-          >
-            <i
-              :class="[
-                copied && copiedColor === data.color ? 'i-carbon-checkmark opacity-100' : 'i-carbon-copy opacity-0 group-hover:opacity-100',
-              ]"
-              transition-opacity duration-200
-            />
-          </Button>
-        </template>
-      </Column>
-      <Column header="Value" style="width: 20%">
-        <template #body="{ data }">
-          <span text-sm font-mono op-80>{{ data.color }}</span>
-        </template>
-      </Column>
-      <Column
-        v-for="(header, index) in channelHeaders"
-        :key="header"
-        :header="header"
-        style="width: 10%"
-      >
-        <template #body="{ data }">
-          <span font-mono text-sm :class="['text-red', 'text-green', 'text-blue'][index]">{{ data.channelValues[index] }}</span>
-        </template>
-      </Column>
-    </DataTable>
-    <Extension mt-8 :colors :name :type="exportType" />
-  </div>
+      </div>
+
+      <div class="spectrum" aria-label="Generated color scale">
+        <button v-for="row in tableData" :key="row.shade" class="spectrum-step" type="button" :style="{ backgroundColor: row.color, color: mc.readable(row.color) }" :title="`Copy ${row.shade}: ${row.color}`" @click="copyColor(row.color)"><span>{{ row.shade }}</span></button>
+      </div>
+
+      <div class="table-heading">
+        <div><p>Click a swatch or row to copy its value.</p></div>
+        <label class="format-select">Color format
+          <select v-model="exportType" aria-label="Color format"><option v-for="type in mc.supports" :key="type" :value="type">{{ type.toUpperCase() }}</option></select>
+        </label>
+      </div>
+      <PaletteTable :rows="tableData" :headers="channelHeaders" :active-shade="activeShade" :copied-color="copied && copiedColor ? copiedColor : null" @copy="copyColor" />
+    </section>
+
+    <ColorInsights :color="baseHex" :colors="colors" />
+
+    <section class="explore-section">
+      <div class="section-heading"><h3>Take it further.</h3><p>Inspect your palette, check accessibility, or take the values into your code.</p></div>
+      <Extension :colors="colors" :name="name" :type="exportType" />
+    </section>
+  </main>
 </template>

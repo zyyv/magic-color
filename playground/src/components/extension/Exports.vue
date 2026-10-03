@@ -84,7 +84,7 @@ const { copy, copied } = useClipboard()
 </script>
 
 <template>
-  <div w-700px pr>
+  <div class="export-wrap" pr>
     <div fsc gap-2 mb-4>
       <div text-sm>
         Export as:
@@ -153,3 +153,7 @@ const { copy, copied } = useClipboard()
     </div>
   </div>
 </template>
+
+<style scoped>
+.export-wrap { max-width: 100%; }
+</style>

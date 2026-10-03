@@ -10,6 +10,6 @@ window.mc = mc
 
 <template>
   <Header />
-  <Container my-8 />
+  <Container />
   <Footer />
 </template>

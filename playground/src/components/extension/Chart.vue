@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from 'chart.js'
 import { Magicolor } from 'magic-color'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 
 const props = defineProps<{
   colors: ThemeMetas
@@ -135,10 +135,19 @@ onMounted(() => {
     })
   }
 })
+
+onUnmounted(() => {
+  chart?.destroy()
+  chart = null
+})
 </script>
 
 <template>
-  <div w-700px>
+  <div class="chart-wrap">
     <canvas ref="chartRef" />
   </div>
 </template>
+
+<style scoped>
+.chart-wrap { width: min(100%, 760px); margin: auto; }
+</style>

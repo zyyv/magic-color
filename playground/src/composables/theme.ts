@@ -13,14 +13,15 @@ const CHANNEL_MAP: Record<string, string[]> = {
 
 export function useTheme() {
   const params = useUrlSearchParams('history')
-  const color = ref((params.color as string) || (import.meta.env.DEV ? '#529e82' : mc.random()))
+  const initialColor = typeof params.color === 'string' && mc.valid(params.color) ? params.color : '#529e82'
+  const color = ref(initialColor)
 
   watch(color, (v) => {
     params.color = v
   })
 
   watch(() => params.color, (v) => {
-    if (v && v !== color.value)
+    if (typeof v === 'string' && mc.valid(v) && v !== color.value)
       color.value = v as string
   })
 
@@ -36,19 +37,11 @@ export function useTheme() {
     }
   })
 
-  const name = computed(() => mc.nameOf(color.value!))
+  const name = computed(() => mc.nameOf(color.value!) || 'Custom color')
 
   const shades = computed(() => {
     return Object.keys(colors.value).sort((a, b) => Number(a) - Number(b))
   })
-
-  function getReadable(v: string) {
-    return mc.readable({
-      bgColor: v,
-      textColor: colors.value[100],
-      fallbackTextColor: colors.value[900],
-    })
-  }
 
   const channelHeaders = computed(() => {
     const type = exportType.value
@@ -69,7 +62,7 @@ export function useTheme() {
       else {
         const val = mc(c).value(type, false)
         if (Array.isArray(val))
-          channelValues = val as number[]
+          channelValues = (val as number[]).map(value => Number(value.toFixed(2)))
       }
 
       return {
@@ -95,7 +88,6 @@ export function useTheme() {
     colors,
     name,
     shades,
-    getReadable,
     channelHeaders,
     tableData,
     copyColor,

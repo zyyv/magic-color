@@ -26,11 +26,6 @@ export default defineConfig({
           'vertical-align': 'text-bottom',
         },
       },
-      webFonts: {
-        fonts: {
-          dm: 'DM Sans',
-        },
-      },
     }) as any,
   ],
 })
