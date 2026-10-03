@@ -39,8 +39,8 @@ jobs:
 
     strategy:
       matrix:
-        node: [ lts/* ]
-        os: [ ubuntu-latest ]
+        node: [lts/*]
+        os: [ubuntu-latest]
       fail-fast: false
 
     steps:

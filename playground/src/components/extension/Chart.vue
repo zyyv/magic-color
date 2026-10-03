@@ -13,6 +13,7 @@ import {
 } from 'chart.js'
 import { Magicolor } from 'magic-color'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { isDark } from '../../composables/dark'
 
 const props = defineProps<{
   colors: ThemeMetas
@@ -75,12 +76,25 @@ function updateChart() {
     dataset.borderColor = props.colors[i === 0 ? 300 : i === 1 ? 500 : 700]
     dataset.backgroundColor = props.colors[i === 0 ? 300 : i === 1 ? 500 : 700]
   })
+  const labelColor = isDark.value ? '#aaa' : '#68776c'
+  const gridColor = isDark.value ? '#ffffff12' : '#18302412'
+  if (chart.options.plugins?.legend?.labels)
+    chart.options.plugins.legend.labels.color = labelColor
+  for (const axis of Object.values(chart.options.scales || {})) {
+    if (!axis)
+      continue
+    if (axis.ticks)
+      axis.ticks.color = labelColor
+    if (axis.grid)
+      axis.grid.color = gridColor
+  }
   chart.update()
 }
 
 watch(() => [props.colors, props.type], () => {
   updateChart()
 }, { deep: true })
+watch(isDark, updateChart)
 
 onMounted(() => {
   if (chartRef.value) {
@@ -126,6 +140,17 @@ onMounted(() => {
         plugins: {
           legend: {
             display: true,
+            labels: { color: isDark.value ? '#aaa' : '#68776c' },
+          },
+        },
+        scales: {
+          x: {
+            ticks: { color: isDark.value ? '#aaa' : '#68776c' },
+            grid: { color: isDark.value ? '#ffffff12' : '#18302412' },
+          },
+          y: {
+            ticks: { color: isDark.value ? '#aaa' : '#68776c' },
+            grid: { color: isDark.value ? '#ffffff12' : '#18302412' },
           },
         },
         interaction: {

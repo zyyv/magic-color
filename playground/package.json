@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "@iconify-json/carbon": "catalog:icons",
-    "@types/prettier": "catalog:types",
     "@vitejs/plugin-vue": "catalog:playground",
     "prettier": "catalog:playground",
     "shiki": "catalog:playground",

@@ -80,7 +80,8 @@ function handleExportTypeChange(e: Event) {
   exportType.value = (e.target as HTMLInputElement).value as any
 }
 
-const { copy, copied } = useClipboard()
+const { copy, copied, text } = useClipboard()
+const codeCopied = computed(() => copied.value && text.value === copyCode.value)
 </script>
 
 <template>
@@ -131,15 +132,14 @@ const { copy, copied } = useClipboard()
       </div>
     </div>
 
+    <div class="export-code-heading">
+      <span><i class="i-carbon-code" aria-hidden="true" /> THE CODE</span>
+      <button v-if="highlightCode && copyCode" type="button" @click="copy(copyCode)">
+        <i :class="codeCopied ? 'i-carbon-checkmark' : 'i-carbon-copy'" aria-hidden="true" />
+        {{ codeCopied ? 'Copied' : 'Copy code' }}
+      </button>
+    </div>
     <div pr b="~ dashed dark:#3c3c3c #ccc" p2 rd>
-      <div
-        v-if="highlightCode" text-xs select-none fcc gap-1 pa right-1 top-1 trans op-50 hover:op-100
-        cursor-pointer bg-gray:30 rd p="x1 y0.5" @click="copyCode && copy(copyCode)"
-      >
-        <i :class="copied ? 'i-carbon-checkmark' : 'i-carbon-bring-forward'" />
-        Copy Code
-      </div>
-
       <Transition
         enter-active-class="animate-fade-in animate-duration-150"
         leave-active-class="animate-fade-out animate-duration-150" mode="out-in"
@@ -156,4 +156,10 @@ const { copy, copied } = useClipboard()
 
 <style scoped>
 .export-wrap { max-width: 100%; }
+.export-code-heading { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; color: #91a297; font-family: 'Commit Mono', monospace; font-size: .66rem; font-weight: 600; letter-spacing: .1em; }
+.export-code-heading span, .export-code-heading button { display: inline-flex; align-items: center; gap: 6px; }
+.export-code-heading i { font-size: .95rem; }
+.export-code-heading button { border: 0; background: transparent; color: #547e60; font-family: inherit; font-size: .69rem; font-weight: 600; letter-spacing: 0; }
+:global(html.dark .export-code-heading) { color: #a8bbaa; }
+:global(html.dark .export-code-heading button) { color: #a8d8b3; }
 </style>

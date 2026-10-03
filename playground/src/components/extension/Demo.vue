@@ -10,19 +10,35 @@ const inlineStyle = computed(() => Object.fromEntries(Object.entries(props.color
 <template>
   <div class="demo-frame" :class="{ 'demo-dark': isDark }" :style="inlineStyle">
     <div class="demo-toolbar">
-      <div class="demo-wordmark"><span class="demo-mark">a.</span> atelier</div>
-      <div class="demo-tools"><span class="demo-caption">PALETTE IN CONTEXT</span><button type="button" :aria-label="isDark ? 'Show light preview' : 'Show dark preview'" @click="isDark = !isDark"><i :class="isDark ? 'i-carbon-moon' : 'i-carbon-sun'" /></button></div>
+      <div class="demo-wordmark">
+        <span class="demo-mark">a.</span> atelier
+      </div>
+      <div class="demo-tools">
+        <span class="demo-caption">PALETTE IN CONTEXT</span><button type="button" :aria-label="isDark ? 'Show light preview' : 'Show dark preview'" @click="isDark = !isDark">
+          <i :class="isDark ? 'i-carbon-moon' : 'i-carbon-sun'" />
+        </button>
+      </div>
     </div>
     <div class="demo-body">
       <div class="demo-copy">
-        <div class="demo-overline">A quieter kind of workspace · 2026</div>
+        <div class="demo-overline">
+          A quieter kind of workspace · 2026
+        </div>
         <h2>Space to make<br><em>something good.</em></h2>
         <p>A focused place for the ideas, notes, and small details that make a project yours.</p>
-        <div class="demo-cta"><button type="button" class="demo-primary" @click="saved = !saved">{{ saved ? 'Added to your list ✓' : 'Save this idea ↗' }}</button><span>Thoughtfully made, every day.</span></div>
+        <div class="demo-cta">
+          <button type="button" class="demo-primary" @click="saved = !saved">
+            {{ saved ? 'Added to your list ✓' : 'Save this idea ↗' }}
+          </button><span>Thoughtfully made, every day.</span>
+        </div>
       </div>
-      <div class="demo-art" aria-hidden="true"><div class="art-border" /><div class="art-circle circle-one" /><div class="art-circle circle-two" /><div class="art-circle circle-three" /><span>STUDY IN COLOR</span></div>
+      <div class="demo-art" aria-hidden="true">
+        <div class="art-border" /><div class="art-circle circle-one" /><div class="art-circle circle-two" /><div class="art-circle circle-three" /><span>STUDY IN COLOR</span>
+      </div>
     </div>
-    <div class="demo-footer"><span>Created with magicolor</span><div><span class="demo-mini-swatch" /><span class="demo-mini-swatch" /><span class="demo-mini-swatch" /><span class="demo-mini-swatch" /><span class="demo-mini-swatch" /></div></div>
+    <div class="demo-footer">
+      <span>Created with magicolor</span><div><span class="demo-mini-swatch" /><span class="demo-mini-swatch" /><span class="demo-mini-swatch" /><span class="demo-mini-swatch" /><span class="demo-mini-swatch" /></div>
+    </div>
   </div>
 </template>
 

@@ -90,8 +90,7 @@ catalogs:
 
   types:
     '@types/node': ^26.6.3
-    '@types/prettier': ^3.0.0
-    typescript: ^7.0.2
+    typescript: 6.0.3
 
   uno:
     unocss: ^66.10.5

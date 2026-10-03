@@ -27,17 +27,21 @@ const cp = computed(() => panels.find(p => p.label === panel.value)!.component)
   <div class="extension-shell">
     <div class="extension-tabs" role="tablist" aria-label="Explore palette">
       <button
-        v-for="p in panels" :key="p.label" type="button" role="tab"
-        :id="`tab-${p.label}`" :aria-controls="'extension-panel'" :aria-selected="panel === p.label"
-        :class="['extension-tab', { active: panel === p.label }]"
+        v-for="p in panels" :id="`tab-${p.label}`" :key="p.label" type="button"
+        role="tab" aria-controls="extension-panel" :aria-selected="panel === p.label"
+        class="extension-tab" :class="[{ active: panel === p.label }]"
         @click="panel = p.label"
-      ><i :class="p.icon" aria-hidden="true" />{{ p.label }}</button>
+      >
+        <i :class="p.icon" aria-hidden="true" />{{ p.label }}
+      </button>
     </div>
     <div id="extension-panel" class="extension-content" role="tabpanel" :aria-labelledby="`tab-${panel}`">
       <Suspense :timeout="50">
         <component :is="cp" :colors="colors" :name :type="type" />
         <template #fallback>
-          <div class="extension-loading">Loading palette details…</div>
+          <div class="extension-loading">
+            Loading palette details…
+          </div>
         </template>
       </Suspense>
     </div>
@@ -53,9 +57,9 @@ const cp = computed(() => panels.find(p => p.label === panel.value)!.component)
 .extension-tab i { font-size: .95rem; }
 .extension-content { padding: 32px; min-width: 0; overflow-x: auto; }
 .extension-loading { padding: 35px; text-align: center; color: #829187; }
-:global(.dark) .extension-shell { background: #1b1b1b; border-color: #323232; }
-:global(.dark) .extension-tabs { background: #202020; border-color: #303030; }
-:global(.dark) .extension-tab:hover { background: #2c2c2c; color: #eeeeee; }
-:global(.dark) .extension-tab.active { background: #303030; color: #e9e9e9; }
+:global(html.dark .extension-shell) { background: #1b1b1b; border-color: #323232; }
+:global(html.dark .extension-tabs) { background: #202020; border-color: #303030; }
+:global(html.dark .extension-tab:hover) { background: #2c2c2c; color: #eeeeee; }
+:global(html.dark .extension-tab.active) { background: #303030; color: #e9e9e9; }
 @media (max-width: 680px) { .extension-tabs { padding: 9px; gap: 2px; } .extension-tab { flex: 1; justify-content: center; padding: 9px; font-size: .73rem; } .extension-content { padding: 18px; } }
 </style>

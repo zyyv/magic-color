@@ -6,7 +6,9 @@ const props = defineProps<{
   color: string
   ratio: number
   type: 'WCAG' | 'APCA'
+  selected: boolean
 }>()
+const emit = defineEmits<{ select: [] }>()
 
 const value = computed(() => props.type === 'WCAG'
   ? mc.wcag(props.color, props.backgroundColor)
@@ -17,11 +19,16 @@ const style = computed(() => passes.value ? { backgroundColor: props.backgroundC
 </script>
 
 <template>
-  <div class="ratio-square" :class="{ filtered: !passes }" :style="style" :title="`${type}: ${displayValue} for ${color} on ${backgroundColor}`">{{ passes ? displayValue : '—' }}</div>
+  <button type="button" class="ratio-square" :class="{ filtered: !passes, selected }" :style="style" :title="`${type}: ${displayValue} for ${color} on ${backgroundColor}`" :aria-label="`${type}: ${displayValue} for ${color} text on ${backgroundColor} background. Show code`" :aria-pressed="selected" @click="emit('select')">
+    {{ passes ? displayValue : '—' }}
+  </button>
 </template>
 
 <style scoped>
-.ratio-square { height: 38px; display: grid; place-items: center; font-family: 'Commit Mono', monospace; font-size: .66rem; font-variant-numeric: tabular-nums; border-radius: 3px; }
+.ratio-square { width: 100%; height: 38px; border: 0; padding: 0; display: grid; place-items: center; font-family: 'Commit Mono', monospace; font-size: .66rem; font-variant-numeric: tabular-nums; border-radius: 3px; }
+.ratio-square:hover { outline: 2px solid #6a9c76; outline-offset: -2px; }
+.ratio-square.selected { outline: 2px solid #467a55; outline-offset: -2px; }
 .ratio-square.filtered { background: #f0f3ee; color: #bcc7bc; }
-:global(.dark) .ratio-square.filtered { background: #292929; color: #777777; }
+:global(html.dark .ratio-square.filtered) { background: #292929; color: #777777; }
+:global(html.dark .ratio-square.selected) { outline-color: #a3d0aa; }
 </style>
