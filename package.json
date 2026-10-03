@@ -6,7 +6,7 @@
   "packageManager": "pnpm@12.8.1",
   "scripts": {
     "dev": "pnpm -r -F=\"./packages/*\" --parallel run dev",
-    "build": "pnpm -r -F=\"./packages/*\" run build",
+    "build": "pnpm -r -F=\"./packages/*\" run build && pnpm run build:cloudflare",
     "lint": "eslint --cache .",
     "lint:fix": "pnpm lint --fix",
     "prepublishOnly": "nr sync-docs && nr build",
