@@ -66,9 +66,7 @@ export function labToHsb(color: LabColor): HsbColor {
 export function labToLch(color: LabColor): LchColor {
   const [l, a, b] = color
   const c = Math.sqrt(a * a + b * b)
-  let h = (Math.atan2(b, a) * 180 / Math.PI + 360) % 360
-  if (Math.round(c * 10000) === 0)
-    h = Number.NaN
+  const h = c < 0.00005 ? 0 : (Math.atan2(b, a) * 180 / Math.PI + 360) % 360
   return [l, c, h]
 }
 

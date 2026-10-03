@@ -13,6 +13,9 @@ describe('hex', () => {
   })
 
   it('hexToRgb', () => {
+    expect(hexToRgb('#fff')).toEqual([255, 255, 255])
+    expect(hexToRgb('fff')).toEqual([255, 255, 255])
+    expect(hexToRgb('#ff000080')).toEqual([255, 0, 0])
     expect(hexToRgb('#000000')).toEqual([0, 0, 0])
     expect(hexToRgb('#ffffff')).toEqual([255, 255, 255])
     expect(hexToRgb('#ff0000')).toEqual([255, 0, 0])

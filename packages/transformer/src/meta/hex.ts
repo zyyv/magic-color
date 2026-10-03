@@ -30,7 +30,7 @@ export function parseHex(color: HexColor) {
 }
 
 export function hexToRgb(color: HexColor): RgbColor {
-  color = color.substring(1)
+  color = parseHex(color).values.substring(1)
   const r = Number.parseInt(color.substring(0, 2), 16)
   const g = Number.parseInt(color.substring(2, 4), 16)
   const b = Number.parseInt(color.substring(4, 6), 16)

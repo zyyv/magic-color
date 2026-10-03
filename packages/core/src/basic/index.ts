@@ -97,6 +97,10 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
       return this.values as Colors[K]
     }
 
+    if (this.type === 'keyword' && targetType === 'hex') {
+      return this.values as Colors[K]
+    }
+
     const sourceType = this.type === 'keyword' ? 'hex' : this.type
     const converters = CONVERSION_MAP[sourceType]
 

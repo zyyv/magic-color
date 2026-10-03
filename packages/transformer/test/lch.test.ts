@@ -8,6 +8,7 @@ describe('lch', () => {
     expect(isLch('lch(50% 100 0 / 0.5)')).toBe(true)
     expect(isLch('lch(50 100 0 / 0.5)')).toBe(true)
     expect(isLch('lch(50 100 0deg)')).toBe(true)
+    expect(isLch('lch(50%% 100 0)')).toBe(false)
   })
 
   it('lchToRgb', () => {

@@ -2,10 +2,10 @@ import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from 
 import { labToRgb } from './lab'
 import { rgbToHex, rgbToHsb, rgbToHsl, rgbToOklab, rgbToOklch } from './rgb'
 
-const lchRegex = /^lch\((\d+(?:\.\d+)?%?)%?\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)(?:deg)?(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
+const lchRegex = /^lch\((\d+(?:\.\d+)?)%?\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)(?:deg)?(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
 
 export function isLch(color: string): boolean {
-  return lchRegex.test(color) || lchRegex.test(color)
+  return lchRegex.test(color)
 }
 
 export function parseLch(color: string) {
@@ -13,7 +13,7 @@ export function parseLch(color: string) {
   if (!match)
     throw new Error('Invalid LCH color format.')
 
-  const lch = [match[1], match[2], match[3]].map(Number) as LchColor
+  const lch = [match[1], match[2], match[3]].map(Number.parseFloat) as LchColor
   const alpha = match[4] ? Number.parseFloat(match[4]) : 1
 
   return { values: lch, alpha }

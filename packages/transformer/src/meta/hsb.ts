@@ -27,7 +27,7 @@ export function hsbToHex(color: HsbColor) {
 
 export function hsbToRgb(color: HsbColor): RgbColor {
   let [h, s, b] = color
-  h = h / 60
+  h = ((h % 360) + 360) % 360 / 60
   s = s / 100
   b = b / 100
 
@@ -57,7 +57,7 @@ export function hsbToHsl(color: HsbColor): HslColor {
   s /= 100
   b /= 100
   const l = (2 - s) * b / 2
-  s = l && l < 1 ? s * b / (l < 0.5 ? l * 2 : 2 - l * 2) : s
+  s = l > 0 && l < 1 ? s * b / (l < 0.5 ? l * 2 : 2 - l * 2) : 0
 
   return [h, s * 100, l * 100]
 }

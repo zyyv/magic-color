@@ -1,7 +1,7 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
 import { rgbToHex, rgbToHsb, rgbToHsl, rgbToLab, rgbToLch } from './rgb'
 
-const oklabRegex = /^oklab\(\s*(100|[1-9]?\d(?:\.\d+)?%?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
+const oklabRegex = /^oklab\(\s*(100|[1-9]?\d(?:\.\d+)?)%?\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
 
 export function isOklab(color: string): boolean {
   return oklabRegex.test(color)
@@ -85,8 +85,6 @@ export function oklabToLch(color: LabColor): LchColor {
 export function oklabToOklch(color: LabColor): LchColor {
   const [l, a, b] = color
   const c = Math.sqrt(a * a + b * b)
-  let h = (Math.atan2(b, a) * 180 / Math.PI + 360) % 360
-  if (Math.round(c * 10000) === 0)
-    h = Number.NaN
+  const h = c < 0.00005 ? 0 : (Math.atan2(b, a) * 180 / Math.PI + 360) % 360
   return [l, c, h]
 }
