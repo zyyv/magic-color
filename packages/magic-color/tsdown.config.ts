@@ -6,4 +6,5 @@ export default defineConfig({
   ],
   dts: true,
   clean: true,
+  attw: { profile: 'strict', level: 'error', ignoreRules: ['cjs-resolves-to-esm'] },
 })

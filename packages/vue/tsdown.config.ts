@@ -9,6 +9,7 @@ export default defineConfig({
   plugins: [Vue({ isProduction: true })],
   dts: { vue: true },
   clean: true,
+  attw: { profile: 'strict', level: 'error', ignoreRules: ['cjs-resolves-to-esm'] },
   deps: {
     neverBundle: [
       'vue',

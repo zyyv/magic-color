@@ -41,9 +41,6 @@ packages:
   - playground
   - packages/*
 
-patchedDependencies:
-  '@arethetypeswrong/cli': patches/@arethetypeswrong__cli.patch
-
 allowBuilds:
   esbuild: true
   pnpm: true
@@ -54,7 +51,7 @@ catalogs:
   cli:
     '@antfu/eslint-config': ^9.5.1
     '@antfu/ni': ^30.6.0
-    '@arethetypeswrong/cli': 0.17.1
+    '@arethetypeswrong/core': ^0.18.5
     bumpp: ^12.3.0
     eslint: ^10.11.0
     esno: ^4.8.0

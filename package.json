@@ -13,7 +13,6 @@
     "release": "nr lint:fix && bumpp -r",
     "test": "vitest",
     "test:update": "vitest -u",
-    "test:attw": "pnpm -r -F=\"./packages/*\" run attw",
     "typecheck": "tsc --noEmit",
     "prepare": "simple-git-hooks",
     "play": "pnpm -C playground dev",
@@ -26,7 +25,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "catalog:cli",
     "@antfu/ni": "catalog:cli",
-    "@arethetypeswrong/cli": "catalog:cli",
+    "@arethetypeswrong/core": "catalog:cli",
     "@iconify-json/akar-icons": "catalog:icons",
     "@iconify-json/carbon": "catalog:icons",
     "@iconify-json/fluent-emoji": "catalog:icons",

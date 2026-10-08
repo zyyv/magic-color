@@ -35,8 +35,7 @@
   ],
   "scripts": {
     "build": "tsdown",
-    "dev": "tsdown -w",
-    "attw": "attw --pack --config-path ../../.attw.json"
+    "dev": "tsdown -w"
   },
   "dependencies": {
     "@magic-color/shared": "workspace:*",
