@@ -3,7 +3,7 @@
   "type": "module",
   "version": "2.3.0",
   "private": true,
-  "packageManager": "pnpm@12.8.1",
+  "packageManager": "pnpm@12.11.2",
   "scripts": {
     "dev": "pnpm -r -F=\"./packages/*\" --parallel run dev",
     "build": "pnpm -r -F=\"./packages/*\" run build && pnpm run build:cloudflare",
