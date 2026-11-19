@@ -1,24 +1,24 @@
 import type { HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
+import { alphaPattern, numberPattern, parseFunctionalColor } from './functional-color'
 import { rgbToHex, rgbToLab, rgbToLch, rgbToOklab, rgbToOklch } from './rgb'
 
-const hsbRegex = /^hsb\((\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\)$/
+const channels = String.raw`(${numberPattern})\s*,\s*(${numberPattern})%\s*,\s*(${numberPattern})%`
+const hsbRegex = new RegExp(String.raw`^hsb\(\s*${channels}\s*\)$`, 'i')
+const hsbaRegex = new RegExp(String.raw`^hsba\(\s*${channels}\s*,\s*(${alphaPattern})\s*\)$`, 'i')
+
+function matchHsb(color: string) {
+  return parseFunctionalColor(color.match(hsbRegex) || color.match(hsbaRegex))
+}
 
 export function isHsb(color: string): boolean {
-  return hsbRegex.test(color)
+  return matchHsb(color) !== undefined
 }
 
 export function parseHsb(color: string) {
-  const match = color.match(hsbRegex)
-  if (!match)
+  const parsed = matchHsb(color)
+  if (!parsed)
     throw new Error('Invalid HSB color format.')
-  const values = [
-    Number.parseInt(match[1]),
-    Number.parseInt(match[2]),
-    Number.parseInt(match[3]),
-  ] as HsbColor
-  const alpha = match[4] ? Number.parseFloat(match[4]) : 1
-
-  return { values, alpha }
+  return parsed
 }
 
 export function hsbToHex(color: HsbColor) {

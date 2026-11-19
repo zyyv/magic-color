@@ -24,6 +24,8 @@ Or import components directly:
 import { Palette } from '@magic-color/vue'
 ```
 
+`v-model:color` includes transparency when used on its own. Bind `v-model:alpha` to control opacity separately. Pasting a HEX value with alpha updates the alpha model when it is bound.
+
 ## License
 
 [MIT](../../LICENSE)

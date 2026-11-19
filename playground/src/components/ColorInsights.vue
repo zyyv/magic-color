@@ -14,22 +14,22 @@ const metrics = computed(() => {
   if (!compareColor.value)
     return null
   return {
-    wcag: mc.wcag(props.color, compareColor.value),
+    wcag: mc.wcag(compareColor.value, props.color),
     apca: Math.abs(Number(mc.apca(compareColor.value, props.color))),
     delta: mc.deltaE(props.color, compareColor.value),
   }
 })
 const textColor = computed(() => mc.readable({ bgColor: props.color, textColor: '#ffffff', fallbackTextColor: '#000000' }))
-const textRatio = computed(() => mc.wcag(props.color, textColor.value))
+const textRatio = computed(() => mc.wcag(textColor.value, props.color))
 const sampleStyle = computed(() => ({ backgroundColor: props.color, color: textColor.value }))
 const temperature = computed(() => mc.warm(props.color) ? 'Warm' : 'Cool')
-const readableCode = computed(() => `const text = mc.readable({ bgColor: ${JSON.stringify(props.color)}, textColor: '#ffffff', fallbackTextColor: '#000000' })\nmc.wcag(${JSON.stringify(props.color)}, text)`)
+const readableCode = computed(() => `const text = mc.readable({ bgColor: ${JSON.stringify(props.color)}, textColor: '#ffffff', fallbackTextColor: '#000000' })\nmc.wcag(text, ${JSON.stringify(props.color)})`)
 const compareCode = computed(() => {
   if (!compareColor.value)
     return ''
   const base = JSON.stringify(props.color)
   const other = JSON.stringify(compareColor.value)
-  return `mc.wcag(${base}, ${other})\nMath.abs(Number(mc.apca(${other}, ${base})))\nmc.deltaE(${base}, ${other})`
+  return `mc.wcag(${other}, ${base})\nMath.abs(Number(mc.apca(${other}, ${base})))\nmc.deltaE(${base}, ${other})`
 })
 const hashCode = computed(() => `mc.hash(${JSON.stringify(hashInput.value)})`)
 </script>

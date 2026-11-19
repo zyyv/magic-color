@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { RgbColor } from 'magic-color'
 import { Magicolor } from 'magic-color'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useControlBlock } from './hook'
 
 interface Props {
@@ -26,37 +26,31 @@ const props = withDefaults(defineProps<Props>(), {
 
 const model = defineModel<number>({ default: 1 })
 
-const width = ref(props.width)
-const height = ref(props.height)
-const disable = ref(props.disable)
-
 const { canvasRef, barRef, onMouseDown } = useControlBlock({
-  disable: disable.value,
-  onChange: ({ x }) => model.value = x,
+  disable: () => props.disable,
+  onChange: ({ x }) => model.value = Number(x.toFixed(2)),
 })
-
-const ctx = ref<CanvasRenderingContext2D | null>(null)
 
 const barStyle = computed(() => ({
   position: 'absolute',
   top: '0',
-  left: `${model.value * Math.round(width.value - height.value)}px`,
-  height: `${height.value}px`,
+  left: `${model.value * Math.max(0, props.width - props.height)}px`,
+  height: `${props.height}px`,
   aspectRatio: '1 / 1',
   borderRadius: '50%',
   border: '2px solid white',
   boxShadow: 'rgba(0, 0, 0, 0.2) 0px 0px 0px 0.6px',
   backgroundColor: getBarBgColor(),
-  cursor: disable.value ? 'not-allowed' : 'grab',
+  cursor: props.disable ? 'not-allowed' : 'grab',
   userSelect: 'none',
-  ...((disable.value || props.type === 'normal') ? { transition: 'left 0.3s ease-in-out' } : {}),
+  ...((props.disable || props.type === 'normal') ? { transition: 'left 0.3s ease-in-out' } : {}),
 } as any))
 
 const wrapperStyle = computed(() => ({
   position: 'relative',
   borderRadius: '9999px',
   overflow: 'hidden',
-  width: `${width.value}px`,
+  width: `${props.width}px`,
 } as any))
 
 function getBarBgColor() {
@@ -107,38 +101,35 @@ function drawColorNormal(ctx: CanvasRenderingContext2D) {
   ctx.fillRect(0, 0, props.width, props.height)
 }
 
-onMounted(() => {
-  const _ctx = canvasRef.value?.getContext('2d')
-  if (_ctx) {
-    ctx.value = _ctx
-    switch (props.type) {
-      case 'hue':
-        drawColorHue(_ctx)
-        break
-      case 'alpha':
-        drawColorAlpha(_ctx)
-        break
-      default:
-        drawColorNormal(_ctx)
-        break
-    }
-  }
-})
+function redraw() {
+  const ctx = canvasRef.value?.getContext('2d')
+  if (!ctx)
+    return
 
-watch(() => props.color, () => {
-  if (ctx.value && props.type === 'alpha') {
-    ctx.value.clearRect(0, 0, width.value, height.value)
-    drawColorAlpha(ctx.value)
+  ctx.clearRect(0, 0, props.width, props.height)
+  switch (props.type) {
+    case 'hue':
+      drawColorHue(ctx)
+      break
+    case 'alpha':
+      drawColorAlpha(ctx)
+      break
+    default:
+      drawColorNormal(ctx)
+      break
   }
-})
+}
+
+onMounted(redraw)
+watch(() => [props.width, props.height, props.type, props.color, props.wrapperColor], redraw, { flush: 'post' })
 </script>
 
 <template>
   <div :style="wrapperStyle">
     <canvas
       ref="canvasRef"
-      :width="width"
-      :height="height"
+      :width="props.width"
+      :height="props.height"
       style="user-select: none;"
     />
     <div

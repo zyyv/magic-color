@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ColorType } from 'magic-color'
-import { computed, onMounted } from 'vue'
+import { guessType } from 'magic-color'
+import { computed, onMounted, ref, watch } from 'vue'
 
 type ArrayValue = [number, number, number]
 
@@ -16,47 +17,57 @@ const type = defineModel<ColorType>('type')
 const colorValue = defineModel<string | ArrayValue>('color')
 const alpha = defineModel<number>('alpha')
 
+const hexDraft = ref<string | null>(null)
 const hexV = computed({
-  get: () => {
-    return type.value === 'hex' ? colorValue.value as string : ''
-  },
+  get: () => hexDraft.value ?? (typeof colorValue.value === 'string' ? colorValue.value : ''),
   set: (v: string) => {
-    colorValue.value = v
+    hexDraft.value = v
+    const candidate = v.trim()
+    // Four digits can also be an intermediate value while typing six or eight.
+    if (candidate.replace(/^#/, '').length !== 4 && guessType(candidate) === 'hex')
+      colorValue.value = candidate
   },
 })
 
-const v0 = computed({
-  get: () => (colorValue.value as ArrayValue)[0],
-  set: (v: number) => {
-    colorValue.value = [v, (colorValue.value as ArrayValue)[1], (colorValue.value as ArrayValue)[2]]
-  },
+function finishHexEdit() {
+  const candidate = hexDraft.value?.trim()
+  if (candidate?.replace(/^#/, '').length === 4 && guessType(candidate) === 'hex')
+    colorValue.value = candidate
+  hexDraft.value = null
+}
+
+watch(type, () => {
+  hexDraft.value = null
 })
 
-const v1 = computed({
-  get: () => (colorValue.value as ArrayValue)[1],
-  set: (v: number) => {
-    colorValue.value = [(colorValue.value as ArrayValue)[0], v, (colorValue.value as ArrayValue)[2]]
-  },
-})
+function channelModel(index: 0 | 1 | 2) {
+  return computed({
+    get: () => Array.isArray(colorValue.value) ? colorValue.value[index] : undefined,
+    set: (value) => {
+      if (typeof value !== 'number' || !Number.isFinite(value) || !Array.isArray(colorValue.value))
+        return
+      const channels: ArrayValue = [...colorValue.value]
+      channels[index] = value
+      colorValue.value = channels
+    },
+  })
+}
 
-const v2 = computed({
-  get: () => (colorValue.value as ArrayValue)[2],
-  set: (v: number) => {
-    colorValue.value = [(colorValue.value as ArrayValue)[0], (colorValue.value as ArrayValue)[1], v]
-  },
-})
+const v0 = channelModel(0)
+const v1 = channelModel(1)
+const v2 = channelModel(2)
 
 const alphaStringify = computed({
-  get: () => Math.round(alpha.value! * 100),
+  get: () => Math.round((alpha.value ?? 1) * 100),
   set: (v: number) => {
-    alpha.value = Math.min(1, Math.max(0, Number((v / 100).toFixed(2))))
+    if (Number.isFinite(v))
+      alpha.value = Math.min(1, Math.max(0, Number((v / 100).toFixed(2))))
   },
 })
 
-function handleAlphaBlur(e: Event) {
+function restoreNumberOnBlur(e: Event, value: number | undefined) {
   const target = e.target as HTMLInputElement
-  if (alphaStringify.value !== Number(target.value))
-    target.value = String(alphaStringify.value)
+  target.value = value === undefined ? '' : String(value)
 }
 
 onMounted(() => {
@@ -139,6 +150,8 @@ onMounted(() => {
             background-color: transparent;
             width: 100%;
           "
+          @blur="finishHexEdit"
+          @keydown.enter="finishHexEdit"
         >
       </label>
       <template v-else>
@@ -161,6 +174,7 @@ onMounted(() => {
               background-color: transparent;
               width: 100%;
             "
+            @blur="restoreNumberOnBlur($event, v0)"
           >
         </label>
         <label
@@ -181,6 +195,7 @@ onMounted(() => {
               background-color: transparent;
               width: 100%;
             "
+            @blur="restoreNumberOnBlur($event, v1)"
           >
         </label>
         <label
@@ -201,6 +216,7 @@ onMounted(() => {
               background-color: transparent;
               width: 100%;
             "
+            @blur="restoreNumberOnBlur($event, v2)"
           >
         </label>
       </template>
@@ -224,7 +240,7 @@ onMounted(() => {
             background-color: transparent;
             width: 100%;
           "
-          @blur="handleAlphaBlur"
+          @blur="restoreNumberOnBlur($event, alphaStringify)"
         >
       </label>
     </div>

@@ -78,15 +78,6 @@ export const CONVERSION_MAP: Record<string, Partial<Record<ColorType, Conversion
     oklab: hexToOklab,
     oklch: hexToOklch,
   },
-  keyword: {
-    rgb: hexToRgb,
-    hsl: hexToHsl,
-    hsb: hexToHsb,
-    lab: hexToLab,
-    lch: hexToLch,
-    oklab: hexToOklab,
-    oklch: hexToOklch,
-  },
   rgb: {
     hex: rgbToHex,
     hsl: rgbToHsl,

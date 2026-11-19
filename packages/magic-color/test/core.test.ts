@@ -1,6 +1,6 @@
-import type { ColorType } from 'magic-color'
+import type { ColorType, ColorValue, RgbColor } from 'magic-color'
 import { Magicolor } from 'magic-color'
-import { describe, expect, it } from 'vitest'
+import { assert, describe, expect, expectTypeOf, it } from 'vitest'
 
 describe('utils scoped', () => {
   const hex = '#d15b14'
@@ -125,33 +125,102 @@ describe('utils scoped', () => {
   })
 
   it('darken and lighten', () => {
-    const mc = new Magicolor(hex) // #d15b14
+    const color = new Magicolor(hex)
+    const amounts = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
-    expect(mc.darken(0.1).hex()).toMatchInlineSnapshot(`"#cc570e"`)
-    expect(mc.darken(0.2).hex()).toMatchInlineSnapshot(`"#c65307"`)
-    expect(mc.darken(0.3).hex()).toMatchInlineSnapshot(`"#c14e00"`)
-    expect(mc.darken(0.4).hex()).toMatchInlineSnapshot(`"#bb4900"`)
-    expect(mc.darken(0.5).hex()).toMatchInlineSnapshot(`"#b64400"`)
-    expect(mc.darken(0.6).hex()).toMatchInlineSnapshot(`"#b04000"`)
-    expect(mc.darken(0.7).hex()).toMatchInlineSnapshot(`"#ab3b00"`)
-    expect(mc.darken(0.8).hex()).toMatchInlineSnapshot(`"#a53600"`)
-    expect(mc.darken(0.9).hex()).toMatchInlineSnapshot(`"#a03100"`)
-    expect(mc.darken().hex()).toMatchInlineSnapshot(`"#9a2c00"`)
-    expect(mc.darken().darken().hex()).toMatchInlineSnapshot(`"#660000"`)
-    expect(mc.darken().darken().darken().hex()).toMatchInlineSnapshot(`"#3b0000"`)
+    expect(amounts.map(amount => color.darken(amount).hex())).toEqual([
+      '#cb560e',
+      '#c65207',
+      '#c04d01',
+      '#bb4800',
+      '#b54300',
+      '#b03f00',
+      '#aa3a00',
+      '#a53500',
+      '#9f3000',
+    ])
+    expect(color.darken().hex()).toBe('#9a2b00')
+    expect(color.darken().darken().hex()).toBe('#660000')
+    expect(color.darken().darken().darken().hex()).toBe('#3b0000')
 
-    expect(mc.lighten(0.1).hex()).toMatchInlineSnapshot(`"#d76119"`)
-    expect(mc.lighten(0.2).hex()).toMatchInlineSnapshot(`"#dd661e"`)
-    expect(mc.lighten(0.3).hex()).toMatchInlineSnapshot(`"#e26a23"`)
-    expect(mc.lighten(0.4).hex()).toMatchInlineSnapshot(`"#e86f28"`)
-    expect(mc.lighten(0.5).hex()).toMatchInlineSnapshot(`"#ee742d"`)
-    expect(mc.lighten(0.6).hex()).toMatchInlineSnapshot(`"#f37932"`)
-    expect(mc.lighten(0.7).hex()).toMatchInlineSnapshot(`"#f97e36"`)
-    expect(mc.lighten(0.8).hex()).toMatchInlineSnapshot(`"#ff823b"`)
-    expect(mc.lighten(0.9).hex()).toMatchInlineSnapshot(`"#ff8740"`)
-    expect(mc.lighten().hex()).toMatchInlineSnapshot(`"#ff8c44"`)
-    expect(mc.lighten().lighten().hex()).toMatchInlineSnapshot(`"#ffbc71"`)
-    expect(mc.lighten().lighten().lighten().hex()).toMatchInlineSnapshot(`"#ffeda1"`)
+    expect(amounts.map(amount => color.lighten(amount).hex())).toEqual([
+      '#d76019',
+      '#dc641f',
+      '#e26924',
+      '#e76e28',
+      '#ed732d',
+      '#f37832',
+      '#f87c36',
+      '#fe813b',
+      '#ff8640',
+    ])
+    expect(color.lighten().hex()).toBe('#ff8b44')
+    expect(color.lighten().lighten().hex()).toBe('#ffbc72')
+    expect(color.lighten().lighten().lighten().hex()).toBe('#ffefa2')
+  })
+
+  it('adjusts only Lab lightness and preserves the original color at zero', () => {
+    const lab = new Magicolor('lab(50.125 20.375 -30.625 / 0.4)')
+    expect(lab.lighten(0.125).values).toEqual([52.375, 20.375, -30.625])
+    expect(lab.darken(0.125).values).toEqual([47.875, 20.375, -30.625])
+    expect(lab.lighten(10).values).toEqual([100, 20.375, -30.625])
+    expect(lab.darken(10).values).toEqual([0, 20.375, -30.625])
+
+    const blue = new Magicolor('#3b82f680')
+    for (const unchanged of [blue.lighten(0), blue.darken(0)]) {
+      expect(unchanged).not.toBe(blue)
+      expect(unchanged.css(true)).toBe('#3b82f680')
+    }
+  })
+
+  it('keeps input, clone, and history channel arrays independent', () => {
+    const input: [number, number, number] = [255, 0, 0]
+    const color = new Magicolor(input, 'rgb')
+    input[0] = 0
+    const rgbCopy = color.clone()
+    assert(Array.isArray(rgbCopy.values))
+    rgbCopy.values[0] = 0
+    expect(rgbCopy.hex()).toBe('#000000')
+    expect(color.hex()).toBe('#ff0000')
+
+    color.toRgb().toHex()
+    const copy = color.clone().revert()
+    assert(Array.isArray(copy.values))
+    copy.values[0] = 0
+    expect(copy.hex()).toBe('#000000')
+    expect(copy.revert().hex()).toBe('#ff0000')
+
+    const history = color.history
+    history[0].values = [0, 0, 0]
+    history.pop()
+    expect(color.history).toHaveLength(2)
+    expect(color.first?.hex()).toBe('#ff0000')
+    expect(color.revert().hex()).toBe('#ff0000')
+    expect(new Magicolor('#fff').last).toBeUndefined()
+  })
+
+  it('exposes the possible runtime shapes of mutable color values', () => {
+    const color = new Magicolor('#f00', 'hex')
+    color.toRgb()
+    expectTypeOf(color.values).toEqualTypeOf<ColorValue>()
+    expectTypeOf(color.value()).toEqualTypeOf<ColorValue>()
+    expectTypeOf(color.value('rgb')).toEqualTypeOf<RgbColor>()
+    expect(color.value('rgb')).toEqual([255, 0, 0])
+  })
+
+  it('rejects sparse RGB arrays and keeps alpha valid after construction', () => {
+    const sparse = [1, 2]
+    sparse.length = 3
+    expect(() => new Magicolor(sparse as RgbColor)).toThrow('Color channels must be three finite numbers')
+    const color = new Magicolor('#f00')
+    color.alpha = 0.5
+    for (const invalid of [-1, 2, Number.NaN, Number.POSITIVE_INFINITY]) {
+      expect(() => {
+        color.alpha = invalid
+      }).toThrow('Alpha must be a finite number')
+      expect(color.css(true)).toBe('#ff000080')
+    }
+    expect(new Magicolor('rgb(1.234567 2 3)').rgb(false)).toEqual([1.234567, 2, 3])
   })
 
   it('get and set methods', () => {

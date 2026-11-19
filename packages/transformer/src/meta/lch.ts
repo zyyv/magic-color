@@ -1,22 +1,23 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
-import { labToRgb } from './lab'
-import { rgbToHex, rgbToHsb, rgbToHsl, rgbToOklab, rgbToOklch } from './rgb'
+import { alphaPattern, huePattern, numberPattern, parseFunctionalColor } from './functional-color'
+import { labToOklab, labToOklch, labToRgb } from './lab'
+import { rgbToHex, rgbToHsb, rgbToHsl } from './rgb'
 
-const lchRegex = /^lch\((\d+(?:\.\d+)?)%?\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)(?:deg)?(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
+const lchRegex = new RegExp(String.raw`^lch\(\s*(${numberPattern}%?)\s+(${numberPattern}%?)\s+(${huePattern})(?:\s*\/\s*(${alphaPattern}))?\s*\)$`, 'i')
+
+function matchLch(color: string) {
+  return parseFunctionalColor(color.match(lchRegex), [100, 150, 'angle'])
+}
 
 export function isLch(color: string): boolean {
-  return lchRegex.test(color)
+  return matchLch(color) !== undefined
 }
 
 export function parseLch(color: string) {
-  const match = color.match(lchRegex)
-  if (!match)
+  const parsed = matchLch(color)
+  if (!parsed)
     throw new Error('Invalid LCH color format.')
-
-  const lch = [match[1], match[2], match[3]].map(Number.parseFloat) as LchColor
-  const alpha = match[4] ? Number.parseFloat(match[4]) : 1
-
-  return { values: lch, alpha }
+  return parsed
 }
 
 export function lchToRgb(color: LchColor): RgbColor {
@@ -44,9 +45,9 @@ export function lchToLab(color: LchColor): LabColor {
 }
 
 export function lchToOklab(color: LchColor): LabColor {
-  return rgbToOklab(lchToRgb(color))
+  return labToOklab(lchToLab(color))
 }
 
 export function lchToOklch(color: LchColor): LchColor {
-  return rgbToOklch(lchToRgb(color))
+  return labToOklch(lchToLab(color))
 }

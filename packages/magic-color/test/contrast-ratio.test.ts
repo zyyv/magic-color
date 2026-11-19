@@ -5,12 +5,25 @@ const c1 = '#123123'
 const c2 = '#797989'
 
 describe('contrast ratio for WCAG', () => {
-  it('wCAG', () => {
+  it('returns the full contrast ratio', () => {
     expect(mc.wcag('#000', '#fff')).toBe(21)
     expect(mc.wcag('#fff', '#000')).toBe(21)
     expect(mc.wcag('#000', '#000')).toBe(1)
     expect(mc.wcag('#fff', '#fff')).toBe(1)
-    expect(mc.wcag(c1, c2)).toMatchInlineSnapshot(`3.3`)
+    expect(mc.wcag(c1, c2)).toBeCloseTo(3.296259251, 9)
+    expect(mc.wcag('#000', '#f00')).toBeCloseTo(5.252, 9)
+  })
+
+  it('uses full precision at the WCAG threshold', () => {
+    expect(mc.wcag('#fff', '#018580')).toBeCloseTo(4.498710137, 9)
+    expect(mc.readable('#018580')).toBe('#000000')
+  })
+
+  it('composites text over the background and transparent backgrounds over white', () => {
+    expect(mc.wcag('#00000000', '#fff')).toBe(1)
+    expect(mc.wcag('rgb(0 0 0 / 50%)', '#fff')).toBeCloseTo(3.97665, 5)
+    expect(mc.wcag('#000', 'transparent')).toBe(21)
+    expect(mc.readable({ bgColor: '#fff', textColor: 'transparent' })).toBe('#000000')
   })
 })
 
@@ -21,6 +34,21 @@ describe('contrast ratio for APCA', () => {
     expect(mc.apca('#000', '#000')).toMatchInlineSnapshot(`0`)
     expect(mc.apca('#fff', '#fff')).toMatchInlineSnapshot(`0`)
     expect(mc.apca('#89889867', '#fff')).toMatchInlineSnapshot(`25.345168601044666`)
+  })
+
+  it('composites transparent backgrounds over white for APCA', () => {
+    expect(mc.apca('#fff', 'transparent')).toBe(0)
+    expect(mc.apca('#000', 'transparent')).toBe(mc.apca('#000', '#fff'))
+    expect(mc.apca('#000', 'rgb(0 0 0 / 50%)')).toBe(mc.apca('#000', '#808080'))
+    expect(mc.apca('transparent', '#0008')).toBe(0)
+  })
+
+  it('clips RGB channels and honors unrounded APCA inputs', () => {
+    expect(mc.apca('rgb(300 -5 0)', '#fff')).toBe(mc.apca('#f00', '#fff'))
+    expect(mc.apca('#000', 'rgb(0 0 0 / 50%)', -1, false))
+      .toBe(mc.apca('#000', 'rgb(127.5 127.5 127.5)', -1, false))
+    const fractional = mc.apca('rgb(127.4 127.4 127.4)', '#fff', -1, false)
+    expect(fractional).not.toBe(mc.apca('rgb(127 127 127)', '#fff', -1, false))
   })
 
   it('reverseAPCA', () => {

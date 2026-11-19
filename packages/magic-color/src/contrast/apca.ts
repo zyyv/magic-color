@@ -5,6 +5,7 @@
 
 import type { RgbColor } from '@magic-color/core'
 import { Magicolor } from '@magic-color/core'
+import { compositeContrastColors } from './composite'
 import { SA98G } from './constant'
 
 function APCAcontrast(txtY: number, bgY: number, places = -1) {
@@ -105,33 +106,12 @@ function sRGBtoY(rgb: RgbColor = [0, 0, 0]) { // send sRGB 8bpc (0xFFFFFF) or st
     + SA98G.sBco * simpleExp(rgb[2])
 }
 
-function alphaBlend(rgbaFG = [0, 0, 0, 1.0], rgbBG = [0, 0, 0], round = true) {
-  rgbaFG[3] = Math.max(Math.min(rgbaFG[3], 1.0), 0.0) // clamp alpha 0-1
-  const compBlend = 1.0 - rgbaFG[3]
-  const rgbOut: RgbColor = [0, 0, 0] // or just use rgbBG to retain other elements?
-
-  for (let i = 0; i < 3; i++) {
-    rgbOut[i] = rgbBG[i] * compBlend + rgbaFG[i] * rgbaFG[3]
-    if (round)
-      rgbOut[i] = Math.min(Math.round(rgbOut[i] as number), 255)
-  };
-  return rgbOut
-}
-
+/**
+ * Calculate APCA contrast with translucent backgrounds composited over white.
+ */
 export function calcAPCA(textColor: string, bgColor: string, places = -1, round = true) {
-  const mcText = new Magicolor(textColor).toRgb()
-  const mcBg = new Magicolor(bgColor).toRgb()
-  const alpha = mcText.alpha
-
-  const bgClr = mcBg.value()
-  let txClr = mcText.value()
-
-  const hasAlpha = alpha !== 1
-
-  if (hasAlpha)
-    txClr = alphaBlend([...txClr, alpha], bgClr, round)
-
-  return APCAcontrast(sRGBtoY(txClr), sRGBtoY(bgClr), places)
+  const { background, foreground } = compositeContrastColors(textColor, bgColor, round)
+  return APCAcontrast(sRGBtoY(foreground), sRGBtoY(background), places)
 }
 
 export function reverseAPCA(

@@ -1,22 +1,28 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
-import { D50_WHITE, xyzD50ToLinearRgb } from './lab-xyz'
-import { rgbToHex, rgbToHsb, rgbToHsl, rgbToOklab, rgbToOklch } from './rgb'
+import { alphaPattern, numberPattern, parseFunctionalColor } from './functional-color'
+import { labToXyzD50, xyzD50ToLinearRgb } from './lab-xyz'
+import { oklabToOklch } from './oklab'
+import { linearRgbToOklab } from './oklab-linear'
+import { rgbToHex, rgbToHsb, rgbToHsl } from './rgb'
 
-const labRegex = /^lab\(\s*(100|[1-9]?\d(?:\.\d+)?)\s+(-?(?:1[01]\d|12[0-8]|\d?\d)(?:\.\d+)?)\s+(-?(?:1[01]\d|12[0-8]|\d?\d)(?:\.\d+)?)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
+const channel = `(${numberPattern}%?)`
+const labRegex = new RegExp(String.raw`^lab\(\s*${channel}\s+${channel}\s+${channel}(?:\s*\/\s*(${alphaPattern}))?\s*\)$`, 'i')
+
+function matchLab(color: string) {
+  const parsed = parseFunctionalColor(color.match(labRegex), [100, 125, 125])
+  if (parsed && parsed.values[0] >= 0 && parsed.values[0] <= 100)
+    return parsed
+}
 
 export function isLab(color: string): boolean {
-  return labRegex.test(color)
+  return matchLab(color) !== undefined
 }
 
 export function parseLab(color: string): { values: LabColor, alpha: number } {
-  const match = color.match(labRegex)
-  if (!match)
+  const parsed = matchLab(color)
+  if (!parsed)
     throw new Error('Invalid Lab color format.')
-
-  const lab = [Number.parseFloat(match[1]), Number.parseFloat(match[2]), Number.parseFloat(match[3])] as LabColor
-  const alpha = match[4] ? Number.parseFloat(match[4]) : 1
-
-  return { values: lab, alpha }
+  return parsed
 }
 
 function linearToSrgb(r: number): number {
@@ -24,23 +30,8 @@ function linearToSrgb(r: number): number {
   return Math.min(Math.max(0, r), 255)
 }
 
-const delta = 6 / 29
-const delta2 = delta * delta
-const multiplier = 3 * delta2
-const offset = 4 / 29
-
-function labToXyzComponent(t: number): number {
-  return t > delta ? t * t * t : multiplier * (t - offset)
-}
-
 export function labToRgb(color: LabColor): RgbColor {
-  const [l, a, b] = color
-  const lightness = (l + 16) / 116
-  const x = D50_WHITE[0] * labToXyzComponent(lightness + a / 500)
-  const y = D50_WHITE[1] * labToXyzComponent(lightness)
-  const z = D50_WHITE[2] * labToXyzComponent(lightness - b / 200)
-  const [r, g, blue] = xyzD50ToLinearRgb(x, y, z)
-
+  const [r, g, blue] = xyzD50ToLinearRgb(...labToXyzD50(color))
   return [linearToSrgb(r), linearToSrgb(g), linearToSrgb(blue)]
 }
 
@@ -64,9 +55,9 @@ export function labToLch(color: LabColor): LchColor {
 }
 
 export function labToOklab(color: LabColor): LabColor {
-  return rgbToOklab(labToRgb(color))
+  return linearRgbToOklab(...xyzD50ToLinearRgb(...labToXyzD50(color)))
 }
 
 export function labToOklch(color: LabColor): LchColor {
-  return rgbToOklch(labToRgb(color))
+  return oklabToOklch(labToOklab(color))
 }

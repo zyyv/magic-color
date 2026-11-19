@@ -1,4 +1,4 @@
-import { nextTick, onMounted, ref } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 interface useControlBlockOptions {
   /**
@@ -23,11 +23,11 @@ interface useControlBlockOptions {
    *
    * @default false
    */
-  disable?: boolean
+  disable?: () => boolean
 }
 
 export function useControlBlock(options: useControlBlockOptions = {}) {
-  const { onChange, overflows = true, disable = false } = options
+  const { onChange, overflows = true, disable } = options
 
   const canvasRef = ref<HTMLCanvasElement | null>(null)
   const barRef = ref<HTMLDivElement | null>(null)
@@ -37,69 +37,73 @@ export function useControlBlock(options: useControlBlockOptions = {}) {
   const startY = ref(0)
   const startLeft = ref(0)
   const startTop = ref(0)
-  const realWidth = ref(0)
-  const realHeight = ref(0)
 
   function handleMouseDown(e: MouseEvent) {
-    if (disable)
+    const bar = barRef.value
+    if (disable?.() || !bar)
       return
     e.preventDefault()
     startX.value = e.clientX
     startY.value = e.clientY
-    startLeft.value = barRef.value!.offsetLeft
-    startTop.value = barRef.value!.offsetTop
+    startLeft.value = bar.offsetLeft
+    startTop.value = bar.offsetTop
 
-    barRef.value!.style.cursor = 'grabbing'
-    barRef.value!.style.transition = 'none'
+    bar.style.cursor = 'grabbing'
+    bar.style.transition = 'none'
 
     registerListeners()
   }
 
   function handleMouseMove(e: MouseEvent) {
-    if (disable)
+    const bar = barRef.value
+    if (disable?.() || !bar)
       return
     e.preventDefault()
-    barRef.value!.style.cursor = 'grabbing'
+    bar.style.cursor = 'grabbing'
     const disX = startLeft.value + e.clientX - startX.value
     const disY = startTop.value + e.clientY - startY.value
-    const left = Math.min(Math.max(disX, 0), realWidth.value)
-    const top = Math.min(Math.max(disY, 0), realHeight.value)
-    const value = {
-      x: Number((left / realWidth.value).toFixed(2)),
-      y: Number((top / realHeight.value).toFixed(2)),
-    }
-    onChange?.(value)
-    nextTick(() => {
-      barRef.value!.style.left = `${left}px`
-      barRef.value!.style.top = `${top}px`
-    })
+    updatePosition(disX, disY)
   }
 
   function handleMouseUp() {
-    if (disable)
-      return
-    barRef.value!.style.cursor = 'grab'
-    barRef.value!.style.transition = 'all 0.2s ease-in-out'
-
     removeListeners()
+    if (barRef.value) {
+      barRef.value.style.cursor = disable?.() ? 'not-allowed' : 'grab'
+      barRef.value.style.transition = 'all 0.2s ease-in-out'
+    }
   }
 
   function handleClick(e: MouseEvent) {
-    if (disable)
+    const bar = barRef.value
+    if (disable?.() || !bar)
       return
     e.stopPropagation()
-    barRef.value!.style.transition = 'all 0.2s ease-in-out'
-    const left = Math.min(Math.max(e.offsetX - (overflows ? barRef.value!.offsetWidth / 2 : 0), 0), realWidth.value)
-    const top = Math.min(Math.max(e.offsetY - (overflows ? barRef.value!.offsetHeight / 2 : 0), 0), realHeight.value)
-    const value = {
-      x: Number((left / realWidth.value).toFixed(2)),
-      y: Number((top / realHeight.value).toFixed(2)),
-    }
+    bar.style.transition = 'all 0.2s ease-in-out'
+    updatePosition(
+      e.offsetX - (overflows ? bar.offsetWidth / 2 : 0),
+      e.offsetY - (overflows ? bar.offsetHeight / 2 : 0),
+    )
+  }
 
-    onChange?.(value)
+  function updatePosition(x: number, y: number) {
+    const canvas = canvasRef.value
+    const bar = barRef.value
+    if (!canvas || !bar)
+      return
+
+    const width = Math.max(0, canvas.width - (overflows ? bar.offsetWidth : 0))
+    const height = Math.max(0, canvas.height - (overflows ? bar.offsetHeight : 0))
+    const left = Math.min(Math.max(x, 0), width)
+    const top = Math.min(Math.max(y, 0), height)
+    onChange?.({
+      x: width > 0 ? left / width : 0,
+      y: height > 0 ? top / height : 0,
+    })
     nextTick(() => {
-      barRef.value!.style.left = `${left}px`
-      barRef.value!.style.top = `${top}px`
+      if (barRef.value) {
+        barRef.value.style.left = `${left}px`
+        barRef.value.style.top = `${top}px`
+      }
     })
   }
 
@@ -110,9 +114,15 @@ export function useControlBlock(options: useControlBlockOptions = {}) {
   }
 
   function removeListeners() {
+    if (!active.value)
+      return
     active.value = false
     window.removeEventListener('mousemove', handleMouseMove)
     window.removeEventListener('mouseup', handleMouseUp)
+  }
+
+  function stopBarClick(e: MouseEvent) {
+    e.stopPropagation()
   }
 
   onMounted(() => {
@@ -120,16 +130,24 @@ export function useControlBlock(options: useControlBlockOptions = {}) {
       canvasRef.value.addEventListener('click', handleClick)
 
     if (barRef.value) {
-      barRef.value.addEventListener('click', e => e.stopPropagation())
+      barRef.value.addEventListener('click', stopBarClick)
 
       if (!overflows)
         barRef.value.style.transform = 'translate(-50%, -50%)'
     }
+  })
 
-    if (canvasRef.value && barRef.value) {
-      realWidth.value = canvasRef.value.width - (overflows ? barRef.value.offsetWidth : 0)
-      realHeight.value = canvasRef.value.height - (overflows ? barRef.value.offsetHeight : 0)
-    }
+  if (disable) {
+    watch(disable, (disabled) => {
+      if (disabled && active.value)
+        handleMouseUp()
+    })
+  }
+
+  onBeforeUnmount(() => {
+    removeListeners()
+    canvasRef.value?.removeEventListener('click', handleClick)
+    barRef.value?.removeEventListener('click', stopBarClick)
   })
 
   return {

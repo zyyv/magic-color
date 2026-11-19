@@ -1,35 +1,20 @@
-import type { HexColor } from '../types'
-import { isObject } from '@magic-color/shared'
-import { Colorbrewer, UnoColors, W3cx11 } from '../colors'
-
+import { W3cx11 } from '../colors/w3cx11'
 import { parseHex } from './hex'
 
+function keywordToHex(color: string) {
+  const name = color.trim().toLowerCase()
+  if (name === 'transparent')
+    return '#00000000'
+  if (Object.hasOwn(W3cx11, name))
+    return W3cx11[name as keyof typeof W3cx11]
+}
+
 export function isKeyword(color: string): boolean {
-  return color in UnoColors || color in Colorbrewer || color in W3cx11
+  return keywordToHex(color) !== undefined
 }
 
 export function parseKeyword(color: string) {
-  let hex
-  let c: any
-
-  c = (UnoColors as any)[color]
-  if (c) {
-    if (isObject(c))
-      hex = c.DEFAULT
-
-    else
-      hex = c
-
-    return parseHex(hex as HexColor)
-  }
-
-  c = (Colorbrewer as any)[color]
-  if (c) {
-    hex = c[3]
+  const hex = keywordToHex(color)
+  if (hex !== undefined)
     return parseHex(hex)
-  }
-
-  c = (W3cx11 as any)[color]
-  if (c)
-    return parseHex(c)
 }

@@ -1,7 +1,7 @@
 /**
- * X11 color names
+ * CSS named colors
  *
- * @see http://www.w3.org/TR/css3-color/#svg-color
+ * @see https://www.w3.org/TR/css-color-4/#named-colors
  */
 
 export const W3cx11 = {
@@ -22,7 +22,6 @@ export const W3cx11 = {
   chartreuse: '#7fff00',
   chocolate: '#d2691e',
   coral: '#ff7f50',
-  cornflower: '#6495ed',
   cornflowerblue: '#6495ed',
   cornsilk: '#fff8dc',
   crimson: '#dc143c',
@@ -69,7 +68,6 @@ export const W3cx11 = {
   indigo: '#4b0082',
   ivory: '#fffff0',
   khaki: '#f0e68c',
-  laserlemon: '#ffff54',
   lavender: '#e6e6fa',
   lavenderblush: '#fff0f5',
   lawngreen: '#7cfc00',
@@ -77,7 +75,6 @@ export const W3cx11 = {
   lightblue: '#add8e6',
   lightcoral: '#f08080',
   lightcyan: '#e0ffff',
-  lightgoldenrod: '#fafad2',
   lightgoldenrodyellow: '#fafad2',
   lightgray: '#d3d3d3',
   lightgreen: '#90ee90',
@@ -95,8 +92,6 @@ export const W3cx11 = {
   linen: '#faf0e6',
   magenta: '#ff00ff',
   maroon: '#800000',
-  maroon2: '#7f0000',
-  maroon3: '#b03060',
   mediumaquamarine: '#66cdaa',
   mediumblue: '#0000cd',
   mediumorchid: '#ba55d3',
@@ -129,8 +124,6 @@ export const W3cx11 = {
   plum: '#dda0dd',
   powderblue: '#b0e0e6',
   purple: '#800080',
-  purple2: '#7f007f',
-  purple3: '#a020f0',
   rebeccapurple: '#663399',
   red: '#ff0000',
   rosybrown: '#bc8f8f',
