@@ -1,5 +1,6 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
 import { labToLch } from './lab'
+import { D50_WHITE, linearRgbToXyzD50 } from './lab-xyz'
 
 const rgbRegex = /^rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(0|0?\.\d+|1(?:\.0)?))?\)$/
 const newRgbRegex = /^rgb\((\d+)\s+(\d+)\s+(\d+)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
@@ -82,37 +83,22 @@ export function rgbToHsb(color: RgbColor): HsbColor {
   return [h * 360, s * 100, v * 100]
 }
 
+function srgbToLinear(channel: number): number {
+  const value = channel / 255
+  return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4
+}
+
+function xyzToLabComponent(value: number): number {
+  const delta = 6 / 29
+  return value > delta ** 3 ? Math.cbrt(value) : value / (3 * delta ** 2) + 4 / 29
+}
+
 export function rgbToLab(color: RgbColor): LabColor {
-  function rgb_xyz(rgb: number) {
-    const r = rgb / 255
-    if (r <= 0.04045)
-      return r / 12.92
-    return ((r + 0.055) / 1.055) ** 2.4
-  }
+  const [r, g, b] = color.map(srgbToLinear)
+  const xyz = linearRgbToXyzD50(r, g, b)
+  const [x, y, z] = xyz.map((value, index) => xyzToLabComponent(value / D50_WHITE[index]))
 
-  function xyz_lab(t: number) {
-    const delta = 6 / 29
-    const delta3 = delta * delta * delta
-    const multiplier = 3 * delta * delta
-    const offset = 4 / 29
-
-    if (t > delta3)
-      return t ** (1 / 3)
-    return t / multiplier + offset
-  }
-
-  function rgb2xyz(color: RgbColor) {
-    const [r, g, b] = color.map(rgb_xyz)
-    const x = xyz_lab((0.4124564 * r + 0.3575761 * g + 0.1804375 * b) / 0.950470)
-    const y = xyz_lab((0.2126729 * r + 0.7151522 * g + 0.0721750 * b) / 1)
-    const z = xyz_lab((0.0193339 * r + 0.1191920 * g + 0.9503041 * b) / 1.088830)
-    return [x, y, z]
-  }
-
-  const [x, y, z] = rgb2xyz(color)
-  const l = 116 * y - 16
-
-  return [l < 0 ? 0 : l, 500 * (x - y), 200 * (y - z)] as LabColor
+  return [Math.max(0, 116 * y - 16), 500 * (x - y), 200 * (y - z)]
 }
 
 export function rgbToLch(color: RgbColor): LchColor {
@@ -120,10 +106,7 @@ export function rgbToLch(color: RgbColor): LchColor {
 }
 
 export function rgbToOklab(color: RgbColor): LabColor {
-  const [r, g, b] = color.map((c) => {
-    c = c / 255
-    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
-  })
+  const [r, g, b] = color.map(srgbToLinear)
 
   const l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b
   const m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b

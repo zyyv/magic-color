@@ -1,7 +1,7 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
 import { rgbToHex, rgbToHsb, rgbToHsl, rgbToLab, rgbToLch } from './rgb'
 
-const oklabRegex = /^oklab\(\s*(100|[1-9]?\d(?:\.\d+)?)%?\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
+const oklabRegex = /^oklab\(\s*((?:100(?:\.0+)?|[1-9]?\d(?:\.\d+)?|\.\d+)%?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
 
 export function isOklab(color: string): boolean {
   return oklabRegex.test(color)
@@ -12,10 +12,9 @@ export function parseOklab(color: string) {
   if (!match)
     throw new Error('Invalid Oklab color format.')
 
-  let l = Number.parseFloat(match[1])
-  if (match[1].endsWith('%'))
-    l = Number.parseFloat(match[1])
-
+  const lightness = Number.parseFloat(match[1])
+  // Retain the legacy 0–100 scale for unitless values greater than 1.
+  const l = match[1].endsWith('%') || lightness > 1 ? lightness : lightness * 100
   const oklab = [l, Number.parseFloat(match[2]), Number.parseFloat(match[3])] as LabColor
   const alpha = match[4] ? Number.parseFloat(match[4]) : 1
 

@@ -36,15 +36,15 @@ describe('rgb', () => {
 
   it('rgbToLab', () => {
     const lab = rgbToLab([114, 152, 218])
-    expect(lab[0]).toBeCloseTo(62.58, 1)
-    expect(lab[1]).toBeCloseTo(4.76, 1)
-    expect(lab[2]).toBeCloseTo(-37.68, 1)
+    expect(lab[0]).toBeCloseTo(62.086, 3)
+    expect(lab[1]).toBeCloseTo(0.183, 3)
+    expect(lab[2]).toBeCloseTo(-38.311, 3)
   })
 
   it('rgbToLch', () => {
     const lch = rgbToLch([114, 152, 218])
-    expect(lch[0]).toBeCloseTo(62.58, 1)
-    expect(lch[1]).toBeCloseTo(37.98, 1)
-    expect(lch[2]).toBeCloseTo(277.20, 1)
+    expect(lch[0]).toBeCloseTo(62.086, 3)
+    expect(lch[1]).toBeCloseTo(38.311, 3)
+    expect(lch[2]).toBeCloseTo(270.273, 3)
   })
 })

@@ -1,4 +1,5 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
+import { D50_WHITE, xyzD50ToLinearRgb } from './lab-xyz'
 import { rgbToHex, rgbToHsb, rgbToHsl, rgbToOklab, rgbToOklch } from './rgb'
 
 const labRegex = /^lab\(\s*(100|[1-9]?\d(?:\.\d+)?)\s+(-?(?:1[01]\d|12[0-8]|\d?\d)(?:\.\d+)?)\s+(-?(?:1[01]\d|12[0-8]|\d?\d)(?:\.\d+)?)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
@@ -18,7 +19,7 @@ export function parseLab(color: string): { values: LabColor, alpha: number } {
   return { values: lab, alpha }
 }
 
-function xyz_rgb(r: number) {
+function linearToSrgb(r: number): number {
   r = 255 * (r <= 0.0031308 ? 12.92 * r : 1.055 * r ** (1 / 2.4) - 0.055)
   return Math.min(Math.max(0, r), 255)
 }
@@ -28,27 +29,19 @@ const delta2 = delta * delta
 const multiplier = 3 * delta2
 const offset = 4 / 29
 
-function lab_xyz(t: number) {
+function labToXyzComponent(t: number): number {
   return t > delta ? t * t * t : multiplier * (t - offset)
 }
 
 export function labToRgb(color: LabColor): RgbColor {
   const [l, a, b] = color
-  let x, y, z
+  const lightness = (l + 16) / 116
+  const x = D50_WHITE[0] * labToXyzComponent(lightness + a / 500)
+  const y = D50_WHITE[1] * labToXyzComponent(lightness)
+  const z = D50_WHITE[2] * labToXyzComponent(lightness - b / 200)
+  const [r, g, blue] = xyzD50ToLinearRgb(x, y, z)
 
-  y = (l + 16) / 116
-  x = y + a / 500
-  z = y - b / 200
-
-  y = 1 * lab_xyz(y)
-  x = 0.950470 * lab_xyz(x)
-  z = 1.088830 * lab_xyz(z)
-
-  const r = xyz_rgb(3.2404542 * x - 1.5371385 * y - 0.4985314 * z) // D65 -> sRGB
-  const g = xyz_rgb(-0.9692660 * x + 1.8760108 * y + 0.0415560 * z)
-  const b_ = xyz_rgb(0.0556434 * x - 0.2040259 * y + 1.0572252 * z)
-
-  return [r, g, b_]
+  return [linearToSrgb(r), linearToSrgb(g), linearToSrgb(blue)]
 }
 
 export function labToHex(color: LabColor): HexColor {
