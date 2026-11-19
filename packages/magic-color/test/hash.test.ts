@@ -2,11 +2,14 @@ import { mc } from 'magic-color'
 import { describe, expect, it } from 'vitest'
 
 describe('hash colors', () => {
-  it('hash output', () => {
-    const input = 'example'
-    const result = mc.hash(input)
+  it('uses FNV-1a by default and preserves the legacy mapping on request', () => {
+    expect(mc.hash('hello')).toBe('#9f2cab')
+    expect(mc.hash('example', 'hex', 'legacy')).toBe('#1dbaae')
+  })
 
-    expect(result).toMatchInlineSnapshot(`"#1dbaae"`)
+  it('includes character order for ASCII and Unicode inputs', () => {
+    expect(new Set(['abc', 'bca', 'cba'].map(input => mc.hash(input))).size).toBe(3)
+    expect(mc.hash('张三')).not.toBe(mc.hash('三张'))
   })
 
   it('should generate consistent color for the same input', () => {

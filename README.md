@@ -99,6 +99,12 @@ const color = mc('#ffffff', 'hex', 1) // specify opacity
 
 CSS `lab()` and `lch()` use the D50 white point. In `oklab()` and `oklch()` strings, lightness can be written as a number from 0 to 1 or as a percentage. For example, `0.62` and `62%` both represent 62% lightness.
 
+CSS named colors are case-insensitive and are stored as HEX. For example, `mc('red').hex()` returns `'#ff0000'` and `mc('transparent').css(true)` returns `'#00000000'`. To use a color from Uno or ColorBrewer, import the palette from `@magic-color/transformer/colors` and pass a swatch such as `UnoColors.red[400]` to `mc()`.
+
+`mc.wcag(textColor, backgroundColor)` returns the full contrast ratio for threshold comparisons. Both `mc.wcag()` and `mc.apca()` composite translucent text over its background and translucent backgrounds over white. Round the WCAG result when displaying it.
+
+`mc.deltaE()` returns the CIEDE2000 difference, which can exceed 100. OKLab and OKLCH arrays preserve fractional channels by default. Pass `false` to `.oklab()` or `.oklch()` for the unrounded channels.
+
 You can convert between supported types.
 
 ```ts
@@ -111,7 +117,7 @@ color.toHsb() // HSB value: [0, 0, 100]
 color.to('your transformed type')
 ```
 
-Get any type value of the color.
+Conversion methods such as `toRgb()` modify the instance. TypeScript represents `color.values` and `color.value()` as a HEX string or a channel array. Request a specific format for a typed result. Pass `false` as the second argument to `value()` for unrounded channels.
 
 ```ts
 color.value() // current type value. If type is rgb: [255, 255, 255]
@@ -127,12 +133,14 @@ color.css() // '#ffffff'
 // with opacity
 color.css(true) // '#ffffffff'
 color.css('rgb') // 'rgb(255 255 255)'
-color.css('rgb', true) // 'rgb(255 255 255 / 100%)'
+color.css('rgb', true) // 'rgb(255 255 255 / 1)'
 ```
 
 Refer to the [type documentation](https://github.com/zyyv/magic-color/blob/main/src/core/types.ts) for more information.
 
 And more...
+
+`mc.hash(input)` uses FNV-1a and incorporates character order. Existing color assignments can use `mc.hash(input, 'hex', 'legacy')`.
 
 ### mc.theme
 

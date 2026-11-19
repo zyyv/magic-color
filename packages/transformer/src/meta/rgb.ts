@@ -1,27 +1,30 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
+import { alphaPattern, numberPattern, parseFunctionalColor } from './functional-color'
 import { labToLch } from './lab'
-import { D50_WHITE, linearRgbToXyzD50 } from './lab-xyz'
+import { linearRgbToXyzD50, xyzD50ToLab } from './lab-xyz'
+import { linearRgbToOklab } from './oklab-linear'
 
-const rgbRegex = /^rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(0|0?\.\d+|1(?:\.0)?))?\)$/
-const newRgbRegex = /^rgb\((\d+)\s+(\d+)\s+(\d+)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
+const channel = `(${numberPattern}%?)`
+const rgbRegex = new RegExp(String.raw`^rgba?\(\s*${channel}\s*,\s*${channel}\s*,\s*${channel}(?:\s*,\s*(${alphaPattern}))?\s*\)$`, 'i')
+const newRgbRegex = new RegExp(String.raw`^rgba?\(\s*${channel}\s+${channel}\s+${channel}(?:\s*\/\s*(${alphaPattern}))?\s*\)$`, 'i')
 
 export function isRgb(color: string): boolean {
-  return rgbRegex.test(color) || newRgbRegex.test(color)
+  return matchRgb(color) !== undefined
+}
+
+function matchRgb(color: string) {
+  return parseFunctionalColor(color.match(rgbRegex) || color.match(newRgbRegex), [255, 255, 255])
 }
 
 export function parseRgb(color: string) {
-  const match = color.match(rgbRegex) || color.match(newRgbRegex)
-  if (!match)
+  const parsed = matchRgb(color)
+  if (!parsed)
     throw new Error('Invalid RGB or RGBA color format.')
-
-  const rgb = [match[1], match[2], match[3]].map(Number) as RgbColor
-  const alpha = match[4] ? Number.parseFloat(match[4]) : 1
-
-  return { values: rgb, alpha }
+  return parsed
 }
 
 export function rgbToHex(color: RgbColor): HexColor {
-  const [r, g, b] = color.map(Math.round)
+  const [r, g, b] = color.map(channel => Math.min(255, Math.max(0, Math.round(channel))))
   return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`
 }
 
@@ -88,17 +91,9 @@ function srgbToLinear(channel: number): number {
   return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4
 }
 
-function xyzToLabComponent(value: number): number {
-  const delta = 6 / 29
-  return value > delta ** 3 ? Math.cbrt(value) : value / (3 * delta ** 2) + 4 / 29
-}
-
 export function rgbToLab(color: RgbColor): LabColor {
   const [r, g, b] = color.map(srgbToLinear)
-  const xyz = linearRgbToXyzD50(r, g, b)
-  const [x, y, z] = xyz.map((value, index) => xyzToLabComponent(value / D50_WHITE[index]))
-
-  return [Math.max(0, 116 * y - 16), 500 * (x - y), 200 * (y - z)]
+  return xyzD50ToLab(linearRgbToXyzD50(r, g, b))
 }
 
 export function rgbToLch(color: RgbColor): LchColor {
@@ -107,20 +102,7 @@ export function rgbToLch(color: RgbColor): LchColor {
 
 export function rgbToOklab(color: RgbColor): LabColor {
   const [r, g, b] = color.map(srgbToLinear)
-
-  const l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b
-  const m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b
-  const s = 0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b
-
-  const l_ = Math.cbrt(l)
-  const m_ = Math.cbrt(m)
-  const s_ = Math.cbrt(s)
-
-  return [
-    100 * (0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_),
-    1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_,
-    0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_,
-  ]
+  return linearRgbToOklab(r, g, b)
 }
 
 export function rgbToOklch(color: RgbColor): LchColor {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { ColorType, HsbColor } from 'magic-color'
-import { Magicolor } from 'magic-color'
+import type { ColorType, HsbColor, HslColor } from 'magic-color'
+import { hslToRgb, Magicolor } from 'magic-color'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useControlBlock } from './hook'
 
@@ -8,7 +8,7 @@ interface Props {
   width?: number
   height?: number
   barSize?: number
-  color: HsbColor
+  color: HsbColor | HslColor
   type?: ColorType
 }
 
@@ -25,7 +25,9 @@ const emit = defineEmits<{
 
 const ctx = ref<CanvasRenderingContext2D | null>(null)
 const { canvasRef, barRef, onMouseDown } = useControlBlock({
-  onChange: v => emit('change', { x: Math.round(v.x * 100), y: Math.round(v.y * 100) }),
+  onChange: ({ x, y }) => {
+    emit('change', { x: toPercent(x), y: toPercent(y) })
+  },
   overflows: false,
 })
 
@@ -49,21 +51,25 @@ const barStyle = computed(() => ({
   userSelect: 'none',
 } as any))
 
+function toPercent(value: number) {
+  return props.type === 'hsl' ? value * 100 : Math.round(Number(value.toFixed(2)) * 100)
+}
+
 function drawBackground(ctx: CanvasRenderingContext2D) {
   if (props.type === 'hsl') {
-    const image = ctx.createImageData(props.width, props.height)
-    const data = image.data
+    const { width, height, color: [h] } = props
+    const image = ctx.createImageData(width, height)
+    const { data } = image
 
-    for (let y = 0; y < props.height; y++) {
-      const l = 100 - (y / props.height) * 100
-      for (let x = 0; x < props.width; x++) {
-        const h = props.color[0]
-        const s = (x / props.width) * 100
-        const [r, g, b] = new Magicolor([h, s, l], 'hsl').rgb()
-        const idx = (y * props.width + x) * 4
-        data[idx] = r
-        data[idx + 1] = g
-        data[idx + 2] = b
+    for (let y = 0; y < height; y++) {
+      const l = 100 - (y / height) * 100
+      for (let x = 0; x < width; x++) {
+        const s = (x / width) * 100
+        const [r, g, b] = hslToRgb([h, s, l])
+        const idx = (y * width + x) * 4
+        data[idx] = Math.round(r)
+        data[idx + 1] = Math.round(g)
+        data[idx + 2] = Math.round(b)
         data[idx + 3] = 255
       }
     }

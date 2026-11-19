@@ -1,32 +1,21 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
 import { rgbToHsb, rgbToLab, rgbToLch, rgbToOklab, rgbToOklch } from './rgb'
 
-const hexRegex = /^#?([a-f\d]{3}|[a-f\d]{6}|[a-f\d]{8})$/i
+const hexRegex = /^#?([a-f\d]{3,4}|[a-f\d]{6}|[a-f\d]{8})$/i
 
 export function isHex(color: string): boolean {
   return hexRegex.test(color)
 }
 
 export function parseHex(color: HexColor) {
-  let value: HexColor
-  let alpha = 1
-
   const match = color.match(hexRegex)
   if (!match)
     throw new Error('Invalid HEX color format.')
 
-  if (match[1].length === 3) {
-    value = match[1].split('').map(c => c + c).join('')
-  }
-  else if (match[1].length === 6) {
-    value = match[1]
-  }
-  else {
-    value = match[1].substring(0, 6)
-    alpha = Number.parseInt(match[1].substring(6, 8), 16) / 255
-  }
-
-  return { values: `#${value}`, alpha }
+  const digits = match[1]
+  const expanded = digits.length <= 4 ? digits.replace(/./g, '$&$&') : digits
+  const alpha = expanded.length === 8 ? Number.parseInt(expanded.slice(6), 16) / 255 : 1
+  return { values: `#${expanded.slice(0, 6)}`, alpha }
 }
 
 export function hexToRgb(color: HexColor): RgbColor {

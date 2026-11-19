@@ -1,45 +1,26 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
-import { rgbToHex, rgbToHsb, rgbToHsl, rgbToLab, rgbToLch } from './rgb'
+import { alphaPattern, numberPattern, parseOkColor } from './functional-color'
+import { labToLch } from './lab'
+import { linearRgbToXyzD50, xyzD50ToLab } from './lab-xyz'
+import { oklabToLinearRgb } from './oklab-linear'
+import { rgbToHex, rgbToHsb, rgbToHsl } from './rgb'
 
-const oklabRegex = /^oklab\(\s*((?:100(?:\.0+)?|[1-9]?\d(?:\.\d+)?|\.\d+)%?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
+const channel = `(${numberPattern}%?)`
+const oklabRegex = new RegExp(String.raw`^oklab\(\s*${channel}\s+${channel}\s+${channel}(?:\s*\/\s*(${alphaPattern}))?\s*\)$`, 'i')
+
+function matchOklab(color: string) {
+  return parseOkColor(color.match(oklabRegex), [100, 0.4, 0.4])
+}
 
 export function isOklab(color: string): boolean {
-  return oklabRegex.test(color)
+  return matchOklab(color) !== undefined
 }
 
 export function parseOklab(color: string) {
-  const match = color.match(oklabRegex)
-  if (!match)
+  const parsed = matchOklab(color)
+  if (!parsed)
     throw new Error('Invalid Oklab color format.')
-
-  const lightness = Number.parseFloat(match[1])
-  // Retain the legacy 0–100 scale for unitless values greater than 1.
-  const l = match[1].endsWith('%') || lightness > 1 ? lightness : lightness * 100
-  const oklab = [l, Number.parseFloat(match[2]), Number.parseFloat(match[3])] as LabColor
-  const alpha = match[4] ? Number.parseFloat(match[4]) : 1
-
-  return { values: oklab, alpha }
-}
-
-function oklabToLinearRgb(oklab: [number, number, number]) {
-  // oklab expects L in range 0..1
-  const L = oklab[0] / 100
-  const a = oklab[1]
-  const b = oklab[2]
-
-  const l_ = L + 0.3963377774 * a + 0.2158037573 * b
-  const m_ = L - 0.1055613458 * a - 0.0638541728 * b
-  const s_ = L - 0.0894841775 * a - 1.2914855480 * b
-
-  const l = l_ * l_ * l_
-  const m = m_ * m_ * m_
-  const s = s_ * s_ * s_
-
-  const r = 4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s
-  const g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s
-  const b_ = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s
-
-  return [r, g, b_]
+  return parsed
 }
 
 function linearToSrgbChannel(v: number) {
@@ -74,11 +55,11 @@ export function oklabToHsb(color: LabColor): HsbColor {
 }
 
 export function oklabToLab(color: LabColor): LabColor {
-  return rgbToLab(oklabToRgb(color))
+  return xyzD50ToLab(linearRgbToXyzD50(...oklabToLinearRgb(color)))
 }
 
 export function oklabToLch(color: LabColor): LchColor {
-  return rgbToLch(oklabToRgb(color))
+  return labToLch(oklabToLab(color))
 }
 
 export function oklabToOklch(color: LabColor): LchColor {

@@ -1,26 +1,24 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
+import { alphaPattern, huePattern, numberPattern, parseFunctionalColor } from './functional-color'
 import { rgbToHex, rgbToHsb, rgbToLab, rgbToLch, rgbToOklab, rgbToOklch } from './rgb'
 
-const hslRegex = /^hsl\((\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\)$/
-const hslaRegex = /^hsla\((\d+)\s*,\s*(\d+)%\s*,\s*(\d+)%\s*,\s*(0?\.\d+|1)\)$/
-const newHslRegex = /^hsl\((\d+)(?:deg)?\s+(\d+)%?\s+(\d+)%?(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
+const hue = `(${huePattern})`
+const hslRegex = new RegExp(String.raw`^hsla?\(\s*${hue}\s*,\s*(${numberPattern})%\s*,\s*(${numberPattern})%(?:\s*,\s*(${alphaPattern}))?\s*\)$`, 'i')
+const newHslRegex = new RegExp(String.raw`^hsla?\(\s*${hue}\s+(${numberPattern})%?\s+(${numberPattern})%?(?:\s*\/\s*(${alphaPattern}))?\s*\)$`, 'i')
 
 export function isHsl(color: string): boolean {
-  return hslRegex.test(color) || hslaRegex.test(color) || newHslRegex.test(color)
+  return matchHsl(color) !== undefined
+}
+
+function matchHsl(color: string) {
+  return parseFunctionalColor(color.match(hslRegex) || color.match(newHslRegex), ['angle', 100, 100])
 }
 
 export function parseHsl(color: string) {
-  const match = color.match(hslRegex) || color.match(hslaRegex) || color.match(newHslRegex)
-  if (!match)
+  const parsed = matchHsl(color)
+  if (!parsed)
     throw new Error('Invalid HSL color format.')
-  const values = [
-    Number.parseInt(match[1]),
-    Number.parseInt(match[2]),
-    Number.parseInt(match[3]),
-  ] as HslColor
-  const alpha = match[4] ? Number.parseFloat(match[4]) : 1
-
-  return { values, alpha }
+  return parsed
 }
 
 export function hslToHex(color: HslColor): HexColor {
@@ -44,7 +42,8 @@ export function hslToRgb(color: HslColor): RgbColor {
     const c = [0, 0, 0]
     const t2 = lNorm < 0.5 ? lNorm * (1 + sNorm) : lNorm + sNorm - lNorm * sNorm
     const t1 = 2 * lNorm - t2
-    const h_ = h / 360
+    const hue = h % 360
+    const h_ = (hue < 0 ? hue + 360 : hue) / 360
 
     t3[0] = h_ + 1 / 3
     t3[1] = h_

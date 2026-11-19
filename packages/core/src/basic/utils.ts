@@ -2,6 +2,7 @@ import type { Colors, ColorType, Opacity } from '@magic-color/transformer'
 import type { ColorObject } from '../types'
 import { isArray, isNumber, isObject, isString } from '@magic-color/shared'
 import { isHex, isHsb, isHsl, isKeyword, isLab, isLch, isOklab, isOklch, isRgb, parseHex, parseHsb, parseHsl, parseKeyword, parseLab, parseLch, parseOklab, parseOklch, parseRgb, SupportTypes } from '@magic-color/transformer'
+import { CHANNEL_MAP } from './map'
 
 export function alphaToString(alpha: Opacity, toHex = false): string {
   return toHex
@@ -26,10 +27,11 @@ function resolveColorString(color: string) {
     oklab: parseOklab,
   }
 
-  return {
-    ...parseMap[type as keyof typeof parseMap](color),
-    type,
-  } as ColorObject<ColorType>
+  const parsed = parseMap[type](color)
+  if (!parsed)
+    throw new TypeError(`Invalid color: ${color}.`)
+
+  return { ...parsed, type }
 }
 
 export function guessType(color: string): ColorType | undefined {
@@ -54,112 +56,39 @@ export function guessType(color: string): ColorType | undefined {
   }
 }
 
-export function resolveArgs<T extends ColorType = 'rgb'>(...args: any[]): [Colors[T], T, Opacity] | undefined {
-  args = Array.from(args)
-  if (args.length === 1) {
-    if (isString(args[0])) {
-      const { values, type, alpha } = resolveColorString(args[0])
-
-      return [values as Colors[T], type as T, alpha]
-    }
-    else if (isObject(args[0])) {
-      for (const type of SupportTypes) {
-        const keys = type.split('')
-        if (keys.every((k: string) => args[0][k] != null)) {
-          return [keys.map((k: string) => args[0][k]) as Colors[T], type as T, 1]
-        }
-      }
-    }
-    else if (isArray(args[0])) {
-      return [args[0] as Colors[T], 'rgb' as T, 1]
-    }
-    else {
-      throw new TypeError('Invalid color type.')
-    }
+export function resolveArgs<T extends ColorType = 'rgb'>(...args: any[]): [Colors[T], ColorObject<T>['type'], Opacity] | undefined {
+  const [input, inputType, inputAlpha, typeOrAlpha = 'rgb', channelAlpha = 1] = args
+  if (isNumber(input)) {
+    if (args.length < 3 || args.length > 5)
+      return
+    const type = isNumber(typeOrAlpha) ? 'rgb' : typeOrAlpha
+    const alpha = isNumber(typeOrAlpha) ? typeOrAlpha : channelAlpha
+    return [[input, inputType, inputAlpha] as Colors[T], type, alpha]
   }
 
-  else if (args.length === 2) {
-    const [anyValue, type] = args
-    /**
-     * @example
-     * ```ts
-     * mc({ r: 255, g: 0, b: 0 }, 'rgb')
-     * ```
-     */
-    if (isObject(anyValue)) {
-      const values = type.split('').map((k: string) => anyValue[k])
-      return [values, type, 1]
+  if (args.length > 3)
+    return
+
+  if (isString(input)) {
+    const parsed = resolveColorString(input)
+    const type = parsed.type === 'keyword' ? 'hex' : parsed.type
+    if (inputType !== undefined && inputType !== parsed.type && !(inputType === 'keyword' && type === 'hex')) {
+      throw new TypeError(`Invalid color type: ${inputType}. Detected ${parsed.type}.`)
     }
-    /**
-     * @example
-     * ```ts
-     * mc([255, 0, 0], 'rgb')
-     * ```
-     */
-    else if (isArray(anyValue)) {
-      return [anyValue as Colors[T], type, 1]
-    }
-    else if (isString(anyValue)) {
-      const { values, type: _type, alpha } = resolveColorString(anyValue)
-      if (type !== _type) {
-        throw new TypeError(`Invalid color type: ${type}. Detected ${_type}.`)
-      }
-      return [values as Colors[T], type, alpha]
-    }
+    return [parsed.values as Colors[T], type as ColorObject<T>['type'], inputAlpha === undefined ? parsed.alpha : inputAlpha]
   }
 
-  else if (args.length >= 3) {
-    /**
-     * @example
-     * ```ts
-     * mc(255, 0, 0, 1)
-     * mc(255, 0, 0, 'rgb')
-     * mc([255, 0, 0], 'rgb', 1)
-     * mc({ r: 255, g: 0, b: 0 }, 'rgb', 1)
-     * mc(255, 0, 0, 'rgb', 1)
-     * ```
-     */
-    if (args && args.every(isNumber)) {
-      return [
-        args.slice(0, 3) as Colors[T],
-        'rgb' as T,
-        args[3] ?? 1,
-      ]
-    }
+  const alpha = inputAlpha === undefined ? 1 : inputAlpha
+  if (isArray(input))
+    return [input as Colors[T], inputType === undefined ? 'rgb' : inputType, alpha]
 
-    let _alpha = 1
-    let _type
-    let _values
-    const last = (args as any[]).pop()
-    if (isNumber(last)) {
-      _alpha = last
-      _type = (args as any[]).pop()
-    }
-    else {
-      _type = last
-    }
-
-    const anyValue = args[0]
-    if (isObject(anyValue)) {
-      _values = _type.split('').map((k: string) => anyValue[k])
-    }
-    else if (isArray(anyValue)) {
-      _values = anyValue
-    }
-    else if (isString(anyValue)) {
-      const { values, type: detectedType } = resolveColorString(anyValue)
-      if (_type !== detectedType && !(_type === 'keyword' && detectedType === 'hex'))
-        throw new TypeError(`Invalid color type: ${_type}. Detected ${detectedType}.`)
-      return [values as Colors[T], _type as T, _alpha]
-    }
-    else if (isNumber(anyValue)) {
-      return [
-        args.slice(0, 3) as Colors[T],
-        _type as T,
-        _alpha,
-      ]
-    }
-
-    return [_values, _type, _alpha]
+  if (isObject(input)) {
+    const type = inputType === undefined
+      ? SupportTypes.find(candidate => CHANNEL_MAP[candidate]?.every(channel => input[channel] != null))
+      : inputType
+    if (type === undefined)
+      return
+    const channels = Object.hasOwn(CHANNEL_MAP, type) ? CHANNEL_MAP[type] : []
+    return [channels.map(channel => input[channel]) as Colors[T], type, alpha]
   }
 }

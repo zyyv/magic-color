@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ColorType, ColorValue, HexColor, HsbColor } from 'magic-color'
+import type { ColorType, ColorValue, Magicolor } from 'magic-color'
 import { mc } from 'magic-color'
 import { computed } from 'vue'
 import PaletteControls from './PaletteControls.vue'
@@ -7,45 +7,72 @@ import PaletteInput from './PaletteInput.vue'
 import PalettePanel from './PalettePanel.vue'
 import PalettePreview from './PalettePreview.vue'
 
+const props = defineProps<{ alpha?: number }>()
+const emit = defineEmits<{ 'update:alpha': [value: number] }>()
+
 const color = defineModel<string>('color', { default: '#ff0000' })
-const alpha = defineModel<number>('alpha', { default: 1 })
 const type = defineModel<ColorType>('type', { default: 'hex' })
 
-const mcHsbColor = computed({
-  get: () => mc(color.value).value('hsb'),
+const currentColor = computed(() => mc(color.value))
+const alpha = computed({
+  get: () => props.alpha ?? currentColor.value.alpha,
+  set: (value: number) => {
+    if (props.alpha === undefined) {
+      const updated = currentColor.value.clone()
+      updated.alpha = value
+      color.value = updated.css(type.value, value !== 1, false)
+    }
+    emit('update:alpha', value)
+  },
+})
+
+function updateColor(updated: Magicolor<ColorType>, opacity?: number, round = true) {
+  updated.alpha = opacity ?? alpha.value
+  const includeAlpha = props.alpha === undefined && (opacity !== undefined || updated.alpha !== 1)
+  color.value = updated.css(type.value, includeAlpha, round)
+  if (opacity !== undefined)
+    emit('update:alpha', opacity)
+}
+
+const panelType = computed(() => type.value === 'hsl' ? 'hsl' : 'hsb')
+const panelColor = computed({
+  get: () => panelType.value === 'hsl' ? currentColor.value.hsl(false) : currentColor.value.hsb(),
   set: (v) => {
-    color.value = mc(v, 'hsb').css(type.value)
+    updateColor(mc(v, panelType.value), undefined, panelType.value !== 'hsl')
   },
 })
 
 const hue = computed({
-  get: () => mcHsbColor.value[0] / 360,
+  get: () => panelColor.value[0] / 360,
   set: (v) => {
-    const hsb = [...mcHsbColor.value]
-    hsb[0] = Math.round(v * 360)
-    mcHsbColor.value = hsb as HsbColor
+    const [, saturation, lightnessOrBrightness] = panelColor.value
+    panelColor.value = [Math.round(v * 360), saturation, lightnessOrBrightness]
   },
 })
 
-const controlColor = computed(() => mc(color.value).hex())
+const controlColor = computed(() => currentColor.value.hex())
 
 const displayBgColor = computed(() => {
-  const mcColor = mc(color.value)
+  const mcColor = currentColor.value.clone()
   mcColor.alpha = alpha.value
   return mcColor.css('rgb', true)
 })
 
 const colorValue = computed({
   get: () => {
-    return mc(color.value).value(type.value)
+    if (type.value === 'hex' && props.alpha === undefined && currentColor.value.alpha !== 1)
+      return currentColor.value.css('hex', true)
+    return currentColor.value.value(type.value)
   },
   set: (v: ColorValue) => {
-    color.value = mc(v as HexColor, type.value).css()
+    const updated = mc(v, type.value)
+    const digits = typeof v === 'string' ? v.replace(/^#/, '').length : 0
+    updateColor(updated, digits === 4 || digits === 8 ? updated.alpha : undefined)
   },
 })
 
 function handlePanelChange({ x, y }: { x: number, y: number }) {
-  mcHsbColor.value = [mcHsbColor.value[0], x, 100 - y]
+  panelColor.value = [panelColor.value[0], x, 100 - y]
 }
 </script>
 
@@ -63,8 +90,8 @@ function handlePanelChange({ x, y }: { x: number, y: number }) {
       :width="240"
       :height="240"
       :bar-size="12"
-      :color="mcHsbColor"
-      :type="type"
+      :color="panelColor"
+      :type="panelType"
       @change="handlePanelChange"
     />
     <div

@@ -1,4 +1,4 @@
-import type { Colors, ColorType, HsbColor, HslColor, LabColor, LchColor, Opacity, RgbColor } from '@magic-color/transformer'
+import type { Colors, ColorType, ColorValue, HsbColor, HslColor, LabColor, LchColor, Opacity, RgbColor } from '@magic-color/transformer'
 import type { ColorObject } from '../types'
 import { SupportTypes } from '@magic-color/transformer'
 import { CHANNEL_MAP, CONVERSION_MAP } from './map'
@@ -8,33 +8,31 @@ export { guessType } from './utils'
 
 const DECIMAL_RE = /^(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i
 
-export class Magicolor<T extends ColorType> implements ColorObject<T> {
-  type: T
-  values: Colors[T]
-  alpha: Opacity
+export class Magicolor<T extends ColorType> implements ColorObject<ColorType> {
+  type: ColorObject<ColorType>['type']
+  values: ColorValue
 
   cloned = false
 
   private _stack: Magicolor<any>[] = []
   private _origin?: Magicolor<any>
+  private _alpha = 1
 
-  constructor(value: Colors[T] | Record<string, number>, type?: T, alpha?: Opacity)
+  constructor(value: Colors[T] | Record<string, number>, type?: T | ColorObject<T>['type'], alpha?: Opacity)
   constructor(v1: number, v2: number, v3: number, typeOrAlpha?: T | Opacity, alpha?: Opacity)
   constructor(...args: any[]) {
     const result = resolveArgs<T>(...args)
     if (result) {
-      const [values, type, alpha] = result
-      if (type !== 'keyword' && !SupportTypes.includes(type as any)) {
+      const [input, type, alpha] = result
+      if (!SupportTypes.includes(type)) {
         throw new TypeError(`Invalid color type: ${type}.`)
       }
+      const values = Array.isArray(input) ? [...input] as [number, number, number] : input
       if (Array.isArray(values) && (values.length !== 3 || !values.every(Number.isFinite))) {
         throw new TypeError('Color channels must be three finite numbers.')
       }
-      if ((type === 'hex' || type === 'keyword') !== (typeof values === 'string')) {
+      if ((type === 'hex') !== (typeof values === 'string')) {
         throw new TypeError(`Invalid value for color type: ${type}.`)
-      }
-      if (!Number.isFinite(alpha) || alpha < 0 || alpha > 1) {
-        throw new RangeError('Alpha must be a finite number between 0 and 1.')
       }
       this.values = values
       this.type = type
@@ -45,11 +43,18 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
     }
   }
 
-  private toString(withAlpha = false, round = true): string {
-    const type = this.type
-    const values = this.values
+  get alpha(): Opacity {
+    return this._alpha
+  }
 
-    // 处理 hex 和 keyword 类型
+  set alpha(value: Opacity) {
+    if (!Number.isFinite(value) || value < 0 || value > 1) {
+      throw new RangeError('Alpha must be a finite number between 0 and 1.')
+    }
+    this._alpha = value
+  }
+
+  private toString(withAlpha = false, round = true, type: ColorType = this.type, values: Colors[ColorType] = this.values): string {
     if (type === 'hex' || type === 'keyword') {
       return values + (withAlpha ? alphaToString(this.alpha, true) : '')
     }
@@ -79,7 +84,8 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
           const L = isOk ? `${format(v[0])}%` : format(v[0])
           const A = format(v[1])
           const B = format(v[2])
-          return `${type}(${L} ${A} ${B}${withAlpha ? ` / ${alphaToString(this.alpha)}` : ''})`
+          const alpha = round ? alphaToString(this.alpha) : this.alpha
+          return `${type}(${L} ${A} ${B}${withAlpha ? ` / ${alpha}` : ''})`
         }
 
         default:
@@ -91,15 +97,20 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
   }
 
   darken(amount = 1): Magicolor<T> {
-    const lab = this.lab()
-    lab[0] = Math.max(0, lab[0] - 18 * amount)
-    return new Magicolor(lab, 'lab', this.alpha).to(this.type) as Magicolor<T>
+    return this.shiftLightness(-18 * amount)
   }
 
   lighten(amount = 1): Magicolor<T> {
-    const lab = this.lab()
-    lab[0] = Math.min(100, lab[0] + 18 * amount)
-    return new Magicolor(lab, 'lab', this.alpha).to(this.type) as Magicolor<T>
+    return this.shiftLightness(18 * amount)
+  }
+
+  private shiftLightness(offset: number): Magicolor<T> {
+    if (offset === 0)
+      return this.clone()
+
+    const [l, a, b] = this.convert('lab')
+    const lightness = Math.min(100, Math.max(0, l + offset))
+    return new Magicolor([lightness, a, b], 'lab', this.alpha).to(this.type) as Magicolor<T>
   }
 
   /**
@@ -108,22 +119,22 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
    * @returns 转换后的颜色值
    */
   private convert<K extends ColorType>(targetType: K): Colors[K] {
-    if (this.type === targetType as any) {
+    const target = targetType === 'keyword' ? 'hex' : targetType as ColorObject<ColorType>['type']
+    if (!SupportTypes.includes(target)) {
+      throw new TypeError(`Invalid target color type: ${targetType}.`)
+    }
+    if (this.type === target) {
       return this.values as Colors[K]
     }
 
-    if (this.type === 'keyword' && targetType === 'hex') {
-      return this.values as Colors[K]
-    }
-
-    const sourceType = this.type === 'keyword' ? 'hex' : this.type
+    const sourceType = this.type
     const converters = CONVERSION_MAP[sourceType]
 
     if (!converters) {
       throw new Error(`Unsupported source type: ${sourceType}`)
     }
 
-    const converter = converters[targetType]
+    const converter = converters[target]
     if (!converter) {
       throw new Error(`Cannot convert from ${this.type} to ${targetType}`)
     }
@@ -184,6 +195,7 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
       case 'rgb':
         return this.toRgb()
       case 'hex':
+      case 'keyword':
         return this.toHex()
       case 'hsl':
         return this.toHsl()
@@ -234,16 +246,18 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
     return this.value('oklch', round)
   }
 
-  value<K extends ColorType = T>(type: K = this.type as unknown as K, round = true): Colors[K] {
-    const mc = this.clone().to(type)
-    if (Array.isArray(mc.values)) {
-      return (round
-        ? mc.values.map(Math.round)
-        : mc.values.map(v => Math.round(v * 1000) / 1000)
-      ) as Colors[K]
-    }
+  value(type?: undefined, round?: boolean): ColorValue
+  value<K extends ColorType>(type: K, round?: boolean): Colors[K]
+  value(type: ColorType = this.type, round = true): ColorValue {
+    const values = this.convert(type)
+    if (!Array.isArray(values))
+      return values
 
-    return mc.values as Colors[K]
+    if (!round)
+      return [...values]
+
+    const precision = type === 'oklab' || type === 'oklch' ? 1e6 : 1
+    return values.map(value => Math.round(value * precision) / precision) as [number, number, number]
   }
 
   css(): string
@@ -260,28 +274,28 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
       return this.toString(typeOrWithAlpha, withAlphaOrRound ?? true)
     }
     else {
-      return this.clone().to(typeOrWithAlpha).toString(withAlphaOrRound ?? false, round ?? true)
+      return this.toString(withAlphaOrRound ?? false, round ?? true, typeOrWithAlpha, this.convert(typeOrWithAlpha))
     }
   }
 
-  private _push<K extends ColorType>(type: K, value: Colors[K], alpha: Opacity) {
+  private _push<K extends Exclude<ColorType, 'keyword'>>(type: K, value: Colors[K], alpha: Opacity) {
     if (this._stack.length === 0)
       this._origin = new Magicolor(this.values, this.type, this.alpha)
     this._stack.push(new Magicolor(value, type, alpha))
-    this.values = value as any
-    this.type = type as any
+    this.values = value
+    this.type = type
   }
 
   get history(): Magicolor<any>[] {
-    return this._stack
+    return this._stack.map(color => color.clone())
   }
 
-  get last(): Magicolor<any> {
-    return this._stack[this._stack.length - 1]
+  get last(): Magicolor<any> | undefined {
+    return this._stack[this._stack.length - 1]?.clone()
   }
 
-  get first(): Magicolor<any> {
-    return this._stack[0]
+  get first(): Magicolor<any> | undefined {
+    return this._stack[0]?.clone()
   }
 
   revert(deep = 1) {
@@ -294,7 +308,7 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 
     const mc = deep === this._stack.length ? this._origin! : this._stack[this._stack.length - deep - 1]
     this.type = mc.type
-    this.values = mc.values
+    this.values = Array.isArray(mc.values) ? [...mc.values] : mc.values
     this.alpha = mc.alpha
     this._stack = this._stack.slice(0, this._stack.length - deep)
     if (this._stack.length === 0)
@@ -310,7 +324,7 @@ export class Magicolor<T extends ColorType> implements ColorObject<T> {
 
   clone(): Magicolor<T> {
     const mc = new Magicolor(this.values, this.type, this.alpha)
-    // 只在需要时复制历史记录，避免不必要的性能开销
+    // History entries stay internal. Public reads and reverts copy their values.
     if (this._stack.length > 0) {
       mc._stack = this._stack.slice()
       mc._origin = this._origin

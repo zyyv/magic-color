@@ -1,14 +1,16 @@
 import type { RgbColor } from '@magic-color/core'
-import { Magicolor } from '@magic-color/core'
-import { SA98G } from './constant'
+import { compositeContrastColors } from './composite'
 
 /**
  * Get the contrast ratio between two colors. The contrast ratio is a value between 1 and 21.
  *
  * 获取两种颜色之间的对比度比值。对比度比值是一个介于 1 和 21 之间的值。
  *
- * @param c1 The first color.
- * @param c2 The second color.
+ * Translucent text is composited over the background. A translucent background
+ * is composited over white.
+ *
+ * @param textColor The foreground color.
+ * @param bgColor The background color.
  *
  * @returns [Contrast ratio](https://www.w3.org/TR/WCAG20/#contrast-ratiodef) between two colors. The value is between 1 and 21.
  *
@@ -16,47 +18,30 @@ import { SA98G } from './constant'
  * ```ts
  * calcWCAG('#000000', '#ffffff') // 21
  * calcWCAG('#000000', '#000000') // 1
- * calcWCAG('#000000', '#ff0000') // 4.23
+ * calcWCAG('#000000', '#ff0000') // 5.252
  * ```
  */
-export function calcWCAG(c1: string, c2: string): number {
-  const _c1 = new Magicolor(c1).value('rgb')
-  const _c2 = new Magicolor(c2).value('rgb')
+export function calcWCAG(textColor: string, bgColor: string): number {
+  const { background, foreground } = compositeContrastColors(textColor, bgColor)
 
-  const luminance1 = calcuRelativeLuminance(_c1)
-  const luminance2 = calcuRelativeLuminance(_c2)
+  const luminance1 = relativeLuminance(foreground)
+  const luminance2 = relativeLuminance(background)
 
   const lighter = Math.max(luminance1, luminance2)
   const darker = Math.min(luminance1, luminance2)
 
-  return Number.parseFloat(((lighter + 0.05) / (darker + 0.05)).toFixed(2))
+  return (lighter + 0.05) / (darker + 0.05)
 }
 
-/**
- * Calculate the relative luminance of a color.
- *
- * 计算颜色的相对亮度。
- *
- * @param rgb The RGB color.
- *
- * @returns The relative luminance of the color.
- *
- * @example
- * ```ts
- * calcuRelativeLuminance([255, 255, 255]) // 1
- * calcuRelativeLuminance([0, 0, 0]) // 0
- * calcuRelativeLuminance([255, 0, 0]) // 0.2126
- * ```
- */
-function calcuRelativeLuminance(rgb: RgbColor): number {
+function relativeLuminance(rgb: RgbColor): number {
   const [red, green, blue] = rgb.map((channel) => {
     const channelNormalized = channel / 255
-    return channelNormalized <= 0.03928
+    return channelNormalized <= 0.04045
       ? channelNormalized / 12.92
       : ((channelNormalized + 0.055) / 1.055) ** 2.4
   })
 
-  return SA98G.sRco * red + SA98G.sGco * green + SA98G.sBco * blue
+  return 0.2126 * red + 0.7152 * green + 0.0722 * blue
 }
 
 interface ReadableOptions {
@@ -103,5 +88,5 @@ export function getReadableTextColor(options: ReadableOptions | string) {
     ratio = 4.5,
   } = _options
 
-  return calcWCAG(bgColor, textColor) >= ratio ? textColor : fallbackTextColor
+  return calcWCAG(textColor, bgColor) >= ratio ? textColor : fallbackTextColor
 }

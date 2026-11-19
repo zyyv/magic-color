@@ -1,8 +1,15 @@
+import type { LabColor } from '@magic-color/core'
 import { Magicolor } from '@magic-color/core'
 
-const { sqrt, min, max, atan2, abs, cos, sin, exp, PI } = Math
+const { sqrt, atan2, abs, cos, sin, exp, PI } = Math
 
 export function deltaE(a: string, b: string, Kl = 1, Kc = 1, Kh = 1) {
+  const labA = new Magicolor(a).lab(false)
+  const labB = new Magicolor(b).lab(false)
+  return deltaEOfLab(labA, labB, Kl, Kc, Kh)
+}
+
+export function deltaEOfLab([L1, a1, b1]: LabColor, [L2, a2, b2]: LabColor, Kl = 1, Kc = 1, Kh = 1) {
   // Delta E (CIE 2000)
   // see http://www.brucelindbloom.com/index.html?Eqn_DeltaE_CIE2000.html
   const rad2deg = function (rad: number) {
@@ -11,10 +18,6 @@ export function deltaE(a: string, b: string, Kl = 1, Kc = 1, Kh = 1) {
   const deg2rad = function (deg: number) {
     return (2 * PI * deg) / 360
   }
-  const mcA = new Magicolor(a)
-  const mcB = new Magicolor(b)
-  const [L1, a1, b1] = mcA.value('lab', false)
-  const [L2, a2, b2] = mcB.value('lab', false)
   const avgL = (L1 + L2) / 2
   const C1 = sqrt(a1 ** 2 + b1 ** 2)
   const C2 = sqrt(a2 ** 2 + b2 ** 2)
@@ -53,11 +56,10 @@ export function deltaE(a: string, b: string, Kl = 1, Kc = 1, Kh = 1) {
   const deltaTheta = 30 * exp(-(((avgHp - 275) / 25) ** 2))
   const Rc = 2 * sqrt(avgCp ** 7 / (avgCp ** 7 + 25 ** 7))
   const Rt = -Rc * sin(2 * deg2rad(deltaTheta))
-  const result = sqrt(
+  return sqrt(
     (deltaL / (Kl * sl)) ** 2
     + (deltaCp / (Kc * sc)) ** 2
     + (deltaHp / (Kh * sh)) ** 2
     + Rt * (deltaCp / (Kc * sc)) * (deltaHp / (Kh * sh)),
   )
-  return max(0, min(100, result))
 }

@@ -1,25 +1,23 @@
 import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from '../types'
-import { oklabToRgb } from './oklab'
-import { rgbToHex, rgbToHsb, rgbToHsl, rgbToLab, rgbToLch } from './rgb'
+import { alphaPattern, huePattern, numberPattern, parseOkColor } from './functional-color'
+import { oklabToLab, oklabToLch, oklabToRgb } from './oklab'
+import { rgbToHex, rgbToHsb, rgbToHsl } from './rgb'
 
-const oklchRegex = /^oklch\(\s*((?:100(?:\.0+)?|[1-9]?\d(?:\.\d+)?|\.\d+)%?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)(?:deg)?(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
+const oklchRegex = new RegExp(String.raw`^oklch\(\s*(${numberPattern}%?)\s+(${numberPattern}%?)\s+(${huePattern})(?:\s*\/\s*(${alphaPattern}))?\s*\)$`, 'i')
+
+function matchOklch(color: string) {
+  return parseOkColor(color.match(oklchRegex), [100, 0.4, 'angle'])
+}
 
 export function isOklch(color: string): boolean {
-  return oklchRegex.test(color)
+  return matchOklch(color) !== undefined
 }
 
 export function parseOklch(color: string) {
-  const match = color.match(oklchRegex)
-  if (!match)
+  const parsed = matchOklch(color)
+  if (!parsed)
     throw new Error('Invalid OKLCH color format.')
-
-  const lightness = Number.parseFloat(match[1])
-  // Retain the legacy 0–100 scale for unitless values greater than 1.
-  const l = match[1].endsWith('%') || lightness > 1 ? lightness : lightness * 100
-  const oklch = [l, Number.parseFloat(match[2]), Number.parseFloat(match[3])] as LchColor
-  const alpha = match[4] ? Number.parseFloat(match[4]) : 1
-
-  return { values: oklch, alpha }
+  return parsed
 }
 
 export function oklchToOklab(color: LchColor): LabColor {
@@ -33,7 +31,7 @@ export function oklchToOklab(color: LchColor): LabColor {
 }
 
 export function oklchToRgb(color: LchColor): RgbColor {
-  return oklabToRgb(oklchToOklab(color) as any)
+  return oklabToRgb(oklchToOklab(color))
 }
 
 export function oklchToHex(color: LchColor): HexColor {
@@ -49,9 +47,9 @@ export function oklchToHsb(color: LchColor): HsbColor {
 }
 
 export function oklchToLab(color: LchColor): LabColor {
-  return rgbToLab(oklchToRgb(color))
+  return oklabToLab(oklchToOklab(color))
 }
 
 export function oklchToLch(color: LchColor): LchColor {
-  return rgbToLch(oklchToRgb(color))
+  return oklabToLch(oklchToOklab(color))
 }

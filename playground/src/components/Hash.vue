@@ -7,6 +7,7 @@ const hashMc = computed(() => {
     return mc(mc.hash(hashInput.value))
   return null
 })
+const hashRgb = computed(() => hashMc.value?.rgb())
 </script>
 
 <template>
@@ -26,24 +27,24 @@ const hashMc = computed(() => {
     </div>
     <div c-white fbc text-sm lh-20px>
       <PaletteControls
-        disable type="normal" :model-value="(hashMc?.toRgb().value()[0] ?? 0) / 255" bar-color="transparent"
+        disable type="normal" :model-value="(hashRgb?.[0] ?? 0) / 255" bar-color="transparent"
         wrapper-color="#f87171dd"
       />
-      <span text-red>{{ hashMc?.toRgb().value()[0] || 'Red' }}</span>
+      <span text-red>{{ hashRgb?.[0] ?? 'Red' }}</span>
     </div>
     <div c-white fbc text-sm lh-20px>
       <PaletteControls
-        disable type="normal" :model-value="(hashMc?.toRgb().value()[1] ?? 0) / 255" bar-color="transparent"
+        disable type="normal" :model-value="(hashRgb?.[1] ?? 0) / 255" bar-color="transparent"
         wrapper-color="#4ade80dd"
       />
-      <span text-green>{{ hashMc?.toRgb().value()[1] || 'Green' }}</span>
+      <span text-green>{{ hashRgb?.[1] ?? 'Green' }}</span>
     </div>
     <div c-white fbc text-sm lh-20px>
       <PaletteControls
-        disable type="normal" :model-value="(hashMc?.toRgb().value()[2] ?? 0) / 255" bar-color="transparent"
+        disable type="normal" :model-value="(hashRgb?.[2] ?? 0) / 255" bar-color="transparent"
         wrapper-color="#60a5fadd"
       />
-      <span text-blue>{{ hashMc?.toRgb().value()[2] || 'Blue' }}</span>
+      <span text-blue>{{ hashRgb?.[2] ?? 'Blue' }}</span>
     </div>
   </div>
 </template>

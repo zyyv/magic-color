@@ -1,78 +1,58 @@
-import type { BasicColorShades, ClosestColorShades, GenerateMeta, ThemeMetas, ThemeOptions } from './types'
-import { Magicolor } from '@magic-color/core'
-import { deltaE } from '../delta-e'
+import type { HslColor, LabColor } from '@magic-color/core'
+import type { BasicColorShades, ThemeMetas, ThemeOptions } from './types'
+import { hexToHsl, hexToLab, hslToHex, Magicolor } from '@magic-color/core'
+import { deltaEOfLab } from '../delta-e'
 import { random } from '../random'
 import { hueShades } from './shades'
 
-const cache = new Map<string, GenerateMeta['shades']>()
+const MAX_CACHED_THEMES = 256
+const cache = new Map<string, BasicColorShades['shades']>()
+const referencePalettes = hueShades.map(palette => palette.shades.map(shade => ({
+  ...shade,
+  ...colorChannels(shade.color),
+})))
 
-function findClosetShade(color: string, colors: BasicColorShades[]): ClosestColorShades {
-  const normalizedColors = colors.map((meta) => {
-    const shades = meta.shades.map(shade => ({
-      ...shade,
-      delta: deltaE(color, shade.color),
-      lightnessDiff: Math.abs((new Magicolor(shade.color).get('hsl.l') / 100) - (new Magicolor(color).get('hsl.l') / 100)),
-    }))
+function roundChannel(value: number): number {
+  return Math.round(value * 1000) / 1000
+}
 
-    return {
-      ...meta,
-      shades,
-      closestShade: shades.reduce((p, n) => p.delta < n.delta ? p : n),
-    }
-  })
-
-  const colorModel = normalizedColors.reduce((i, a) => i.closestShade.delta < a.closestShade.delta ? i : a)
-
+function colorChannels(color: string) {
   return {
-    ...colorModel,
-    closestShadeLightness: colorModel.shades.reduce((i, a) => i.lightnessDiff < a.lightnessDiff ? i : a),
+    hsl: hexToHsl(color).map(roundChannel) as HslColor,
+    lab: hexToLab(color).map(roundChannel) as LabColor,
   }
 }
 
-function generate(color: string, colorShades: BasicColorShades[], apca = false): GenerateMeta['shades'] {
-  const closedShade = findClosetShade(color, colorShades)
-
-  const _h = new Magicolor(color).get('hsl.h')
-  const _close_h = new Magicolor(closedShade.closestShadeLightness.color).get('hsl.h')
-
-  let d: string | number = _h - (_close_h || 0)
-
-  const k = (new Magicolor(color).value('hsl', false)[1] / 100) / (new Magicolor(closedShade.closestShadeLightness.color).value('hsl', false)[1] / 100)
-
-  if (d === 0)
-    d = _close_h.toString()
-  else if (d > 0)
-    d = `+${d}`
-  else
-    d = d.toString()
-
-  return closedShade.shades.map((shade) => {
-    let _color = shade.color
-
-    const u = new Magicolor(_color).get('hsl.s') / 100 * k
-    _color = new Magicolor(_color)
-      .set('hsl.s', u * 100 > 100 ? 100 : u * 100)
-      .set('hsl.h', d)
-      .hex()
-
-    if (closedShade.closestShadeLightness.key === shade.key)
-      _color = new Magicolor(color).hex()
-
-    if (apca) {
-      // if (shade.number < 500) {
-      //     let b = i.find(v => v.number == shade.number).apcaOnBlack;
-      //     C = M(b, "#000", C);
-      // } else {
-      //     let b = i.find(v => v.number == shade.number).apcaOnWhite;
-      //     C = M(b, "#fff", C);
-      // }
+function findClosestPalette(lab: LabColor) {
+  let closestPalette = referencePalettes[0]
+  let closestDistance = Infinity
+  for (const palette of referencePalettes) {
+    for (const shade of palette) {
+      const distance = deltaEOfLab(lab, shade.lab)
+      if (distance <= closestDistance) {
+        closestDistance = distance
+        closestPalette = palette
+      }
     }
+  }
+  return closestPalette
+}
 
-    return {
-      key: shade.key,
-      color: _color,
-      hsl: new Magicolor(_color).value('hsl'),
-    }
+function generate(color: string): BasicColorShades['shades'] {
+  const { hsl: [hue, saturation, lightness], lab } = colorChannels(color)
+  const palette = findClosestPalette(lab)
+  const lightnessDistance = (hsl: HslColor) => Math.abs(hsl[2] / 100 - lightness / 100)
+  const anchor = palette.reduce((best, shade) => lightnessDistance(best.hsl) < lightnessDistance(shade.hsl) ? best : shade)
+  const hueShift = hue - anchor.hsl[0]
+  const saturationScale = (saturation / 100) / (anchor.hsl[1] / 100)
+
+  return palette.map(({ key, hsl }) => {
+    if (key === anchor.key)
+      return { key, color }
+
+    const shiftedHue = hueShift === 0 ? hue : hsl[0] + hueShift
+    const shiftedSaturation = roundChannel(Math.min(100, hsl[1] / 100 * saturationScale * 100))
+    return { key, color: hslToHex([shiftedHue, shiftedSaturation, hsl[2]]) }
   })
 }
 
@@ -104,24 +84,28 @@ function generate(color: string, colorShades: BasicColorShades[], apca = false):
  */
 export function theme(color: string = random(), options: ThemeOptions = {}): ThemeMetas {
   const input = new Magicolor(color)
-  const defaultOptions: ThemeOptions = {
-    type: input.type,
-    // @ts-expect-error - render is rightable
-    render: c => c,
-  }
-  const { type, render } = { ...defaultOptions, ...options } as Required<ThemeOptions>
+  const { type = input.type, render } = options
+  const key = input.hex()
 
-  let shades: GenerateMeta['shades']
-  const key = input.css('hex')
-  if (cache.has(key)) {
-    shades = cache.get(key)!
+  let shades = cache.get(key)
+  if (shades) {
+    cache.delete(key)
   }
   else {
-    shades = generate(key, hueShades)
-    cache.set(key, shades)
+    shades = generate(key)
+    if (cache.size >= MAX_CACHED_THEMES) {
+      const oldest = cache.keys().next()
+      if (!oldest.done)
+        cache.delete(oldest.value)
+    }
   }
+  cache.set(key, shades)
 
-  const entries = shades!.map(shade => render([shade.key, new Magicolor(shade.color).css(type)]))
+  const entries = shades.map((shade) => {
+    const output = type === 'hex' || type === 'keyword' ? shade.color : new Magicolor(shade.color).css(type)
+    const entry: [keyof ThemeMetas, string] = [shade.key, output]
+    return render ? render(entry) : entry
+  })
 
   return Object.fromEntries(entries) as unknown as ThemeMetas
 }
