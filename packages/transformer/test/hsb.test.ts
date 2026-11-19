@@ -37,15 +37,15 @@ describe('hsb', () => {
 
   it('hsbToLab', () => {
     const lab = hsbToLab([218, 48, 85])
-    expect(lab[0]).toBeCloseTo(62.14, 1)
-    expect(lab[1]).toBeCloseTo(4.74, 1)
-    expect(lab[2]).toBeCloseTo(-37.68, 1)
+    expect(lab[0]).toBeCloseTo(61.64, 1)
+    expect(lab[1]).toBeCloseTo(0.15, 1)
+    expect(lab[2]).toBeCloseTo(-38.31, 1)
   })
 
   it('hsbToLch', () => {
     const lch = hsbToLch([218, 48, 85])
-    expect(lch[0]).toBeCloseTo(62.14, 1)
-    expect(lch[1]).toBeCloseTo(37.98, 1)
-    expect(lch[2]).toBeCloseTo(277.17, 1)
+    expect(lch[0]).toBeCloseTo(61.64, 1)
+    expect(lch[1]).toBeCloseTo(38.31, 1)
+    expect(lch[2]).toBeCloseTo(270.23, 1)
   })
 })

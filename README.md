@@ -97,6 +97,8 @@ const color = mc('#ffffff', 'hex', 1) // specify opacity
 
 **Currently Magicolor supports the following types: `RGB`, `HEX`, `HSL`, `HSB`, `LAB`, `LCH`, `OKLCH`, `OKLAB`.**
 
+CSS `lab()` and `lch()` use the D50 white point. In `oklab()` and `oklch()` strings, lightness can be written as a number from 0 to 1 or as a percentage. For example, `0.62` and `62%` both represent 62% lightness.
+
 You can convert between supported types.
 
 ```ts

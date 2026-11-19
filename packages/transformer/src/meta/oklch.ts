@@ -2,7 +2,7 @@ import type { HexColor, HsbColor, HslColor, LabColor, LchColor, RgbColor } from 
 import { oklabToRgb } from './oklab'
 import { rgbToHex, rgbToHsb, rgbToHsl, rgbToLab, rgbToLch } from './rgb'
 
-const oklchRegex = /^oklch\(\s*(100|[1-9]?\d(?:\.\d+)?)%?\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)(?:deg)?(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
+const oklchRegex = /^oklch\(\s*((?:100(?:\.0+)?|[1-9]?\d(?:\.\d+)?|\.\d+)%?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)(?:deg)?(?:\s*\/\s*(0|0?\.\d+|1(?:\.0)?))?\s*\)$/
 
 export function isOklch(color: string): boolean {
   return oklchRegex.test(color)
@@ -13,7 +13,10 @@ export function parseOklch(color: string) {
   if (!match)
     throw new Error('Invalid OKLCH color format.')
 
-  const oklch = [Number.parseFloat(match[1]), Number.parseFloat(match[2]), Number.parseFloat(match[3])] as LchColor
+  const lightness = Number.parseFloat(match[1])
+  // Retain the legacy 0–100 scale for unitless values greater than 1.
+  const l = match[1].endsWith('%') || lightness > 1 ? lightness : lightness * 100
+  const oklch = [l, Number.parseFloat(match[2]), Number.parseFloat(match[3])] as LchColor
   const alpha = match[4] ? Number.parseFloat(match[4]) : 1
 
   return { values: oklch, alpha }

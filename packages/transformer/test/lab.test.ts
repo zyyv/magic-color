@@ -19,15 +19,15 @@ describe('lab', () => {
     expect(labToRgb([0, 0, 0])).toEqual([0, 0, 0])
 
     const rgb = labToRgb([62.66, 4.29, -38.38])
-    expect(rgb[0]).toBeCloseTo(111.51, 1)
-    expect(rgb[1]).toBeCloseTo(152.54, 1)
-    expect(rgb[2]).toBeCloseTo(219.43, 1)
+    expect(rgb[0]).toBeCloseTo(125.73, 1)
+    expect(rgb[1]).toBeCloseTo(151.13, 1)
+    expect(rgb[2]).toBeCloseTo(219.86, 1)
   })
 
   it('labToHex', () => {
     expect(labToHex([100, 0, 0])).toBe('#ffffff')
     expect(labToHex([0, 0, 0])).toBe('#000000')
-    expect(labToHex([62.66, 4.29, -38.38])).toBe('#7099db')
+    expect(labToHex([62.66, 4.29, -38.38])).toBe('#7e97dc')
   })
 
   it('labToHsl', () => {
@@ -37,9 +37,9 @@ describe('lab', () => {
     expect(white[2]).toBeCloseTo(100, 1)
 
     const hsl = labToHsl([62.66, 4.29, -38.38])
-    expect(hsl[0]).toBeCloseTo(217.18, 1)
-    expect(hsl[1]).toBeCloseTo(60.27, 1)
-    expect(hsl[2]).toBeCloseTo(64.89, 1)
+    expect(hsl[0]).toBeCloseTo(223.81, 1)
+    expect(hsl[1]).toBeCloseTo(57.25, 1)
+    expect(hsl[2]).toBeCloseTo(67.76, 1)
   })
 
   it('labToHsb', () => {
@@ -48,9 +48,9 @@ describe('lab', () => {
     expect(white[2]).toBeCloseTo(100, 1)
 
     const hsb = labToHsb([62.66, 4.29, -38.38])
-    expect(hsb[0]).toBeCloseTo(217.18, 1)
-    expect(hsb[1]).toBeCloseTo(49.18, 1)
-    expect(hsb[2]).toBeCloseTo(86.05, 1)
+    expect(hsb[0]).toBeCloseTo(223.81, 1)
+    expect(hsb[1]).toBeCloseTo(42.81, 1)
+    expect(hsb[2]).toBeCloseTo(86.22, 1)
   })
 
   it('labToLch', () => {

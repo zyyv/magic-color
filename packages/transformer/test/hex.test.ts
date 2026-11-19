@@ -48,15 +48,15 @@ describe('hex', () => {
 
   it('hexToLab', () => {
     const lab = hexToLab('#7298da')
-    expect(lab[0]).toBeCloseTo(62.58, 1)
-    expect(lab[1]).toBeCloseTo(4.76, 1)
-    expect(lab[2]).toBeCloseTo(-37.68, 1)
+    expect(lab[0]).toBeCloseTo(62.09, 1)
+    expect(lab[1]).toBeCloseTo(0.18, 1)
+    expect(lab[2]).toBeCloseTo(-38.31, 1)
   })
 
   it('hexToLch', () => {
     const lch = hexToLch('#7298da')
-    expect(lch[0]).toBeCloseTo(62.58, 1)
-    expect(lch[1]).toBeCloseTo(37.98, 1)
-    expect(lch[2]).toBeCloseTo(277.20, 1)
+    expect(lch[0]).toBeCloseTo(62.09, 1)
+    expect(lch[1]).toBeCloseTo(38.31, 1)
+    expect(lch[2]).toBeCloseTo(270.27, 1)
   })
 })

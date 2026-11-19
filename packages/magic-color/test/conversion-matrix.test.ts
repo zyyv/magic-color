@@ -51,4 +51,29 @@ describe('color conversion boundaries', () => {
     expect(mc('hsb(0, 100%, 0%)').hsl()).toEqual([0, 0, 0])
     expect(mc('hsb(0, 100%, 100%)').hsl()).toEqual([0, 100, 50])
   })
+
+  it('round-trips CSS Lab and LCH with a D50 white point', () => {
+    const color = mc('#3b82f6')
+    const lab = 'lab(54.619 8.763 -65.791)'
+    const lch = 'lch(54.619 66.372 277.587)'
+
+    expect(color.css('lab')).toBe(lab)
+    expect(color.css('lch')).toBe(lch)
+    expect(mc(lab).hex()).toBe('#3b82f6')
+    expect(mc(lch).hex()).toBe('#3b82f6')
+  })
+
+  it('parses unitless CSS OKLab and OKLCH lightness', () => {
+    expect(mc('oklab(0.62 -0.1 0.1)').hex()).toBe('#5f9839')
+    expect(mc('oklab(62% -0.1 0.1)').hex()).toBe('#5f9839')
+    expect(mc('oklch(0.62 0.2 30)').hex()).toBe('#e54533')
+    expect(mc('oklch(62% 0.2 30)').hex()).toBe('#e54533')
+
+    const translucent = mc('oklch(.62 0.2 30 / 0.5)')
+    expect(translucent.values).toEqual([62, 0.2, 30])
+    expect(translucent.alpha).toBe(0.5)
+    expect(mc('oklab(1 0 0)').hex()).toBe('#ffffff')
+    expect(mc('oklab(1% 0 0)').values).toEqual([1, 0, 0])
+    expect(mc('oklab(62 -0.1 0.1)').hex()).toBe('#5f9839')
+  })
 })
